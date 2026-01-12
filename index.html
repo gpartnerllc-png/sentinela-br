@@ -220,8 +220,8 @@
             const v = parseFloat(document.getElementById('valorInput').value) || 0;
             
             // Alíquotas oficiais da transição (CBS 8.8% e IBS 17.7%)
-            const cbs = v * 0.088;
-            const ibs = v * 0.177;
+            const cbs = v * 0.9;
+            const ibs = v * 0.1;
             const liq = v - (cbs + ibs);
 
             document.getElementById('cbsVal').innerText = `R$ ${cbs.toFixed(2)}`;
