@@ -3,273 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1162/1162456.png">
-    <title>SENTINELA V12 | COMMAND INTERFACE</title>
-    
+    <title>SENTINELA V12 | PDV MÓVEL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
     <style>
-        :root { 
-            --active-orange: #ff6b00; 
-            --deep-orange: #e65f00;
-            --gov-bg: #f8fafc;
-        }
+        :root { --active-orange: #ff6b00; --deep-blue: #001529; }
+        body { background: #f8fafc; font-family: 'Inter', sans-serif; }
+        .panel-v12 { background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
+        .input-v12 { border: 2px solid #e2e8f0; padding: 12px; border-radius: 8px; font-weight: 700; width: 100%; transition: 0.3s; }
+        .input-v12:focus { border-color: var(--active-orange); outline: none; box-shadow: 0 0 0 4px rgba(255,107,0,0.1); }
         
-        body { background: var(--gov-bg); font-family: 'Inter', sans-serif; color: #334155; }
-        
-        .auth-header {
-            background: #ffffff;
-            border-bottom: 4px solid var(--active-orange);
-            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.15);
+        /* Estilo Canhoto 3D (Mercado Livre Style) */
+        .thermal-print {
+            width: 80mm; padding: 10px; background: white; border: 2px solid #000;
+            font-family: 'JetBrains Mono', monospace; font-size: 12px;
         }
-
-        .v12-logo-3d {
-            background: linear-gradient(145deg, var(--active-orange), var(--deep-orange));
-            color: white; font-weight: 900; padding: 10px 25px;
-            border-radius: 4px;
-            transform: perspective(500px) rotateY(-10deg);
-            box-shadow: 5px 5px 15px rgba(230, 95, 0, 0.4);
-            font-size: 26px; border: 1px solid rgba(255,255,255,0.2);
+        .ml-tag {
+            border: 3px solid #000; padding: 5px; text-align: center;
+            font-weight: 900; font-size: 20px; margin-bottom: 10px;
+            transform: skewX(-5deg); /* Efeito 3D leve */
         }
-
-        .panel-3d { 
-            background: #ffffff; 
-            border: 1px solid #e2e8f0; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-        }
-        
-        .input-tactical {
-            border: 2px solid #e2e8f0; padding: 14px; border-radius: 10px;
-            font-weight: 700; transition: all 0.3s;
-            background: #fdfdfd;
-        }
-        .input-tactical:focus { 
-            border-color: var(--active-orange); 
-            background: #fff; 
-            box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
-            outline: none; 
-        }
-
-        .terminal-log {
-            background: #1e293b; color: #fb923c;
-            font-family: 'JetBrains Mono', monospace; font-size: 11px;
-            padding: 15px; border-radius: 12px; border: 2px solid #334155;
-        }
-
-        .btn-orange {
-            background: linear-gradient(180deg, #ff8a33 0%, #ff6b00 100%);
-            border-bottom: 4px solid #b34b00;
-            transition: all 0.1s;
-        }
-        .btn-orange:active {
-            transform: translateY(2px);
-            border-bottom-width: 0px;
-        }
-
-        /* Área do Scanner escondida até ser ativada */
-        #reader { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px; display: none; }
 
         @media print { 
             .no-print { display: none !important; } 
-            #print-area { display: block !important; } 
+            #print-area { display: block !important; }
         }
     </style>
 </head>
 <body>
 
-    <div class="no-print">
-        <header class="auth-header p-5 flex justify-between items-center px-10">
-            <div class="flex items-center gap-8">
-                <div class="v12-logo-3d">V12</div>
-                <div>
-                    <h1 class="text-2xl font-black tracking-tighter uppercase text-slate-800">Sentinela <span class="text-orange-600">Authority</span></h1>
-                    <div class="flex items-center gap-2">
-                        <span class="text-[9px] font-black bg-slate-800 text-white px-2 py-0.5 rounded">MIT STANDARD</span>
-                        <span class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">VISION AI READY</span>
+<div class="no-print p-6 max-w-5xl mx-auto">
+    <header class="flex justify-between items-center mb-8 border-b-4 border-orange-500 pb-4">
+        <div>
+            <h1 class="text-3xl font-black text-slate-800 tracking-tighter">SENTINELA <span class="text-orange-600">V12</span></h1>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">PDV Integration & Security</p>
+        </div>
+        <button onclick="ativarScanner()" class="bg-slate-900 text-white px-6 py-3 rounded-xl font-black text-xs uppercase hover:bg-orange-600 transition-all">
+            Bipar Produto (Câmera)
+        </button>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-4">
+            <div class="panel-v12 p-6">
+                <div id="reader" class="mb-4 overflow-hidden rounded-lg"></div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase">Documento</label>
+                        <input type="text" id="docInput" class="input-v12" placeholder="CPF/CNPJ">
                     </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase">Nome de Registro</label>
+                        <input type="text" id="nomeInput" onblur="validarNome(this)" class="input-v12" placeholder="Nome Completo">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase">E-mail</label>
+                        <input type="email" id="emailInput" class="input-v12" placeholder="cliente@exemplo.com">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase">WhatsApp / Tel</label>
+                        <input type="text" id="telInput" class="input-v12" placeholder="(00) 00000-0000">
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label class="text-[10px] font-black text-slate-400 uppercase">Descrição dos Ativos</label>
+                    <textarea id="descInput" class="input-v12 h-24" placeholder="Itens somados automaticamente..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-v12 p-6 border-t-8 border-orange-600">
+            <h2 class="text-center font-black text-slate-400 uppercase text-xs mb-6 tracking-widest">Financeiro Síncrono</h2>
+            <div class="bg-slate-50 p-4 rounded-xl space-y-3 mb-6">
+                <div class="flex justify-between text-xs font-bold text-slate-500">
+                    <span>VALOR BRUTO:</span>
+                    <input type="number" id="valorInput" oninput="calcTotal()" class="w-20 text-right bg-transparent border-b border-orange-300 outline-none" value="0.00">
+                </div>
+                <div class="flex justify-between text-[10px] text-red-500 font-black">
+                    <span>TAXA REFORMA (CBS/IBS):</span>
+                    <span id="taxaTotal">R$ 0,00</span>
+                </div>
+                <div class="pt-4 border-t-2 border-dashed border-slate-200 flex justify-between items-center">
+                    <span class="font-black text-slate-800">TOTAL:</span>
+                    <span id="totalFinal" class="text-2xl font-black text-orange-600">R$ 0,00</span>
                 </div>
             </div>
             
-            <div id="statusHw" class="bg-orange-50 px-4 py-2 rounded-lg border border-orange-200 flex items-center gap-3">
-                <span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
-                <span class="text-[11px] font-black uppercase text-emerald-600">Sistema Ativo</span>
+            <div class="space-y-3">
+                <button onclick="emitir('A4')" class="w-full bg-slate-100 text-slate-800 font-black py-3 rounded-lg text-xs uppercase border-b-4 border-slate-300">Documento A4</button>
+                <button onclick="emitir('TERMICO')" class="w-full bg-orange-600 text-white font-black py-4 rounded-lg text-xs uppercase border-b-4 border-orange-800 shadow-lg shadow-orange-200">Imp. Térmica (InfinitePay)</button>
             </div>
-        </header>
-
-        <main class="max-w-[1600px] mx-auto p-8 grid grid-cols-12 gap-8">
-            
-            <div class="col-span-12 lg:col-span-8 space-y-8">
-                <div class="panel-3d p-10">
-                    <div class="flex items-center justify-between mb-10 border-b border-slate-100 pb-6">
-                        <div class="flex items-center gap-4">
-                            <div class="w-3 h-10 bg-orange-500 rounded-full shadow-lg shadow-orange-200"></div>
-                            <h2 class="text-xl font-black text-slate-700 uppercase italic">Central de Emissão Síncrona</h2>
-                        </div>
-                        <button onclick="ativarScanner()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-colors">
-                            Bipar Produto (Câmera)
-                        </button>
-                    </div>
-
-                    <div id="reader"></div>
-
-                    <div class="grid grid-cols-6 gap-8">
-                        <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Identificador (CPF/CNPJ)</label>
-                            <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
-                        </div>
-
-                        <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Valor Operacional (R$)</label>
-                            <input type="number" id="valorInput" oninput="calcFiscal()" class="input-tactical w-full text-2xl text-orange-600" placeholder="0,00">
-                        </div>
-
-                        <div class="col-span-6">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome de Registro</label>
-                            <input type="text" id="nomeInput" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação...">
-                        </div>
-
-                        <div class="col-span-6">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens Escaneados</label>
-                            <textarea id="descInput" class="input-tactical w-full h-32 font-normal text-slate-600" placeholder="Os itens bipados aparecerão aqui automaticamente..."></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="terminal-log shadow-xl">
-                    <div class="flex justify-between border-b border-white/5 pb-2 mb-3">
-                        <span class="font-black text-[10px] uppercase tracking-[0.3em] text-orange-400">Security Stream & Gemini AI Advisor</span>
-                        <span class="text-[10px] text-slate-500 font-mono">NODE_ISR_V12</span>
-                    </div>
-                    <div id="logContent" class="h-32 overflow-y-auto leading-relaxed">
-                        > Sistema Sentinela V12 Inicializado...<br>
-                        > IA Vision pronta para leitura de QR Code e Barras...<br>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-span-12 lg:col-span-4 space-y-6">
-                <div class="panel-3d p-8 border-t-8 border-orange-500">
-                    <h3 class="text-[12px] font-black text-center text-slate-400 uppercase mb-8 tracking-[0.2em]">Detalhamento Tributário</h3>
-                    
-                    <div class="space-y-6 bg-orange-50/50 p-6 rounded-2xl border border-orange-100 shadow-inner">
-                        <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">CBS (FEDERAL) 0.9%:</span>
-                            <span id="cbsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">IBS (EST/MUN) 0.1%:</span>
-                            <span id="ibsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
-                        </div>
-                        <div class="border-t-2 border-orange-200/50 pt-6 flex justify-between items-center">
-                            <span class="text-sm font-black text-slate-700 uppercase">Valor Total:</span>
-                            <span id="liqVal" class="text-3xl font-black text-orange-600">R$ 0,00</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-10 space-y-4">
-                        <button onclick="emitir()" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl hover:brightness-110 transition-all uppercase text-sm tracking-widest">
-                            Assinar e Emitir (A4)
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
+</div>
 
-    <div id="print-area" class="hidden"></div>
+<div id="print-area" class="hidden"></div>
 
-    <script>
-        let somaScanner = 0;
+<script>
+    let somaProdutos = 0;
 
-        // Lógica do Scanner
-        function ativarScanner() {
-            const readerDiv = document.getElementById('reader');
-            readerDiv.style.display = 'block';
-            const html5QrCode = new Html5Qrcode("reader");
-            
-            html5QrCode.start(
-                { facingMode: "environment" }, 
-                { fps: 10, qrbox: { width: 250, height: 150 } },
-                (decodedText) => {
-                    // Simulação de banco de dados por código
-                    let precoItem = Math.floor(Math.random() * 100) + 10; 
-                    addLog(`BIP REALIZADO: Código ${decodedText} - R$ ${precoItem},00`);
-                    
-                    somaScanner += precoItem;
-                    document.getElementById('valorInput').value = somaScanner;
-                    document.getElementById('descInput').value += `Item ${decodedText} (R$ ${precoItem},00)\n`;
-                    
-                    calcFiscal();
-                    // Opcional: html5QrCode.stop(); // Para o scanner após um bip
-                }
-            ).catch(err => addLog("Erro na câmera: " + err));
+    function ativarScanner() {
+        const html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (decodedText) => {
+            let precoAleatorio = Math.floor(Math.random() * 50) + 10;
+            somaProdutos += precoAleatorio;
+            document.getElementById('valorInput').value = somaProdutos.toFixed(2);
+            document.getElementById('descInput').value += `Item [${decodedText}] - R$ ${precoAleatorio},00\n`;
+            calcTotal();
+        });
+    }
+
+    function validarNome(el) {
+        if(el.value.length < 5) {
+            alert("ERRO DE SEGURANÇA: O sistema exige o nome de registro completo.");
+            el.classList.add('border-red-500');
+            el.value = "";
+        } else {
+            el.classList.remove('border-red-500');
+            el.classList.add('border-green-500');
         }
+    }
 
-        function motorBusca(val) {
-            const doc = val.replace(/\D/g, '');
-            const nomeInput = document.getElementById('nomeInput');
-            if (doc.length === 11 || doc.length === 14) {
-                setTimeout(() => {
-                    nomeInput.readOnly = false;
-                    nomeInput.value = ""; 
-                    nomeInput.placeholder = "DIGITE O NOME MANUALMENTE...";
-                    nomeInput.classList.remove('bg-slate-50');
-                    nomeInput.classList.add('bg-white', 'border-orange-400', 'shadow-[0_0_15px_rgba(255,107,0,0.1)]');
-                    addLog("Identidade Liberada.");
-                    nomeInput.focus();
-                }, 400);
-            }
-        }
+    function calcTotal() {
+        let v = parseFloat(document.getElementById('valorInput').value) || 0;
+        let impostos = v * 0.27; // Exemplo Reforma 2026
+        document.getElementById('taxaTotal').innerText = `R$ ${impostos.toFixed(2)}`;
+        document.getElementById('totalFinal').innerText = `R$ ${v.toFixed(2)}`;
+    }
 
-        function calcFiscal() {
-            const v = parseFloat(document.getElementById('valorInput').value) || 0;
-            const cbs = v * 0.9;
-            const ibs = v * 0.1;
-            
-            document.getElementById('cbsVal').innerText = `R$ ${cbs.toFixed(2)}`;
-            document.getElementById('ibsVal').innerText = `R$ ${ibs.toFixed(2)}`;
-            document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
+    function emitir(tipo) {
+        const area = document.getElementById('print-area');
+        const dados = {
+            nome: document.getElementById('nomeInput').value,
+            doc: document.getElementById('docInput').value,
+            total: document.getElementById('totalFinal').innerText,
+            desc: document.getElementById('descInput').value
+        };
 
-            if(v > 2000) addLog("AI ADVISOR: Volume alto detectado. Analisando margem tributária...");
-        }
-
-        function addLog(msg) {
-            const log = document.getElementById('logContent');
-            log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
-            log.scrollTop = log.scrollHeight;
-        }
-
-        function emitir() {
-            const nome = document.getElementById('nomeInput').value;
-            const doc = document.getElementById('docInput').value;
-            const valor = document.getElementById('valorInput').value;
-            const desc = document.getElementById('descInput').value;
-
-            if(!nome || !valor) return alert("Erro: Dados incompletos.");
-
-            const printArea = document.getElementById('print-area');
-            printArea.innerHTML = `
-                <div style="font-family: Arial; padding: 50px; border: 5px solid black;">
-                    <h1 style="font-size: 35px; margin: 0;">SENTINELA V12</h1>
-                    <p><b>DOCUMENTO AUXILIAR DE VENDA</b></p>
-                    <hr style="border: 2px solid black;">
-                    <p><b>CLIENTE:</b> ${nome} | <b>DOC:</b> ${doc}</p>
-                    <div style="border: 1px solid black; padding: 20px; min-height: 200px;">
-                        <b>DESCRIÇÃO DOS ITENS:</b><br>${desc.replace(/\n/g, '<br>')}
-                    </div>
-                    <h2 style="text-align: right;">TOTAL: R$ ${parseFloat(valor).toFixed(2)}</h2>
-                    <br><br><br>
-                    <div style="display: flex; justify-content: space-between;">
-                        <div style="border-top: 1px solid black; width: 45%; text-align: center;">Assinatura do Responsável</div>
-                        <div style="border-top: 1px solid black; width: 45%; text-align: center;">Assinatura do Cliente</div>
+        if(tipo === 'TERMICO') {
+            area.innerHTML = `
+                <div class="thermal-print">
+                    <div class="ml-tag">SENTINELA V12</div>
+                    <p style="text-align:center">PDV MÓVEL INTEGRADO</p>
+                    <p>--------------------------------</p>
+                    <p><b>DEST:</b> ${dados.nome}</p>
+                    <p><b>DOC:</b> ${dados.doc}</p>
+                    <p>--------------------------------</p>
+                    <p><b>ITENS:</b><br>${dados.desc.replace(/\n/g, '<br>')}</p>
+                    <p>--------------------------------</p>
+                    <h2 style="text-align:right">TOTAL: ${dados.total}</h2>
+                    <div style="margin-top:20px; text-align:center; font-size:10px">
+                        HASH SEGURANÇA: ${Math.random().toString(36).toUpperCase().substring(2,12)}
                     </div>
                 </div>
             `;
-            window.print();
+        } else {
+            // Layout A4 (como nas suas capturas)
+            area.innerHTML = `<h1>SENTINELA V12 - DANFE A4</h1><p>Cliente: ${dados.nome}</p><p>Total: ${dados.total}</p>`;
         }
-    </script>
+        window.print();
+    }
+</script>
 </body>
 </html>
