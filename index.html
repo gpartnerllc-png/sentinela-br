@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/754/754388.png"> 
     
-    <title>SENTINELA V12 | COMMAND CENTER (REFORMA 2026)</title>
+    <title>SENTINELA V12 | COMMAND CENTER</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
@@ -47,7 +47,7 @@
                 <div>
                     <h1 class="text-2xl font-black italic tracking-tighter text-white">SENTINELA <span class="text-blue-500">FISCAL</span></h1>
                     <div class="flex gap-2 items-center">
-                        <span class="text-[9px] bg-blue-600 px-2 py-0.5 rounded text-white font-bold uppercase tracking-widest">Israel Tech</span>
+                        <span class="text-[9px] bg-blue-600 px-2 py-0.5 rounded text-white font-bold uppercase tracking-widest">V12 Tech</span>
                         <span class="text-[9px] bg-slate-700 px-2 py-0.5 rounded text-slate-300 font-bold uppercase">v.2026.1.12</span>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                         <span class="text-[9px] text-slate-700">KERNEL_V12_BR</span>
                     </div>
                     <div id="log" class="font-mono text-[10px] text-blue-200/50 h-24 overflow-y-auto leading-relaxed">
-                        > Sentinela V12 iniciado. Módulos de 2026 carregados.<br>
+                        > Sentinela V12 iniciado. Módulos carregados.<br>
                         > Monitorando porta do Assinador Serpro...<br>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                     
                     <div class="space-y-4">
                         <div class="bg-slate-900/50 p-3 rounded">
-                            <p class="tech-label mb-1">Carga Tributária 2026</p>
+                            <p class="tech-label mb-1">Carga Tributária</p>
                             <div class="flex justify-between text-xs mb-1">
                                 <span class="text-slate-500">CBS (Federal):</span>
                                 <span id="resCBS" class="text-white font-bold">R$ 0,00</span>
@@ -168,11 +168,11 @@
 
         function calc2026() {
             const v = parseFloat(document.getElementById('prodValor').value) || 0;
-            const cbs = v * 0.088; // 8.8% Federal
-            const ibs = v * 0.177; // 17.7% Estadual
+            const cbs = v * 0.9; // 8.8% Federal
+            const ibs = v * 0.1; // 17.7% Estadual
             document.getElementById('resCBS').innerText = `R$ ${cbs.toFixed(2)}`;
             document.getElementById('resIBS').innerText = `R$ ${ibs.toFixed(2)}`;
-            addLog(`Motor Tributário 2026: Calculando impostos para R$ ${v.toFixed(2)}`);
+            addLog(`Motor Tributário: Calculando impostos para R$ ${v.toFixed(2)}`);
         }
 
         async function monitorarHardware() {
@@ -199,7 +199,7 @@
                         <span style="font-weight:bold;">COMPROVANTE FISCAL 2026</span>
                     </div>
                     <div style="margin-top:20px;">
-                        <p><b>EMISSOR:</b> CRISTIAN SOLUTIONS | FISCAL COMMAND</p>
+                        <p><b>EMISSOR:</b> V12 SOLUTIONS | FISCAL COMMAND</p>
                         <p><b>DESTINATÁRIO:</b> ${document.getElementById('cliNome').value}</p>
                         <p><b>DOCUMENTO:</b> ${document.getElementById('cliDoc').value}</p>
                     </div>
