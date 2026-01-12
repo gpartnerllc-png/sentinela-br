@@ -3,189 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENTINELA V12 - PDV E EMISSOR FISCAL</title>
+    <title>SENTINELA V12 - ISRAEL INTELLIGENCE EDITION</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Playfair+Display:wght@700&family=Courier+Prime&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #f1f5f9; }
-        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .thermal-font { font-family: 'Courier Prime', monospace; }
+        :root { --cyber-blue: #00a3ff; --israel-blue: #0038b8; }
+        body { background: #02040a; color: #e6edf3; font-family: 'Inter', sans-serif; }
+        .glass-panel { background: rgba(13, 17, 23, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(48, 54, 61, 1); }
         
-        /* Sistema de Impressão Dinâmico */
+        /* DIFERENCIAÇÃO DE IMPRESSÃO */
         @media print {
             .no-print { display: none !important; }
-            #print-area { display: block !important; width: 100%; color: black !important; }
-            body { background: white; }
+            #print-area { display: block !important; background: white !important; color: black !important; }
+            
+            /* Ajuste para Térmica */
+            .print-thermal { width: 80mm; padding: 5mm; font-family: 'Courier Prime', monospace; }
+            /* Ajuste para A4 Professional */
+            .print-a4 { width: 210mm; padding: 20mm; font-family: 'serif'; }
         }
 
-        #print-area { display: none; background: white; color: black; padding: 10px; }
-        .btn-v12 { transition: all 0.2s; border-bottom: 4px solid rgba(0,0,0,0.3); }
-        .btn-v12:active { transform: translateY(2px); border-bottom: 0; }
-        
-        /* Estilo da Nota Fiscal */
-        .nf-box { border: 2px solid #000; padding: 15px; background: #fff; color: #000; }
+        .input-v12 { background: rgba(0,0,0,0.4); border: 1px solid #30363d; padding: 12px; border-radius: 8px; width: 100%; outline: none; transition: 0.3s; }
+        .input-v12:focus { border-color: var(--cyber-blue); box-shadow: 0 0 10px rgba(0,163,255,0.3); }
+        .stamp-authority { border: 3px solid var(--israel-blue); color: var(--israel-blue); padding: 5px 10px; font-weight: 900; transform: rotate(-15deg); display: inline-block; opacity: 0.8; }
     </style>
 </head>
-<body class="min-h-screen pb-20">
+<body class="p-4">
 
-    <div class="no-print p-4 md:p-8 max-w-6xl mx-auto">
-        <header class="flex justify-between items-center mb-8 border-b border-white/10 pb-6">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center font-black text-2xl rotate-3 shadow-lg shadow-blue-500/20">S</div>
+    <div class="no-print max-w-6xl mx-auto space-y-6">
+        <header class="flex flex-col md:flex-row justify-between items-center glass-panel p-8 rounded-3xl border-b-4 border-blue-600">
+            <div class="flex items-center gap-6">
+                <div class="relative">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center overflow-hidden border-4 border-blue-600 shadow-2xl">
+                         <span class="text-blue-900 font-black text-2xl italic">S12</span>
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 bg-blue-600 text-[8px] font-bold px-2 py-1 rounded">MOSAD GRADE</div>
+                </div>
                 <div>
-                    <h1 class="text-2xl font-black uppercase italic tracking-tighter">Sentinela <span class="text-blue-500">PDV V12</span></h1>
-                    <p class="text-[9px] uppercase tracking-widest text-slate-500">Emissão Fiscal & Vendas Cristian</p>
+                    <h1 class="text-3xl font-black tracking-tighter uppercase italic">Sentinela <span class="text-blue-500">V12 Israel</span></h1>
+                    <p class="text-[10px] tracking-[0.4em] text-slate-500 uppercase font-bold">Advanced Fiscal Intelligence - Cristian</p>
                 </div>
             </div>
-            <div class="text-right">
-                <p id="status-sefaz" class="text-[10px] font-black text-emerald-500 uppercase">● SEFAZ ONLINE</p>
-                <p id="status-asaas" class="text-[10px] font-black text-blue-400 uppercase">● ASAAS INTEGRADO</p>
+            <div class="flex gap-4 mt-6 md:mt-0">
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-emerald-500">CONEXÃO: SEFAZ G2G 🟢</p>
+                    <p class="text-[10px] font-black text-blue-400">ASAAS API: READY 🔵</p>
+                </div>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <div class="lg:col-span-7 space-y-6">
-                <div class="glass p-8 rounded-[2rem] border border-blue-500/20">
-                    <h3 class="text-xs font-black text-blue-400 uppercase mb-6 italic tracking-widest">Dados do Cliente / Comprador</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="cliNome" placeholder="NOME COMPLETO / RAZÃO SOCIAL" class="bg-black/40 border border-white/10 p-4 rounded-xl text-sm outline-none focus:border-blue-500 transition-all">
-                        <input type="text" id="cliDoc" placeholder="CPF ou CNPJ (Automático)" class="bg-black/40 border border-white/10 p-4 rounded-xl text-sm outline-none focus:border-blue-500 transition-all">
-                        <input type="text" id="cliWhats" placeholder="WHATSAPP (EX: 551199999999)" class="bg-black/40 border border-white/10 p-4 rounded-xl text-sm outline-none focus:border-blue-500 transition-all col-span-2">
-                    </div>
-
-                    <h3 class="text-xs font-black text-blue-400 uppercase mt-8 mb-6 italic tracking-widest">Detalhes do Produto / Serviço</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="text" id="prodDesc" placeholder="DESCRIÇÃO DA VENDA" class="md:col-span-2 bg-black/40 border border-white/10 p-4 rounded-xl text-sm outline-none focus:border-blue-500">
-                        <input type="number" id="prodValor" placeholder="VALOR R$" class="bg-black/40 border border-white/10 p-4 rounded-xl text-sm outline-none focus:border-blue-500">
-                    </div>
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass-panel p-8 rounded-3xl space-y-4">
+                <h2 class="text-blue-500 font-black uppercase text-xs tracking-widest mb-4 italic">Cadastro de Autoridade (CPF/CNPJ)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" id="v_nome" placeholder="NOME OU RAZÃO SOCIAL" class="input-v12 col-span-2">
+                    <input type="text" id="v_doc" placeholder="CPF / CNPJ" class="input-v12">
+                    <input type="text" id="v_email" placeholder="E-MAIL" class="input-v12">
+                    <input type="text" id="v_whats" placeholder="WHATSAPP (55...)" class="input-v12">
+                    <input type="text" id="v_endereco" placeholder="ENDEREÇO COMPLETO" class="input-v12">
                 </div>
-
-                <div class="glass p-6 rounded-[2rem] flex flex-wrap gap-4 items-center justify-center">
-                    <span class="text-[10px] font-bold text-slate-500 uppercase">Modo de Saída:</span>
-                    <label class="flex items-center gap-2 text-xs font-bold cursor-pointer">
-                        <input type="radio" name="printer" value="thermal" checked> Térmica (80mm)
-                    </label>
-                    <label class="flex items-center gap-2 text-xs font-bold cursor-pointer">
-                        <input type="radio" name="printer" value="sticker"> Adesiva
-                    </label>
-                    <label class="flex items-center gap-2 text-xs font-bold cursor-pointer">
-                        <input type="radio" name="printer" value="a4"> A4 / Nota Completa
-                    </label>
+                
+                <h2 class="text-blue-500 font-black uppercase text-xs tracking-widest mt-6 mb-4 italic">Descrição do Ativo / Serviço</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input type="text" id="v_prod" placeholder="DESCRIÇÃO DETALHADA" class="input-v12 col-span-3">
+                    <input type="number" id="v_valor" placeholder="VALOR R$" class="input-v12">
                 </div>
             </div>
 
-            <div class="lg:col-span-5 space-y-6">
-                <div class="glass p-8 rounded-[2rem] bg-gradient-to-br from-blue-600/10 to-transparent border-t-4 border-blue-500">
-                    <h3 class="text-xs font-black text-white uppercase mb-6 italic tracking-widest text-center">Finalizar Operação</h3>
-                    
-                    <div class="space-y-3">
-                        <button onclick="gerarDocumento('nf')" class="btn-v12 w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black text-sm uppercase shadow-xl shadow-blue-900/40">Emitir Nota Fiscal (SEFAZ)</button>
-                        <button onclick="gerarDocumento('rec')" class="btn-v12 w-full bg-emerald-600 hover:bg-emerald-500 py-5 rounded-2xl font-black text-sm uppercase shadow-xl shadow-emerald-900/40">Gerar Recibo Rápido</button>
-                        <button onclick="enviarWhatsApp()" class="btn-v12 w-full bg-slate-100 text-black hover:bg-white py-5 rounded-2xl font-black text-sm uppercase">Enviar via WhatsApp</button>
-                    </div>
-
-                    <div class="mt-8 pt-8 border-t border-white/10">
-                        <p class="text-[9px] text-slate-500 uppercase font-bold mb-2">Integração Radar de Leilões:</p>
-                        <div class="bg-black/40 p-4 rounded-xl text-[10px] text-orange-400 font-mono italic">
-                            Sincronizando lotes Receita Federal...
-                        </div>
-                    </div>
+            <div class="glass-panel p-8 rounded-3xl space-y-4">
+                <h2 class="text-white font-black uppercase text-xs tracking-widest mb-6 text-center">Tipo de Documento</h2>
+                
+                <button onclick="gerarSaida('A4')" class="w-full bg-white text-black py-4 rounded-xl font-black uppercase hover:bg-blue-500 hover:text-white transition-all shadow-lg">
+                    📄 Nota Fiscal SEFAZ (A4)
+                </button>
+                <button onclick="gerarSaida('TERMICA')" class="w-full border-2 border-blue-600 text-blue-500 py-4 rounded-xl font-black uppercase hover:bg-blue-600 hover:text-white transition-all">
+                    🧾 Cupom Térmico (80mm)
+                </button>
+                
+                <div class="pt-6">
+                    <button onclick="enviarWhats()" class="w-full bg-emerald-600 py-4 rounded-xl font-black uppercase flex items-center justify-center gap-3">
+                        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" class="w-5 h-5 invert"> Enviar p/ WhatsApp
+                    </button>
                 </div>
             </div>
         </main>
     </div>
 
-    <div id="print-area">
-        <div id="thermal-receipt" class="thermal-font">
-            </div>
+    <div id="print-area" class="hidden">
+        <div id="container-documento"></div>
     </div>
 
     <script>
-        // Lógica de Geração de Documentos
-        function gerarDocumento(tipo) {
-            const cliente = document.getElementById('cliNome').value;
-            const doc = document.getElementById('cliDoc').value;
-            const valor = document.getElementById('prodValor').value;
-            const desc = document.getElementById('prodDesc').value;
-
-            if(!cliente || !valor) return alert("Preencha os dados da venda primeiro.");
-
-            const dataHora = new Date().toLocaleString();
-            const nProtocolo = Math.floor(Math.random() * 900000000) + 100000000;
-            const chaveAcesso = Array.from({length: 11}, () => Math.floor(Math.random()*9000)+1000).join(' ');
+        function gerarSaida(formato) {
+            const dados = {
+                nome: document.getElementById('v_nome').value,
+                doc: document.getElementById('v_doc').value,
+                email: document.getElementById('v_email').value,
+                endereco: document.getElementById('v_endereco').value,
+                prod: document.getElementById('v_prod').value,
+                valor: document.getElementById('v_valor').value,
+                nfe: Math.floor(Math.random() * 999999),
+                chave: Array.from({length: 11}, () => Math.floor(Math.random()*8999)+1000).join(' ')
+            };
 
             let html = "";
 
-            if(tipo === 'nf') {
+            if(formato === 'A4') {
+                // DESIGN NOTA FISCAL PROFISSIONAL A4
                 html = `
-                    <div class="nf-box">
-                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #000; padding-bottom:10px;">
-                            <div style="font-size:12px; font-weight:900;">SENTINELA PDV V12<br>CRISTIAN INTEGRATION LTDA</div>
-                            <div style="text-align:right; font-size:10px;"><b>DANFE NFC-e</b><br>Nº: 000.${nProtocolo}<br>Série: 12</div>
+                    <div class="print-a4" style="color:black; background:white;">
+                        <div style="display:flex; justify-content:space-between; border:2px solid black; padding:15px;">
+                            <div style="width:60%">
+                                <h1 style="margin:0; font-size:22px;">SENTINELA INTELLIGENCE V12</h1>
+                                <p style="font-size:10px;">CRISTIAN SYSTEMS & DATA PROTECTION<br>Setor de Operações Fiscais Avançadas</p>
+                                <p style="font-size:12px; margin-top:10px;"><b>ENDEREÇO:</b> UNIDADE CENTRAL DE INTELIGÊNCIA</p>
+                            </div>
+                            <div style="width:35%; border-left:2px solid black; padding-left:15px; text-align:center;">
+                                <h2 style="margin:0;">DANFE</h2>
+                                <p style="font-size:10px;">Documento Auxiliar da Nota Fiscal Eletrônica</p>
+                                <p style="font-size:14px; font-weight:bold;">Nº ${dados.nfe}</p>
+                            </div>
                         </div>
-                        <div style="margin:10px 0; font-size:11px;">
-                            <p><b>DESTINATÁRIO:</b> ${cliente}</p>
-                            <p><b>CPF/CNPJ:</b> ${doc}</p>
+
+                        <div style="border:1px solid black; margin-top:10px; padding:10px; font-size:12px;">
+                            <p><b>DESTINATÁRIO / COMPRADOR:</b> ${dados.nome}</p>
+                            <p><b>CPF / CNPJ:</b> ${dados.doc}</p>
+                            <p><b>ENDEREÇO:</b> ${dados.endereco}</p>
+                            <p><b>E-MAIL:</b> ${dados.email}</p>
                         </div>
-                        <table style="width:100%; font-size:10px; border-collapse:collapse;">
-                            <tr style="border-bottom:1px solid #000;">
-                                <th align="left">ITEM</th><th align="right">QTD</th><th align="right">TOTAL</th>
-                            </tr>
-                            <tr>
-                                <td>${desc}</td><td align="right">1.0</td><td align="right">R$ ${valor}</td>
-                            </tr>
+
+                        <table style="width:100%; border-collapse:collapse; margin-top:20px; font-size:12px;">
+                            <thead>
+                                <tr style="background:#eee; border:1px solid black;">
+                                    <th style="padding:10px; border:1px solid black;">CÓDIGO</th>
+                                    <th style="padding:10px; border:1px solid black;">DESCRIÇÃO DOS PRODUTOS / SERVIÇOS</th>
+                                    <th style="padding:10px; border:1px solid black;">VALOR TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border:1px solid black;">
+                                    <td style="padding:10px; text-align:center;">V12-001</td>
+                                    <td style="padding:10px;">${dados.prod}</td>
+                                    <td style="padding:10px; text-align:right;">R$ ${dados.valor}</td>
+                                </tr>
+                            </tbody>
                         </table>
-                        <div style="margin-top:20px; font-size:12px; font-weight:900; text-align:right;">
-                            TOTAL: R$ ${valor}
+
+                        <div style="margin-top:20px; text-align:right; font-size:18px; font-weight:bold;">
+                            TOTAL DA NOTA: R$ ${dados.valor}
                         </div>
-                        <div style="font-size:8px; margin-top:20px; word-break:break-all; text-align:center;">
-                            CHAVE DE ACESSO:<br>${chaveAcesso}<br><br>
-                            <b>Protocolo de Autorização: ${Date.now()}</b>
+
+                        <div style="margin-top:50px; display:flex; justify-content:space-between;">
+                            <div style="width:45%; border-top:1px solid black; text-align:center; padding-top:5px;">
+                                <p style="font-size:10px;">ASSINATURA DO EMISSOR (SENTINELA)</p>
+                            </div>
+                            <div style="width:45%; border-top:1px solid black; text-align:center; padding-top:5px;">
+                                <p style="font-size:10px;">ASSINATURA DO CLIENTE: ${dados.nome}</p>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:30px; font-size:8px; text-align:center;">
+                            CHAVE DE ACESSO SEFAZ: ${dados.chave}<br>
+                            SISTEMA SENTINELA V12 - TECNOLOGIA DE CRIPTOGRAFIA AVANÇADA
                         </div>
                     </div>
                 `;
             } else {
+                // DESIGN CUPOM TÉRMICO (DIFERENTE)
                 html = `
-                    <div class="thermal-font" style="text-align:center; width:80mm; font-size:12px;">
-                        <p><b>*** COMPROVANTE DE PAGAMENTO ***</b></p>
-                        <p>V12 SENTINELA PDV</p>
-                        <hr>
-                        <p align="left">DATA: ${dataHora}</p>
-                        <p align="left">CLIENTE: ${cliente}</p>
-                        <p align="left">DOC: ${doc}</p>
-                        <hr>
-                        <p align="left">DESC: ${desc}</p>
-                        <p align="left" style="font-size:16px;"><b>TOTAL: R$ ${valor}</b></p>
-                        <hr>
-                        <p>Obrigado pela preferência!</p>
-                        <p>Cristian System v12.0</p>
+                    <div class="print-thermal" style="width:80mm; font-family:'Courier Prime'; color:black;">
+                        <center>
+                            <h2 style="margin:0;">V12 SENTINELA</h2>
+                            <p style="font-size:10px;">UNIDADE MÓVEL DE VENDAS</p>
+                            <p>--------------------------------</p>
+                            <p><b>CUPOM DE OPERAÇÃO</b></p>
+                        </center>
+                        <p style="font-size:11px;">CLIENTE: ${dados.nome}</p>
+                        <p style="font-size:11px;">DOC: ${dados.doc}</p>
+                        <p>--------------------------------</p>
+                        <p style="font-size:11px;">${dados.prod}</p>
+                        <p style="font-size:14px; text-align:right;"><b>TOTAL: R$ ${dados.valor}</b></p>
+                        <p>--------------------------------</p>
+                        <p style="font-size:9px;">DATA: ${new Date().toLocaleString()}</p>
+                        <p style="font-size:9px;">AUTORIZAÇÃO: ${Math.random().toString(36).toUpperCase().slice(2)}</p>
+                        <br><br>
+                        <center>__________________________<br>VISTO DO FISCAL</center>
                     </div>
                 `;
             }
 
-            document.getElementById('thermal-receipt').innerHTML = html;
-            
-            // Chama API do ASAAS (Exemplo de Handshake)
-            registrarNoAsaas(cliente, valor);
-            
+            document.getElementById('container-documento').innerHTML = html;
             window.print();
         }
 
-        async function registrarNoAsaas(nome, valor) {
-            console.log(`Integrando venda de R$ ${valor} para ${nome} no ASAAS...`);
-            // Aqui entra o fetch real para sua API/Backend que fala com o Asaas
-        }
-
-        function enviarWhatsApp() {
-            const numero = document.getElementById('cliWhats').value;
-            const cliente = document.getElementById('cliNome').value;
-            const valor = document.getElementById('prodValor').value;
-
-            if(!numero) return alert("Insira o WhatsApp do cliente.");
-
-            const msg = window.encodeURIComponent(`Olá ${cliente}, segue o link da sua Nota Fiscal / Recibo emitido pelo Sentinela V12 no valor de R$ ${valor}.`);
-            window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${msg}`);
+        function enviarWhats() {
+            const num = document.getElementById('v_whats').value;
+            const nome = document.getElementById('v_nome').value;
+            const valor = document.getElementById('v_valor').value;
+            const msg = `Olá ${nome}, seu documento fiscal Sentinela V12 foi gerado com sucesso no valor de R$ ${valor}. Acesse seu e-mail ou visualize o PDF anexo.`;
+            window.open(`https://api.whatsapp.com/send?phone=${num}&text=${encodeURIComponent(msg)}`);
         }
     </script>
 </body>
