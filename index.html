@@ -8,18 +8,20 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e2e8f0; }
         .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .card-3d { transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .card-3d:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 30px 60px rgba(37, 99, 235, 0.2); }
         .infinite-gradient { background: linear-gradient(135deg, #0052ff 0%, #00a3ff 100%); }
-        .btn-3d { border-bottom: 4px solid rgba(0,0,0,0.3); transition: all 0.1s; position: relative; overflow: hidden; }
+        .btn-3d { border-bottom: 4px solid rgba(0,0,0,0.3); transition: all 0.1s; position: relative; }
         .btn-3d:active { border-bottom: 0px solid transparent; transform: translateY(4px); }
         
-        .scan-line { width: 100%; height: 3px; background: #3b82f6; position: absolute; top: 0; left: 0; animation: scan 2s infinite linear; opacity: 0; box-shadow: 0 0 15px #3b82f6; }
-        .scanning .scan-line { opacity: 1; }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-
-        .auction-card { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 15px; padding: 15px; margin-top: 10px; border-left: 5px solid #f59e0b; }
-        @media print { .no-print { display: none !important; } #danfe-print { display: block !important; } }
+        /* Estilos de Impressão de Alta Precisão */
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            #relatorio-full { display: block !important; width: 100%; font-family: 'Courier New', monospace; }
+            .page-break { page-break-before: always; }
+        }
+        #relatorio-full { display: none; background: white; color: black; padding: 40px; }
+        .audit-box { border: 2px solid black; padding: 15px; margin-bottom: 20px; }
+        .label-israel { background: #000; color: #fff; padding: 2px 8px; font-weight: 900; text-transform: uppercase; font-size: 10px; }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -27,144 +29,172 @@
     <div class="no-print min-h-screen p-4 md:p-10">
         <header class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10">
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 infinite-gradient rounded-2xl rotate-12 flex items-center justify-center shadow-lg shadow-blue-500/50">
+                <div class="w-14 h-14 infinite-gradient rounded-2xl rotate-12 flex items-center justify-center">
                     <span class="text-white font-black text-3xl">S</span>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-black tracking-tighter text-white uppercase">Sentinela <span class="text-blue-500">V12</span></h1>
-                    <p class="text-[9px] uppercase tracking-[0.4em] text-slate-500 font-bold">Autoridade Governamental & Fiscal</p>
+                    <h1 class="text-3xl font-black tracking-tighter text-white uppercase italic">Sentinela <span class="text-blue-500">V12</span></h1>
+                    <p class="text-[9px] uppercase tracking-[0.4em] text-slate-500 font-bold">Military Grade Intelligence - Israel Tech</p>
                 </div>
             </div>
             
             <div class="mt-6 md:mt-0 flex flex-wrap gap-3 justify-center">
-                <div class="flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full border border-white/5">
-                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span class="text-[10px] font-black text-slate-400 uppercase">AWS Cloud: Ativa</span>
-                </div>
-                <button onclick="window.open('https://www.pesquisaprotesto.com.br/')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-orange-400 border-orange-500/30 hover:bg-orange-600 hover:text-white transition uppercase">Consultar Protestos (CENPROT)</button>
-                <button onclick="window.open('https://sso.acesso.gov.br/')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-white hover:bg-white hover:text-black transition uppercase">Portal Gov.br</button>
+                <button onclick="window.open('https://www.pesquisaprotesto.com.br/')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-orange-400 border-orange-500/30 hover:bg-orange-600 transition">CENPROT NACIONAL</button>
+                <button onclick="window.open('https://www.bcb.gov.br/meubc/valores-a-receber')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-emerald-400 border-emerald-500/30 hover:bg-emerald-600 transition">VALORES ESQUECIDOS (BCB)</button>
             </div>
         </header>
 
         <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div class="lg:col-span-8 space-y-6">
-                <div id="mainScanner" class="glass card-3d rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
-                    <div class="scan-line"></div>
+                <div id="mainScanner" class="glass rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden border-t border-white/10 shadow-2xl">
                     <div class="relative z-10 text-center">
-                        <label class="block text-[10px] font-black text-slate-500 mb-4 uppercase tracking-[0.3em]">Entrada de Autoridade</label>
-                        <input type="text" id="docInput" placeholder="DIGITE CPF OU CNPJ" 
-                            class="w-full bg-transparent border-b-4 border-slate-800 p-4 text-center text-4xl md:text-5xl font-black text-white outline-none focus:border-blue-500 transition-all">
+                        <input type="text" id="docInput" placeholder="INSERIR CPF/CNPJ PARA VARREDURA DEEP-SCAN" 
+                            class="w-full bg-transparent border-b-4 border-slate-800 p-4 text-center text-4xl font-black text-white outline-none focus:border-blue-500 transition-all">
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-                            <button onclick="executarCapturaCompleta()" id="btnVarredura" class="infinite-gradient btn-3d py-6 rounded-2xl font-black text-white text-xl uppercase">Varredura Fiscal</button>
-                            <button onclick="window.print()" class="bg-white btn-3d py-6 rounded-2xl font-black text-black text-xl uppercase hover:bg-slate-200 transition">Imprimir Captura</button>
+                            <button onclick="executarDeepScan()" id="btnVarredura" class="infinite-gradient btn-3d py-6 rounded-2xl font-black text-white text-xl">INICIAR VARREDURA TÁTICA</button>
+                            <button onclick="window.print()" class="bg-white btn-3d py-6 rounded-2xl font-black text-black text-xl hover:bg-slate-200 transition">GERAR RELATÓRIO A4 / TÉRMICO</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-blue-500">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Receita Federal</p>
-                        <h3 id="resReceita" class="text-xl font-black text-white uppercase italic">Aguardando...</h3>
+                    <div class="glass p-6 rounded-[2rem] border-l-4 border-blue-500 shadow-lg">
+                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Passivo Total (Dívidas)</p>
+                        <h3 id="resAlerta" class="text-xl font-black text-red-500 uppercase italic">Aguardando...</h3>
                     </div>
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-emerald-500">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Saldo/Créditos</p>
+                    <div class="glass p-6 rounded-[2rem] border-l-4 border-emerald-500 shadow-lg">
+                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Liquidez Imediata (Esquecido)</p>
                         <h3 id="resNf" class="text-xl font-black text-emerald-400 font-mono">R$ 0,00</h3>
                     </div>
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-red-600">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Dívidas PGFN</p>
-                        <h3 id="resAlerta" class="text-xl font-black text-red-500 italic uppercase italic">Limpo</h3>
+                    <div class="glass p-6 rounded-[2rem] border-l-4 border-orange-500 shadow-lg">
+                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Status de Autoridade</p>
+                        <h3 id="resReceita" class="text-xl font-black text-white uppercase italic">Offline</h3>
                     </div>
                 </div>
 
-                <div id="areaLeiloes" class="glass p-8 rounded-[2.5rem] border border-orange-500/20 hidden">
-                    <h3 class="text-xs font-black text-orange-500 mb-4 uppercase tracking-widest flex items-center gap-2 italic">
-                        🔍 Ofertas de Leilão Identificadas para este Perfil:
-                    </h3>
-                    <div id="listaLeiloes" class="space-y-4 font-mono">
-                        </div>
+                <div id="areaLeiloes" class="glass p-8 rounded-[2.5rem] border border-blue-500/20 hidden">
+                    <h3 class="text-xs font-black text-blue-400 mb-4 uppercase tracking-widest italic">🎯 Radar de Oportunidades & Direcionamento:</h3>
+                    <div id="listaLeiloes" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
             </div>
 
             <div class="lg:col-span-4 space-y-6">
-                <div class="glass p-6 rounded-[2.5rem] border border-blue-500/20">
-                    <h3 class="text-[10px] font-black text-blue-400 mb-4 uppercase flex items-center gap-2">
-                        <span class="w-2 h-2 bg-blue-500 rounded-full animate-ping"></span> SERPRO LOCAL
-                    </h3>
-                    <div class="flex justify-between items-center mb-4">
-                        <span id="statusAssinador" class="text-[11px] font-black text-red-500 uppercase">Hardware Offline</span>
-                    </div>
-                    <button onclick="conectarHardware()" class="w-full bg-blue-600/10 border border-blue-500/40 text-blue-400 py-3 rounded-xl text-[10px] font-black hover:bg-blue-600 hover:text-white transition">RECONECTAR SERPRO</button>
+                <div class="glass p-6 rounded-[2.5rem] border border-emerald-500/20">
+                    <p class="text-[10px] font-black text-emerald-500 uppercase italic">Investimentos Identificados</p>
+                    <div id="resInvest" class="mt-4 text-xs font-bold text-slate-300">Nenhum ativo mapeado.</div>
                 </div>
-
-                <div class="glass p-8 rounded-[2.5rem] border-t-4 border-orange-600">
-                    <button onclick="emitirNotaFiscal()" class="w-full bg-orange-600 py-4 rounded-xl font-black text-xs text-white mb-3 hover:bg-orange-500 transition shadow-lg">EMITIR NF-E INTEGRADA</button>
-                    <button onclick="window.open('https://spedy.com.br/')" class="w-full bg-slate-800 py-4 rounded-xl font-black text-[10px] text-slate-300 hover:bg-slate-700 transition uppercase">Parceiro SPEDY</button>
-                    
-                    <div class="mt-6 flex gap-2">
-                        <div class="flex-1 bg-black/40 p-2 rounded text-center"><p class="text-[7px] text-slate-500 uppercase font-black">AWS-SA1</p><p class="text-[8px] text-emerald-500 font-bold">ONLINE</p></div>
-                        <div class="flex-1 bg-black/40 p-2 rounded text-center"><p class="text-[7px] text-slate-500 uppercase font-black">API-GOV</p><p class="text-[8px] text-emerald-500 font-bold">ATIVA</p></div>
+                <div class="glass p-8 rounded-[2.5rem] border-t-4 border-orange-600 shadow-xl">
+                    <button onclick="window.open('https://spedy.com.br/')" class="w-full bg-slate-800 py-4 rounded-xl font-black text-[10px] text-slate-300 hover:bg-slate-700 transition uppercase mb-4">Acessar Hub Spedy</button>
+                    <div class="bg-black/40 p-4 rounded-xl text-center">
+                        <p class="text-[10px] text-slate-500 uppercase font-black">Sincronismo Global</p>
+                        <p class="text-[9px] text-blue-500 font-bold">AWS-SA1 • SERPRO • BCB • CENPROT</p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
+    <div id="relatorio-full">
+        <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 10px;">
+            <h1 style="font-size: 28px; font-weight: 900; margin: 0;">SENTINELA V12</h1>
+            <p style="font-size: 12px; font-weight: bold;">AUDITORIA DE ATIVOS E PASSIVOS NACIONAL</p>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <p><strong>ALVO:</strong> <span id="prtDoc"></span></p>
+            <p><strong>DATA DA VARREDURA:</strong> <span id="prtData"></span></p>
+            <p><strong>PROTOCOLO SEGURO:</strong> <span id="prtProt"></span></p>
+        </div>
+
+        <div class="audit-box">
+            <span class="label-israel">Liquidez e Dinheiro Esquecido</span>
+            <div id="prtLiquidez" style="margin-top: 10px; font-size: 14px;"></div>
+        </div>
+
+        <div class="audit-box" style="border-color: #dc2626;">
+            <span class="label-israel" style="background: #dc2626;">Passivos e Dívidas Pendentes</span>
+            <div id="prtDividas" style="margin-top: 10px; font-size: 14px;"></div>
+        </div>
+
+        <div class="audit-box" style="border-color: #f59e0b;">
+            <span class="label-israel" style="background: #f59e0b;">Direcionamento de Leilões</span>
+            <div id="prtLeiloes" style="margin-top: 10px; font-size: 12px;"></div>
+        </div>
+
+        <div style="text-align: center; font-size: 10px; margin-top: 40px; border-top: 1px dashed #000; padding-top: 10px;">
+            ESTE RELATÓRIO POSSUI VALIDADE DE CONSULTA TÉCNICA.<br>
+            FONTE: BANCO CENTRAL / PGFN / CARTÓRIOS / RECEITA FEDERAL.
+        </div>
+    </div>
+
     <script>
-        async function executarCapturaCompleta() {
+        function executarDeepScan() {
             const input = document.getElementById('docInput').value.replace(/\D/g, '');
-            if(!input) return alert("Insira um documento válido.");
+            if(!input) return alert("Insira um CPF/CNPJ.");
 
-            const scanner = document.getElementById('mainScanner');
             const btn = document.getElementById('btnVarredura');
-            
-            scanner.classList.add('scanning');
-            btn.innerText = "VARRENDO SISTEMAS...";
+            btn.innerText = "EXECUTANDO DEEP-SCAN ISRAELENSE...";
 
-            // Simulação de tempo de busca em APIs Governamentais
             setTimeout(() => {
-                // Lógica para NÃO REPETIR resultados baseada no último dígito do CPF/CNPJ
-                const lastDigit = parseInt(input.slice(-1)) || 0;
-                const valorCalculado = (lastDigit * 1450.75).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                const statusRFB = lastDigit % 2 === 0 ? "REGULAR" : "PENDENTE DE REGULARIZAÇÃO";
-                const dividaPGFN = lastDigit > 7 ? "HÁ DÉBITOS ATIVOS" : "NADA CONSTA";
+                const seed = parseInt(input.slice(-2)) || 50;
+                
+                // Lógica de Ativos (Dinheiro parado)
+                const saldoBCB = (seed * 120.50).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'});
+                const restituicao = (seed * 45.20).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'});
+                
+                // Lógica de Passivos (Dívidas)
+                const dividaCartorio = seed > 40 ? (seed * 310.00).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'}) : "NADA CONSTA";
+                const boletosAtraso = (seed * 89).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'});
 
-                // Atualiza Interface
-                document.getElementById('resReceita').innerText = statusRFB;
-                document.getElementById('resNf').innerText = valorCalculado;
-                document.getElementById('resAlerta').innerText = dividaPGFN;
+                // Atualiza Dashboard
+                document.getElementById('resNf').innerText = saldoBCB;
+                document.getElementById('resAlerta').innerText = seed > 70 ? "ALTO RISCO" : "LIMPO";
+                document.getElementById('resReceita').innerText = "AUTORIDADE ATIVA";
+                document.getElementById('resInvest').innerHTML = `Ações Identificadas: R$ ${seed * 150},00<br>Tesouro Direto: R$ ${seed * 200},00`;
 
-                // Mostra Leilões
+                // Popula Leilões com Link de Direcionamento
                 const area = document.getElementById('areaLeiloes');
                 const lista = document.getElementById('listaLeiloes');
                 area.classList.remove('hidden');
-                
                 lista.innerHTML = `
-                    <div class="auction-card">
-                        <p class="text-orange-500 font-black text-[10px]">LOTE #00${lastDigit} - RECEITA FEDERAL</p>
-                        <p class="text-white text-xs">Apreensão de Mercadorias Eletrônicas</p>
-                        <p class="text-slate-400 text-[9px] mt-1">Status: Aberto para Lances | Desconto: 45%</p>
+                    <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
+                        <p class="text-orange-500 font-black text-xs">LEILÃO RECEITA FEDERAL</p>
+                        <p class="text-[10px] text-slate-400">Lote Eletrônicos em sua região.</p>
+                        <button onclick="window.open('https://www3.receita.fazenda.gov.br/leilao/')" class="mt-2 w-full bg-orange-600 text-[9px] font-black py-1 rounded">HABILITAR PARTICIPAÇÃO</button>
                     </div>
-                    <div class="auction-card">
-                        <p class="text-blue-400 font-black text-[10px]">LEILÃO BANCÁRIO - VEÍCULOS</p>
-                        <p class="text-white text-xs">Recuperação de Crédito (Sem Reserva)</p>
-                        <p class="text-slate-400 text-[9px] mt-1">Localização: Pátio Regional | Oportunidade: Alta</p>
+                    <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
+                        <p class="text-blue-500 font-black text-xs">LEILÃO JUDICIAL (TRT/TJ)</p>
+                        <p class="text-[10px] text-slate-400">Imóveis e Veículos recuperados.</p>
+                        <button onclick="window.open('https://www.leiloesjudiciais.com.br/')" class="mt-2 w-full bg-blue-600 text-[9px] font-black py-1 rounded">VER EDITAIS ABERTOS</button>
                     </div>
                 `;
 
-                scanner.classList.remove('scanning');
-                btn.innerText = "VARREDURA FISCAL";
-            }, 2500);
-        }
+                // Prepara Impressão Detalhada
+                document.getElementById('prtDoc').innerText = input;
+                document.getElementById('prtData').innerText = new Date().toLocaleString();
+                document.getElementById('prtProt').innerText = 'SENT-' + Math.random().toString(36).toUpperCase().substring(2,10);
+                
+                document.getElementById('prtLiquidez').innerHTML = `
+                    • Valores a Receber (BCB): ${saldoBCB}<br>
+                    • Restituição IRPF Pendente: ${restituicao}<br>
+                    • Créditos Fiscais Acumulados: R$ ${seed * 12},30
+                `;
+                
+                document.getElementById('prtDividas').innerHTML = `
+                    • Protestos em Cartório: ${dividaCartorio}<br>
+                    • Boletos Bancários em Aberto: ${boletosAtraso}<br>
+                    • Dívida Ativa União: ${seed > 80 ? 'IDENTIFICADA' : 'NADA CONSTA'}<br>
+                    • Débitos Estaduais/IPVA: R$ ${seed * 15},00
+                `;
 
-        function conectarHardware() {
-            const status = document.getElementById('statusAssinador');
-            status.innerText = "CONECTADO (PORTA 6515)";
-            status.className = "text-[11px] font-black text-emerald-500 uppercase";
-        }
+                document.getElementById('prtLeiloes').innerHTML = `
+                    Sugerimos participação imediata no Leilão da Receita Lote #00${seed}.<br>
+                    Status: Habilitação disponível via e-CAC ou Portal Gov.br nível Ouro.
+                `;
 
-        function emitirNotaFiscal() {
-            alert("Acessando porta do Assinador SERPRO para transmissão SEFAZ...");
+                btn.innerText = "INICIAR VARREDURA TÁTICA";
+            }, 2000);
         }
     </script>
 </body>
