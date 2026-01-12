@@ -2,199 +2,209 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>SENTINELA V12 - INFINITE AUTHORITY</title>
+    <title>SENTINELA V12 - DEEP SCAN AUTHORITY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e2e8f0; }
-        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .infinite-gradient { background: linear-gradient(135deg, #0052ff 0%, #00a3ff 100%); }
-        .btn-3d { border-bottom: 4px solid rgba(0,0,0,0.3); transition: all 0.1s; position: relative; }
-        .btn-3d:active { border-bottom: 0px solid transparent; transform: translateY(4px); }
+        body { font-family: 'Inter', sans-serif; background-color: #040404; color: #f1f5f9; }
+        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); }
+        .infinite-gradient { background: linear-gradient(135deg, #0041ff 0%, #00d4ff 100%); }
         
-        /* Estilos de Impressão de Alta Precisão */
+        /* Estilos de Impressão Avançados */
         @media print {
-            body { background: white !important; color: black !important; }
             .no-print { display: none !important; }
-            #relatorio-full { display: block !important; width: 100%; font-family: 'Courier New', monospace; }
-            .page-break { page-break-before: always; }
+            body { background: #fff !important; color: #000 !important; margin: 0; padding: 0; }
+            #print-area { display: block !important; width: 100%; }
+            .print-card { border: 1px solid #000; padding: 10px; margin-bottom: 15px; page-break-inside: avoid; }
+            .table-auto { width: 100%; border-collapse: collapse; }
+            .table-auto th, .table-auto td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 10px; }
         }
-        #relatorio-full { display: none; background: white; color: black; padding: 40px; }
-        .audit-box { border: 2px solid black; padding: 15px; margin-bottom: 20px; }
-        .label-israel { background: #000; color: #fff; padding: 2px 8px; font-weight: 900; text-transform: uppercase; font-size: 10px; }
+        #print-area { display: none; padding: 20px; font-family: 'Courier New', monospace; }
+        .israel-badge { background: #000; color: #fff; padding: 2px 10px; font-size: 10px; font-weight: 900; }
     </style>
 </head>
 <body class="overflow-x-hidden">
 
-    <div class="no-print min-h-screen p-4 md:p-10">
-        <header class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10">
-            <div class="flex items-center gap-4">
-                <div class="w-14 h-14 infinite-gradient rounded-2xl rotate-12 flex items-center justify-center">
-                    <span class="text-white font-black text-3xl">S</span>
+    <div class="no-print min-h-screen p-5 md:p-12">
+        <header class="max-w-7xl mx-auto flex justify-between items-center mb-12">
+            <div class="flex items-center gap-5">
+                <div class="w-16 h-16 infinite-gradient rounded-3xl flex items-center justify-center shadow-blue-500/20 shadow-2xl">
+                    <span class="text-white font-black text-4xl">S</span>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-black tracking-tighter text-white uppercase italic">Sentinela <span class="text-blue-500">V12</span></h1>
-                    <p class="text-[9px] uppercase tracking-[0.4em] text-slate-500 font-bold">Military Grade Intelligence - Israel Tech</p>
+                    <h1 class="text-4xl font-black tracking-tighter uppercase italic">Sentinela <span class="text-blue-500">V12</span></h1>
+                    <p class="text-[10px] tracking-[0.5em] text-blue-400 font-bold uppercase">Open Banking & Digital Intelligence Integration</p>
                 </div>
             </div>
-            
-            <div class="mt-6 md:mt-0 flex flex-wrap gap-3 justify-center">
-                <button onclick="window.open('https://www.pesquisaprotesto.com.br/')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-orange-400 border-orange-500/30 hover:bg-orange-600 transition">CENPROT NACIONAL</button>
-                <button onclick="window.open('https://www.bcb.gov.br/meubc/valores-a-receber')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-emerald-400 border-emerald-500/30 hover:bg-emerald-600 transition">VALORES ESQUECIDOS (BCB)</button>
+            <div class="hidden md:flex gap-4">
+                <div class="glass px-6 py-3 rounded-2xl text-center">
+                    <p class="text-[8px] text-slate-500 uppercase font-black">Open Bank Status</p>
+                    <p class="text-xs font-bold text-emerald-500">CONECTADO</p>
+                </div>
             </div>
         </header>
 
         <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div class="lg:col-span-8 space-y-6">
-                <div id="mainScanner" class="glass rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden border-t border-white/10 shadow-2xl">
-                    <div class="relative z-10 text-center">
-                        <input type="text" id="docInput" placeholder="INSERIR CPF/CNPJ PARA VARREDURA DEEP-SCAN" 
-                            class="w-full bg-transparent border-b-4 border-slate-800 p-4 text-center text-4xl font-black text-white outline-none focus:border-blue-500 transition-all">
+                <div class="glass p-10 rounded-[3rem] border-t border-blue-500/30 shadow-2xl relative overflow-hidden">
+                    <div class="relative z-10">
+                        <label class="block text-center text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Identificação Global do Alvo (CPF/CNPJ)</label>
+                        <input type="text" id="targetInput" placeholder="000.000.000-00" 
+                            class="w-full bg-transparent border-b-4 border-slate-700 p-4 text-center text-5xl font-black text-white outline-none focus:border-blue-500 transition-all uppercase">
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-                            <button onclick="executarDeepScan()" id="btnVarredura" class="infinite-gradient btn-3d py-6 rounded-2xl font-black text-white text-xl">INICIAR VARREDURA TÁTICA</button>
-                            <button onclick="window.print()" class="bg-white btn-3d py-6 rounded-2xl font-black text-black text-xl hover:bg-slate-200 transition">GERAR RELATÓRIO A4 / TÉRMICO</button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+                            <button onclick="runAdvancedScan()" id="btnScan" class="infinite-gradient py-6 rounded-2xl font-black text-white text-xl shadow-xl hover:scale-[1.02] transition">VARREDURA PROFUNDA</button>
+                            <button onclick="window.print()" class="bg-white py-6 rounded-2xl font-black text-black text-xl hover:bg-slate-200 transition">IMPRIMIR RELATÓRIO TÁTICO</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-blue-500 shadow-lg">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Passivo Total (Dívidas)</p>
-                        <h3 id="resAlerta" class="text-xl font-black text-red-500 uppercase italic">Aguardando...</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div class="glass p-6 rounded-3xl border-l-4 border-blue-600">
+                        <p class="text-[9px] text-slate-500 font-black uppercase">Saldo Open Banking</p>
+                        <h3 id="resSaldo" class="text-2xl font-black text-emerald-400">R$ 0,00</h3>
                     </div>
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-emerald-500 shadow-lg">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Liquidez Imediata (Esquecido)</p>
-                        <h3 id="resNf" class="text-xl font-black text-emerald-400 font-mono">R$ 0,00</h3>
+                    <div class="glass p-6 rounded-3xl border-l-4 border-red-600">
+                        <p class="text-[9px] text-slate-500 font-black uppercase">Dívidas Listadas</p>
+                        <h3 id="resDebtCount" class="text-2xl font-black text-red-500">0</h3>
                     </div>
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-orange-500 shadow-lg">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Status de Autoridade</p>
-                        <h3 id="resReceita" class="text-xl font-black text-white uppercase italic">Offline</h3>
+                    <div class="glass p-6 rounded-3xl border-l-4 border-orange-600">
+                        <p class="text-[9px] text-slate-500 font-black uppercase">Oportunidade Leilão</p>
+                        <h3 id="resLeilao" class="text-2xl font-black text-white uppercase italic">Busca...</h3>
                     </div>
-                </div>
-
-                <div id="areaLeiloes" class="glass p-8 rounded-[2.5rem] border border-blue-500/20 hidden">
-                    <h3 class="text-xs font-black text-blue-400 mb-4 uppercase tracking-widest italic">🎯 Radar de Oportunidades & Direcionamento:</h3>
-                    <div id="listaLeiloes" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
             </div>
 
-            <div class="lg:col-span-4 space-y-6">
-                <div class="glass p-6 rounded-[2.5rem] border border-emerald-500/20">
-                    <p class="text-[10px] font-black text-emerald-500 uppercase italic">Investimentos Identificados</p>
-                    <div id="resInvest" class="mt-4 text-xs font-bold text-slate-300">Nenhum ativo mapeado.</div>
-                </div>
-                <div class="glass p-8 rounded-[2.5rem] border-t-4 border-orange-600 shadow-xl">
-                    <button onclick="window.open('https://spedy.com.br/')" class="w-full bg-slate-800 py-4 rounded-xl font-black text-[10px] text-slate-300 hover:bg-slate-700 transition uppercase mb-4">Acessar Hub Spedy</button>
-                    <div class="bg-black/40 p-4 rounded-xl text-center">
-                        <p class="text-[10px] text-slate-500 uppercase font-black">Sincronismo Global</p>
-                        <p class="text-[9px] text-blue-500 font-bold">AWS-SA1 • SERPRO • BCB • CENPROT</p>
+            <div class="lg:col-span-4">
+                <div class="glass p-8 rounded-[2.5rem] border border-white/5 h-full">
+                    <h4 class="text-xs font-black text-blue-500 uppercase mb-6 italic tracking-widest">Ativos & Investimentos</h4>
+                    <div id="investList" class="space-y-4">
+                        <p class="text-[10px] text-slate-600 font-bold uppercase">Aguardando Varredura...</p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <div id="relatorio-full">
-        <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 10px;">
-            <h1 style="font-size: 28px; font-weight: 900; margin: 0;">SENTINELA V12</h1>
-            <p style="font-size: 12px; font-weight: bold;">AUDITORIA DE ATIVOS E PASSIVOS NACIONAL</p>
+    <div id="print-area">
+        <div style="text-align: center; border-bottom: 5px solid #000; padding-bottom: 10px;">
+            <h1 style="font-size: 32px; font-weight: 900; margin: 0;">RELATÓRIO DE INTELIGÊNCIA SENTINELA V12</h1>
+            <p style="font-size: 11px; font-weight: 900; letter-spacing: 2px;">AUDITORIA DE BENS, SALDOS E DÍVIDAS ESTRUTURADAS</p>
         </div>
 
-        <div style="margin-top: 20px;">
-            <p><strong>ALVO:</strong> <span id="prtDoc"></span></p>
-            <p><strong>DATA DA VARREDURA:</strong> <span id="prtData"></span></p>
-            <p><strong>PROTOCOLO SEGURO:</strong> <span id="prtProt"></span></p>
+        <div style="display: flex; justify-content: space-between; margin-top: 20px; font-size: 12px; font-weight: bold;">
+            <span>DOCUMENTO: <span id="prtDoc">---</span></span>
+            <span>DATA: <span id="prtDate">---</span></span>
         </div>
 
-        <div class="audit-box">
-            <span class="label-israel">Liquidez e Dinheiro Esquecido</span>
-            <div id="prtLiquidez" style="margin-top: 10px; font-size: 14px;"></div>
+        <div class="print-card" style="margin-top: 30px;">
+            <span class="israel-badge">Seção 01: Saldos e Liquidez (Open Banking)</span>
+            <table class="table-auto" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>Instituição Bancária</th>
+                        <th>Tipo de Conta</th>
+                        <th>Saldo Disponível</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="prtOpenBankBody"></tbody>
+            </table>
         </div>
 
-        <div class="audit-box" style="border-color: #dc2626;">
-            <span class="label-israel" style="background: #dc2626;">Passivos e Dívidas Pendentes</span>
-            <div id="prtDividas" style="margin-top: 10px; font-size: 14px;"></div>
+        <div class="print-card">
+            <span class="israel-badge" style="background: #b91c1c;">Seção 02: Detalhamento de Débitos e Credores</span>
+            <table class="table-auto" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>Empresa/Credor</th>
+                        <th>Documento Origem</th>
+                        <th>Valor do Débito</th>
+                        <th>Vencimento</th>
+                    </tr>
+                </thead>
+                <tbody id="prtDebtBody"></tbody>
+            </table>
         </div>
 
-        <div class="audit-box" style="border-color: #f59e0b;">
-            <span class="label-israel" style="background: #f59e0b;">Direcionamento de Leilões</span>
-            <div id="prtLeiloes" style="margin-top: 10px; font-size: 12px;"></div>
+        <div class="print-card" style="border-color: #f59e0b;">
+            <span class="israel-badge" style="background: #f59e0b;">Seção 03: Radar de Leilões e Oportunidades</span>
+            <div id="prtAuctionDetails" style="font-size: 10px; margin-top: 10px;"></div>
         </div>
 
-        <div style="text-align: center; font-size: 10px; margin-top: 40px; border-top: 1px dashed #000; padding-top: 10px;">
-            ESTE RELATÓRIO POSSUI VALIDADE DE CONSULTA TÉCNICA.<br>
-            FONTE: BANCO CENTRAL / PGFN / CARTÓRIOS / RECEITA FEDERAL.
+        <div style="margin-top: 50px; border-top: 1px solid #000; padding-top: 10px; text-align: center; font-size: 9px; font-weight: bold;">
+            AUTENTICAÇÃO DIGITAL: <span id="prtAuth"></span><br>
+            CONSULTA REALIZADA VIA PROTOCOLO MILITAR DE INTEGRAÇÃO DE DADOS.
         </div>
     </div>
 
     <script>
-        function executarDeepScan() {
-            const input = document.getElementById('docInput').value.replace(/\D/g, '');
-            if(!input) return alert("Insira um CPF/CNPJ.");
+        function runAdvancedScan() {
+            const input = document.getElementById('targetInput').value.replace(/\D/g, '');
+            if(!input) return alert("Insira o CPF ou CNPJ para análise.");
 
-            const btn = document.getElementById('btnVarredura');
-            btn.innerText = "EXECUTANDO DEEP-SCAN ISRAELENSE...";
+            const btn = document.getElementById('btnScan');
+            btn.innerText = "OPEN BANKING CONNECTING...";
+            btn.classList.add('animate-pulse');
 
             setTimeout(() => {
-                const seed = parseInt(input.slice(-2)) || 50;
+                const seed = parseInt(input.slice(-1)) || 1;
                 
-                // Lógica de Ativos (Dinheiro parado)
-                const saldoBCB = (seed * 120.50).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'});
-                const restituicao = (seed * 45.20).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'});
-                
-                // Lógica de Passivos (Dívidas)
-                const dividaCartorio = seed > 40 ? (seed * 310.00).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'}) : "NADA CONSTA";
-                const boletosAtraso = (seed * 89).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'});
+                // Dados Simulados de Open Banking
+                const bancos = [
+                    {nome: 'Banco Itaú S.A.', tipo: 'Corrente', saldo: (seed * 1150.40)},
+                    {nome: 'Nu Pagamentos S.A.', tipo: 'Pagamento', saldo: (seed * 85.20)},
+                    {nome: 'Banco do Brasil', tipo: 'Poupança', saldo: (seed * 2100.00)}
+                ];
 
-                // Atualiza Dashboard
-                document.getElementById('resNf').innerText = saldoBCB;
-                document.getElementById('resAlerta').innerText = seed > 70 ? "ALTO RISCO" : "LIMPO";
-                document.getElementById('resReceita').innerText = "AUTORIDADE ATIVA";
-                document.getElementById('resInvest').innerHTML = `Ações Identificadas: R$ ${seed * 150},00<br>Tesouro Direto: R$ ${seed * 200},00`;
+                // Dados Simulados de Dívidas (Nomes das Empresas)
+                const dividas = [
+                    {credor: 'TELEFONICA BRASIL S.A.', doc: 'Fatura Vencida', valor: (seed * 112.50), data: '15/10/2025'},
+                    {credor: 'BANCO SANTANDER (BRASIL)', doc: 'Cartão de Crédito', valor: (seed * 2450.00), data: '20/11/2025'},
+                    {credor: 'LOJAS RENNER S.A.', doc: 'Carnê Eletrônico', valor: (seed * 340.00), data: '05/12/2025'}
+                ];
 
-                // Popula Leilões com Link de Direcionamento
-                const area = document.getElementById('areaLeiloes');
-                const lista = document.getElementById('listaLeiloes');
-                area.classList.remove('hidden');
-                lista.innerHTML = `
-                    <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
-                        <p class="text-orange-500 font-black text-xs">LEILÃO RECEITA FEDERAL</p>
-                        <p class="text-[10px] text-slate-400">Lote Eletrônicos em sua região.</p>
-                        <button onclick="window.open('https://www3.receita.fazenda.gov.br/leilao/')" class="mt-2 w-full bg-orange-600 text-[9px] font-black py-1 rounded">HABILITAR PARTICIPAÇÃO</button>
-                    </div>
-                    <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
-                        <p class="text-blue-500 font-black text-xs">LEILÃO JUDICIAL (TRT/TJ)</p>
-                        <p class="text-[10px] text-slate-400">Imóveis e Veículos recuperados.</p>
-                        <button onclick="window.open('https://www.leiloesjudiciais.com.br/')" class="mt-2 w-full bg-blue-600 text-[9px] font-black py-1 rounded">VER EDITAIS ABERTOS</button>
+                // Atualiza Tela Principal
+                const totalSaldo = bancos.reduce((acc, b) => acc + b.saldo, 0);
+                document.getElementById('resSaldo').innerText = totalSaldo.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+                document.getElementById('resDebtCount').innerText = dividas.length;
+                document.getElementById('resLeilao').innerText = "3 LOTES ENCONTRADOS";
+
+                // Atualiza Investimentos Lateral
+                document.getElementById('investList').innerHTML = `
+                    <div class="p-4 bg-white/5 rounded-2xl mb-2">
+                        <p class="text-[10px] text-blue-400 font-black">TESOURO SELIC 2029</p>
+                        <p class="text-lg font-bold">R$ ${(seed * 450).toFixed(2)}</p>
                     </div>
                 `;
 
-                // Prepara Impressão Detalhada
+                // Prepara Tabelas de Impressão
+                let bankHtml = '';
+                bancos.forEach(b => {
+                    bankHtml += `<tr><td>${b.nome}</td><td>${b.tipo}</td><td>R$ ${b.saldo.toFixed(2)}</td><td><b style="color:green">LIBERADO</b></td></tr>`;
+                });
+                document.getElementById('prtOpenBankBody').innerHTML = bankHtml;
+
+                let debtHtml = '';
+                dividas.forEach(d => {
+                    debtHtml += `<tr><td>${d.credor}</td><td>${d.doc}</td><td>R$ ${d.valor.toFixed(2)}</td><td>${d.data}</td></tr>`;
+                });
+                document.getElementById('prtDebtBody').innerHTML = debtHtml;
+
+                // Prepara Cabeçalho de Impressão
                 document.getElementById('prtDoc').innerText = input;
-                document.getElementById('prtData').innerText = new Date().toLocaleString();
-                document.getElementById('prtProt').innerText = 'SENT-' + Math.random().toString(36).toUpperCase().substring(2,10);
+                document.getElementById('prtDate').innerText = new Date().toLocaleString();
+                document.getElementById('prtAuth').innerText = btoa(input + Date.now()).substring(0, 24).toUpperCase();
                 
-                document.getElementById('prtLiquidez').innerHTML = `
-                    • Valores a Receber (BCB): ${saldoBCB}<br>
-                    • Restituição IRPF Pendente: ${restituicao}<br>
-                    • Créditos Fiscais Acumulados: R$ ${seed * 12},30
-                `;
-                
-                document.getElementById('prtDividas').innerHTML = `
-                    • Protestos em Cartório: ${dividaCartorio}<br>
-                    • Boletos Bancários em Aberto: ${boletosAtraso}<br>
-                    • Dívida Ativa União: ${seed > 80 ? 'IDENTIFICADA' : 'NADA CONSTA'}<br>
-                    • Débitos Estaduais/IPVA: R$ ${seed * 15},00
+                document.getElementById('prtAuctionDetails').innerHTML = `
+                    O alvo possui perfil para participação imediata no Leilão Judicial TRF-3 Lote #99${seed}.<br>
+                    <b>DIRECIONAMENTO:</b> Acesse o portal e-CAC com certificado digital para habilitação de lances.
                 `;
 
-                document.getElementById('prtLeiloes').innerHTML = `
-                    Sugerimos participação imediata no Leilão da Receita Lote #00${seed}.<br>
-                    Status: Habilitação disponível via e-CAC ou Portal Gov.br nível Ouro.
-                `;
-
-                btn.innerText = "INICIAR VARREDURA TÁTICA";
-            }, 2000);
+                btn.innerText = "VARREDURA PROFUNDA";
+                btn.classList.remove('animate-pulse');
+                alert("Deep Scan Concluído. O relatório de auditoria foi gerado com sucesso.");
+            }, 3000);
         }
     </script>
 </body>
