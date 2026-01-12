@@ -7,6 +7,7 @@
     <title>SENTINELA V12 | COMMAND INTERFACE</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
     <style>
@@ -14,7 +15,6 @@
             --active-orange: #ff6b00; 
             --deep-orange: #e65f00;
             --gov-bg: #f8fafc;
-            --israel-blue: #0038b8;
         }
         
         body { background: var(--gov-bg); font-family: 'Inter', sans-serif; color: #334155; }
@@ -38,7 +38,7 @@
             background: #ffffff; 
             border: 1px solid #e2e8f0; 
             border-radius: 12px; 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
         }
         
         .input-tactical {
@@ -69,12 +69,12 @@
             border-bottom-width: 0px;
         }
 
-        /* CORREÇÃO DO ERRO DE IMPRESSÃO A4 - PADRÃO PRIMEIRA FOTO */
+        /* Área do Scanner escondida até ser ativada */
+        #reader { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px; display: none; }
+
         @media print { 
             .no-print { display: none !important; } 
-            #print-area { display: block !important; padding: 20px; background: white; }
-            .print-card { border: 2px solid black; padding: 20px; margin-bottom: 10px; }
-            .print-header { border-bottom: 4px solid black; padding-bottom: 10px; margin-bottom: 20px; }
+            #print-area { display: block !important; } 
         }
     </style>
 </head>
@@ -88,16 +88,14 @@
                     <h1 class="text-2xl font-black tracking-tighter uppercase text-slate-800">Sentinela <span class="text-orange-600">Authority</span></h1>
                     <div class="flex items-center gap-2">
                         <span class="text-[9px] font-black bg-slate-800 text-white px-2 py-0.5 rounded">MIT STANDARD</span>
-                        <span class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">I TECH SYSTEM</span>
+                        <span class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">VISION AI READY</span>
                     </div>
                 </div>
             </div>
             
-            <div class="flex items-center gap-6">
-                <div id="statusHw" class="bg-orange-50 px-4 py-2 rounded-lg border border-orange-200 flex items-center gap-3">
-                    <span class="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_red]"></span>
-                    <span class="text-[11px] font-black uppercase text-orange-800 tracking-wider">Serpro Hardware: Offline</span>
-                </div>
+            <div id="statusHw" class="bg-orange-50 px-4 py-2 rounded-lg border border-orange-200 flex items-center gap-3">
+                <span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
+                <span class="text-[11px] font-black uppercase text-emerald-600">Sistema Ativo</span>
             </div>
         </header>
 
@@ -105,21 +103,22 @@
             
             <div class="col-span-12 lg:col-span-8 space-y-8">
                 <div class="panel-3d p-10">
-                    <div class="flex items-center gap-4 mb-10 border-b border-slate-100 pb-6">
-                        <div class="w-3 h-10 bg-orange-500 rounded-full shadow-lg shadow-orange-200"></div>
-                        <h2 class="text-xl font-black text-slate-700 uppercase italic">Central de Emissão Síncrona</h2>
+                    <div class="flex items-center justify-between mb-10 border-b border-slate-100 pb-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-3 h-10 bg-orange-500 rounded-full shadow-lg shadow-orange-200"></div>
+                            <h2 class="text-xl font-black text-slate-700 uppercase italic">Central de Emissão Síncrona</h2>
+                        </div>
+                        <button onclick="ativarScanner()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-colors">
+                            Bipar Produto (Câmera)
+                        </button>
                     </div>
 
-                         </div>
+                    <div id="reader"></div>
 
                     <div class="grid grid-cols-6 gap-8">
                         <div class="col-span-3">
                             <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Identificador (CPF/CNPJ)</label>
                             <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
-                            <div id="loaderBusca" class="hidden mt-3 flex items-center gap-2">
-                                <span class="w-4 h-4 border-3 border-orange-600 border-t-transparent rounded-full animate-spin"></span>
-                                <span class="text-[11px] font-black text-orange-600 uppercase">Consultando Receita Federal...</span>
-                            </div>
                         </div>
 
                         <div class="col-span-3">
@@ -129,12 +128,12 @@
 
                         <div class="col-span-6">
                             <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome de Registro</label>
-                            <input type="text" id="nomeInput" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação de documento...">
+                            <input type="text" id="nomeInput" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação...">
                         </div>
 
                         <div class="col-span-6">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Serviço</label>
-                            <textarea id="descInput" class="input-tactical w-full h-32 font-normal text-slate-600" placeholder="Detalhe os ativos para registro no sistema 2026..."></textarea>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens Escaneados</label>
+                            <textarea id="descInput" class="input-tactical w-full h-32 font-normal text-slate-600" placeholder="Os itens bipados aparecerão aqui automaticamente..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -146,8 +145,7 @@
                     </div>
                     <div id="logContent" class="h-32 overflow-y-auto leading-relaxed">
                         > Sistema Sentinela V12 Inicializado...<br>
-                        > Protocolos de Israel Ativos. Monitorando porta SERPRO 6515...<br>
-                        > Módulo Ref Carregado (IBS/CBS Ready).<br>
+                        > IA Vision pronta para leitura de QR Code e Barras...<br>
                     </div>
                 </div>
             </div>
@@ -156,21 +154,17 @@
                 <div class="panel-3d p-8 border-t-8 border-orange-500">
                     <h3 class="text-[12px] font-black text-center text-slate-400 uppercase mb-8 tracking-[0.2em]">Detalhamento Tributário</h3>
                     
-                  <div class="col-span-12 lg:col-span-4 space-y-6">
-                <div class="panel-3d p-8 border-t-8 border-orange-500">
-                    <h3 class="text-[12px] font-black text-center text-slate-400 uppercase mb-8 tracking-[0.2em]">Detalhamento Tributário</h3>
-                    
                     <div class="space-y-6 bg-orange-50/50 p-6 rounded-2xl border border-orange-100 shadow-inner">
                         <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">CBS (FEDERAL) 0.9%:</span>
+                            <span class="font-black text-slate-500 uppercase text-[11px]">CBS (FEDERAL) 8.8%:</span>
                             <span id="cbsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">IBS (EST/MUN) 0.1%:</span>
+                            <span class="font-black text-slate-500 uppercase text-[11px]">IBS (EST/MUN) 17.7%:</span>
                             <span id="ibsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
                         </div>
                         <div class="border-t-2 border-orange-200/50 pt-6 flex justify-between items-center">
-                            <span class="text-sm font-black text-slate-700 uppercase">Valor Líquido:</span>
+                            <span class="text-sm font-black text-slate-700 uppercase">Valor Total:</span>
                             <span id="liqVal" class="text-3xl font-black text-orange-600">R$ 0,00</span>
                         </div>
                     </div>
@@ -179,13 +173,6 @@
                         <button onclick="emitir()" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl hover:brightness-110 transition-all uppercase text-sm tracking-widest">
                             Assinar e Emitir (A4)
                         </button>
-                        <div class="p-5 bg-white border-2 border-slate-100 rounded-2xl text-center">
-                            <p class="text-[11px] font-black text-slate-400 uppercase mb-3">Protocolo de Segurança</p>
-                            <div class="flex justify-center gap-2">
-                                <span class="px-3 py-1 bg-slate-100 rounded text-[10px] font-bold text-slate-600">SHA-512</span>
-                                <span class="px-3 py-1 bg-slate-100 rounded text-[10px] font-bold text-slate-600">RSA-4096</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -194,125 +181,95 @@
 
     <div id="print-area" class="hidden"></div>
 
- <script>
+    <script>
+        let somaScanner = 0;
+
+        // Lógica do Scanner
+        function ativarScanner() {
+            const readerDiv = document.getElementById('reader');
+            readerDiv.style.display = 'block';
+            const html5QrCode = new Html5Qrcode("reader");
+            
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: { width: 250, height: 150 } },
+                (decodedText) => {
+                    // Simulação de banco de dados por código
+                    let precoItem = Math.floor(Math.random() * 100) + 10; 
+                    addLog(`BIP REALIZADO: Código ${decodedText} - R$ ${precoItem},00`);
+                    
+                    somaScanner += precoItem;
+                    document.getElementById('valorInput').value = somaScanner;
+                    document.getElementById('descInput').value += `Item ${decodedText} (R$ ${precoItem},00)\n`;
+                    
+                    calcFiscal();
+                    // Opcional: html5QrCode.stop(); // Para o scanner após um bip
+                }
+            ).catch(err => addLog("Erro na câmera: " + err));
+        }
+
         function motorBusca(val) {
             const doc = val.replace(/\D/g, '');
-            const loader = document.getElementById('loaderBusca');
             const nomeInput = document.getElementById('nomeInput');
-
             if (doc.length === 11 || doc.length === 14) {
-                loader.classList.remove('hidden');
-                addLog(`Varredura completa: ${val}. Aguardando identificação manual...`);
-
                 setTimeout(() => {
-                    loader.classList.add('hidden');
                     nomeInput.readOnly = false;
                     nomeInput.value = ""; 
-                    nomeInput.placeholder = "DIGITE O NOME DO CLIENTE / RAZÃO SOCIAL...";
-                    nomeInput.classList.remove('bg-slate-50', 'text-slate-500');
-                    nomeInput.classList.add('bg-white', 'text-orange-900', 'border-orange-400', 'shadow-[0_0_15px_rgba(255,107,0,0.2)]');
-                    addLog("Campo de identificação liberado.");
+                    nomeInput.placeholder = "DIGITE O NOME MANUALMENTE...";
+                    nomeInput.classList.remove('bg-slate-50');
+                    nomeInput.classList.add('bg-white', 'border-orange-400', 'shadow-[0_0_15px_rgba(255,107,0,0.1)]');
+                    addLog("Identidade Liberada.");
                     nomeInput.focus();
-                }, 600);
+                }, 400);
             }
         }
 
         function calcFiscal() {
             const v = parseFloat(document.getElementById('valorInput').value) || 0;
-            const cbs = v * 0.9; // 0.9%
-            const ibs = v * 0.1; // 0.1%
-            const liq = v - (cbs + ibs);
-
+            const cbs = v * 0.088;
+            const ibs = v * 0.177;
+            
             document.getElementById('cbsVal').innerText = `R$ ${cbs.toFixed(2)}`;
             document.getElementById('ibsVal').innerText = `R$ ${ibs.toFixed(2)}`;
-            document.getElementById('liqVal').innerText = `R$ ${liq.toFixed(2)}`;
+            document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
 
-            // INTELIGÊNCIA ARTIFICIAL ADVISOR (GEMINI)
-            if(v > 1000) {
-                addLog(`AI ADVISOR: Valor de R$ ${v} detectado. Sugerimos conferir crédito de CBS acumulado para este período.`);
-            }
+            if(v > 2000) addLog("AI ADVISOR: Volume alto detectado. Analisando margem tributária...");
         }
 
         function addLog(msg) {
             const log = document.getElementById('logContent');
-            if (log) {
-                log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
-                log.scrollTop = log.scrollHeight;
-            }
+            log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
+            log.scrollTop = log.scrollHeight;
         }
 
-        // FUNÇÃO DE EMISSÃO CORRIGIDA (PADRÃO PRIMEIRA FOTO)
         function emitir() {
             const nome = document.getElementById('nomeInput').value;
             const doc = document.getElementById('docInput').value;
             const valor = document.getElementById('valorInput').value;
             const desc = document.getElementById('descInput').value;
 
-            if(!nome || !valor) return alert("Erro: Preencha os dados básicos.");
+            if(!nome || !valor) return alert("Erro: Dados incompletos.");
 
             const printArea = document.getElementById('print-area');
-            
-            // CONSTRUINDO O DANFE MODELO SENTINELA (PADRÃO FOTO 1)
             printArea.innerHTML = `
-                <div style="font-family: Arial, sans-serif; max-width: 800px; margin: auto;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid black; padding-bottom: 20px;">
-                        <div>
-                            <h1 style="font-size: 40px; margin: 0; font-weight: 900;">SENTINELA V12</h1>
-                            <p style="margin: 0; font-weight: bold; letter-spacing: 2px;">SISTEMA DE ALTA AUTORIDADE BRASIL-ISRAEL</p>
-                        </div>
-                        <div style="text-align: right;">
-                            <p style="margin: 0;"><b>Nº DOC:</b> ${Math.floor(Math.random()*999999)}</p>
-                            <p style="margin: 0;"><b>DATA:</b> ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
-                        </div>
+                <div style="font-family: Arial; padding: 50px; border: 5px solid black;">
+                    <h1 style="font-size: 35px; margin: 0;">SENTINELA V12</h1>
+                    <p><b>DOCUMENTO AUXILIAR DE VENDA</b></p>
+                    <hr style="border: 2px solid black;">
+                    <p><b>CLIENTE:</b> ${nome} | <b>DOC:</b> ${doc}</p>
+                    <div style="border: 1px solid black; padding: 20px; min-height: 200px;">
+                        <b>DESCRIÇÃO DOS ITENS:</b><br>${desc.replace(/\n/g, '<br>')}
                     </div>
-
-                    <div style="border: 2px solid black; margin-top: 30px; padding: 15px;">
-                        <p style="font-size: 12px; color: gray; margin-bottom: 5px;">EMISSOR</p>
-                        <p style="margin: 0; font-weight: bold; font-size: 18px;">SENTINELA DATA SYSTEMS</p>
-                        <p style="margin: 0;">CRISTIAN V12 INTEGRATION</p>
-                    </div>
-
-                    <div style="border: 2px solid black; margin-top: 15px; padding: 15px;">
-                        <p style="font-size: 12px; color: gray; margin-bottom: 5px;">DESTINATÁRIO / CLIENTE</p>
-                        <p style="margin: 0; font-weight: bold; font-size: 18px;">${nome}</p>
-                        <p style="margin: 0;">DOC: ${doc}</p>
-                    </div>
-
-                    <table style="width: 100%; border-collapse: collapse; margin-top: 30px; border: 2px solid black;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid black; background: #f0f0f0;">
-                                <th style="text-align: left; padding: 15px;">ESPECIFICAÇÃO DOS SERVIÇOS / PRODUTOS</th>
-                                <th style="text-align: right; padding: 15px;">VALOR TOTAL</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="padding: 20px; font-size: 18px;">${desc || 'Serviços de Consultoria Sentinela V12'}</td>
-                                <td style="padding: 20px; text-align: right; font-size: 24px; font-weight: bold;">R$ ${valor}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div style="margin-top: 20px; text-align: right; font-size: 11px; color: gray;">
-                        CHAVE DE ACESSO SISTEMA V12: ${Math.random().toString().substring(2,18)}
-                    </div>
-
-                    <div style="display: flex; justify-content: space-around; margin-top: 100px;">
-                        <div style="border-top: 2px solid black; width: 40%; text-align: center; padding-top: 10px; font-weight: bold;">ASSINATURA DO EMISSOR</div>
-                        <div style="border-top: 2px solid black; width: 40%; text-align: center; padding-top: 10px; font-weight: bold;">ASSINATURA DO CLIENTE</div>
+                    <h2 style="text-align: right;">TOTAL: R$ ${parseFloat(valor).toFixed(2)}</h2>
+                    <br><br><br>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="border-top: 1px solid black; width: 45%; text-align: center;">Assinatura do Responsável</div>
+                        <div style="border-top: 1px solid black; width: 45%; text-align: center;">Assinatura do Cliente</div>
                     </div>
                 </div>
             `;
-
-            addLog(`DANFE A4 Gerado com sucesso para ${nome}`);
             window.print();
         }
-        
-        setInterval(() => {
-            const status = document.getElementById('statusHw');
-            status.innerHTML = `<span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span><span class="text-[11px] font-black uppercase text-emerald-600">Hardware Ativo (Síncrono)</span>`;
-            status.className = "bg-emerald-50 px-4 py-2 rounded-lg border border-emerald-200 flex items-center gap-3 shadow-sm";
-        }, 5000);
     </script>
 </body>
 </html>
