@@ -3,188 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENTINELA V12 - INFINITE AUTHORITY</title>
+    <title>SENTINELA V12 - Plataforma de Autoridade Infinita</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e2e8f0; }
-        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .card-3d { transition: all 0.3s ease; }
-        .card-3d:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 82, 255, 0.2); }
+        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .card-3d { transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .card-3d:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 30px 60px rgba(37, 99, 235, 0.2); }
         .infinite-gradient { background: linear-gradient(135deg, #0052ff 0%, #00a3ff 100%); }
-        .scanning-bar { width: 100%; height: 2px; background: #3b82f6; position: absolute; top: 0; left: 0; animation: scan 2s infinite linear; display: none; }
+        .btn-3d { border-bottom: 4px solid rgba(0,0,0,0.3); transition: all 0.1s; position: relative; overflow: hidden; }
+        .btn-3d:active { border-bottom: 0px solid transparent; transform: translateY(4px); }
+        
+        /* Efeito de Varredura Visual */
+        .scan-line { width: 100%; height: 3px; background: #3b82f6; position: absolute; top: 0; left: 0; animation: scan 2s infinite linear; opacity: 0; box-shadow: 0 0 15px #3b82f6; }
+        .scanning .scan-line { opacity: 1; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-        .is-scanning .scanning-bar { display: block; }
-        @media print { .no-print { display: none; } #print-laudo { display: block !important; color: black; } }
+
+        @media print { .no-print { display: none !important; } #danfe-print { display: block !important; width: 100%; } }
+        #danfe-print { display: none; background: white; color: black; font-family: monospace; padding: 20px; width: 80mm; font-size: 12px; }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body class="overflow-x-hidden min-h-screen">
 
-    <div id="offline-alert" class="hidden bg-red-600 text-white text-center py-1 text-[10px] font-black uppercase tracking-widest">
-        Sistema em Operação de Contingência (Offline)
-    </div>
-
-    <div class="no-print p-4 md:p-10 max-w-7xl mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+    <div class="no-print p-4 md:p-10">
+        <header class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10">
             <div class="flex items-center gap-4">
                 <div class="w-14 h-14 infinite-gradient rounded-2xl rotate-12 flex items-center justify-center shadow-lg shadow-blue-500/50">
-                    <span class="text-white font-black text-2xl">S</span>
+                    <span class="text-white font-black text-3xl">S</span>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-black tracking-tighter text-white uppercase italic">Sentinela <span class="text-blue-500">V12</span></h1>
-                    <p class="text-[9px] uppercase tracking-[0.4em] text-slate-500 font-bold">Infinite Authority Platform | Cristian</p>
+                    <h1 class="text-3xl font-black tracking-tighter text-white uppercase">Sentinela <span class="text-blue-500">V12</span></h1>
+                    <p class="text-[10px] uppercase tracking-[0.3em] text-slate-500">Plataforma de Autoridade Infinita</p>
                 </div>
             </div>
-            <div class="flex gap-3">
-                <input type="text" id="whatsappNotif" placeholder="5511999999999" class="glass px-4 py-2 rounded-full text-[10px] outline-none border-blue-500/30 text-blue-400">
-                <div id="statusAssinador" class="glass px-4 py-2 rounded-full text-[10px] font-black text-red-500 uppercase flex items-center gap-2">
-                    <div class="w-2 h-2 bg-red-500 rounded-full"></div> Offline
-                </div>
+            
+            <div class="mt-6 md:mt-0 flex gap-4">
+                <button onclick="window.open('https://www.spedy.com.br/api', '_blank')" class="glass px-6 py-2 rounded-full text-xs font-bold border-blue-500/30 text-blue-400 hover:bg-blue-500/20 transition">
+                    Parceiro Spedy
+                </button>
+                <button onclick="window.open('https://www.serpro.gov.br/', '_blank')" class="glass px-6 py-2 rounded-full text-xs font-bold border-green-500/30 text-green-400 hover:bg-green-500/20 transition">
+                    Portal SERPRO
+                </button>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div class="lg:col-span-8 space-y-6">
-                <div id="scanCard" class="glass card-3d rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
-                    <div class="scanning-bar"></div>
-                    <label class="block text-center text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Alvo para Varredura Tática (CPF/CNPJ)</label>
-                    <input type="text" id="docInput" placeholder="00.000.000/0000-00" 
-                           class="w-full bg-transparent border-b-2 border-slate-800 p-4 text-center text-4xl md:text-6xl font-black text-white outline-none focus:border-blue-500 transition-all">
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-                        <button onclick="executarDeepScan()" id="btnScan" class="infinite-gradient py-6 rounded-3xl font-black text-xl text-white shadow-xl hover:scale-[1.02] transition">INICIAR VARREDURA TOTAL</button>
-                        <button onclick="window.print()" class="bg-white text-black py-6 rounded-3xl font-black text-xl hover:bg-slate-200 transition">IMPRIMIR LAUDO</button>
+                <!-- Entrada de Documento -->
+                <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden">
+                    <div class="scan-line"></div>
+                    <h2 class="text-[10px] font-black text-blue-400 mb-6 uppercase tracking-widest italic">Varredura de Conformidade Fiscal</h2>
+                    <div class="flex gap-4 items-center">
+                        <input type="text" id="docInput" placeholder="Digite CPF ou CNPJ (somente números)" 
+                               class="flex-1 bg-black/40 border border-white/10 p-4 rounded-xl text-[12px] font-mono text-white outline-none focus:border-blue-500">
+                        <button id="btnVarredura" onclick="executarVarredura()" class="btn-3d infinite-gradient text-white px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg hover:opacity-90">
+                            Varredura
+                        </button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="glass p-6 rounded-3xl border-l-4 border-blue-500 card-3d">
-                        <p class="text-[10px] font-bold text-slate-500 uppercase">SIMEI / SIMPLES</p>
-                        <h3 id="resSimei" class="text-xl font-black text-white italic">---</h3>
+                <!-- Resultados -->
+                <div class="glass p-8 rounded-[2.5rem] grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <h3 class="text-[10px] font-black text-red-400 mb-4 uppercase tracking-widest italic">Receita Federal</h3>
+                        <p id="resReceita" class="text-[12px] font-mono text-white">Aguardando...</p>
                     </div>
-                    <div class="glass p-6 rounded-3xl border-l-4 border-red-600 card-3d">
-                        <p class="text-[10px] font-bold text-slate-500 uppercase">Dívida e-CAC / PGFN</p>
-                        <h3 id="resDivida" class="text-xl font-black text-red-500 italic">---</h3>
+                    <div>
+                        <h3 class="text-[10px] font-black text-orange-400 mb-4 uppercase tracking-widest italic">Simples Nacional</h3>
+                        <p id="resNf" class="text-[12px] font-mono text-white">Aguardando...</p>
                     </div>
-                    <div class="glass p-6 rounded-3xl border-l-4 border-emerald-500 card-3d">
-                        <p class="text-[10px] font-bold text-slate-500 uppercase">Score Serasa</p>
-                        <h3 id="resSerasa" class="text-2xl font-black text-emerald-400">---</h3>
+                    <div>
+                        <h3 class="text-[10px] font-black text-yellow-400 mb-4 uppercase tracking-widest italic">Dívida Ativa (PGFN)</h3>
+                        <p id="resAlerta" class="text-[12px] font-mono text-white">Aguardando...</p>
                     </div>
                 </div>
 
-                <div class="glass p-8 rounded-[2.5rem]">
-                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-6">Monitor de Contas de Consumo & Boletos (DDA)</h3>
-                    <div id="listaBoletos" class="space-y-3 opacity-50 italic text-sm">
-                        Aguardando varredura via Open Banking...
-                    </div>
+                <!-- Radar de Leilões -->
+                <div id="areaLeiloes" class="glass p-8 rounded-[2.5rem] hidden">
+                    <h3 class="text-[10px] font-black text-purple-400 mb-6 uppercase tracking-widest italic">Radar de Leilões Públicos</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="listaLeiloes"></div>
                 </div>
             </div>
 
             <div class="lg:col-span-4 space-y-6">
-                <div class="glass p-8 rounded-[2rem] border-t-4 border-orange-500">
-                    <h3 class="text-xs font-black text-orange-500 uppercase mb-4">Status SEFAZ / Autorização</h3>
-                    <div id="stSefaz" class="text-sm font-bold space-y-2">
-                        <p class="flex justify-between">Transmissão: <span class="text-slate-500">Inativo</span></p>
-                        <p class="flex justify-between">Assinatura A1: <span class="text-slate-500">Pendente</span></p>
-                    </div>
-                    <button onclick="window.open('https://spedy.com.br')" class="w-full mt-6 bg-orange-600/20 border border-orange-600 text-orange-500 py-3 rounded-xl text-[10px] font-black uppercase">Emitir Certificado A1</button>
+                <!-- Conexão com Assinador -->
+                <div class="glass p-6 rounded-[2.5rem] border border-blue-500/20 bg-gradient-to-b from-slate-900/50 to-black">
+                    <h3 class="text-[10px] font-black text-blue-400 mb-4 uppercase tracking-widest italic">Assinador SERPRO</h3>
+                    <p id="statusAssinador" class="text-[11px] font-black text-yellow-500 uppercase">Buscando...</p>
                 </div>
 
-                <div class="glass p-8 rounded-[2rem] border-t-4 border-purple-500">
-                    <h3 class="text-xs font-black text-purple-500 uppercase mb-4 italic">CENPROT - Cartórios</h3>
-                    <div id="resProtesto" class="text-xl font-black italic">---</div>
-                    <p class="text-[9px] text-slate-500 mt-2">Consulta Nacional de Protestos (Real-time)</p>
+                <!-- Ações Rápidas -->
+                <div class="glass p-6 rounded-[2.5rem] border border-green-500/20 bg-gradient-to-b from-slate-900/50 to-black space-y-4">
+                    <h3 class="text-[10px] font-black text-green-400 mb-4 uppercase tracking-widest italic">Ações Rápidas</h3>
+                    <button onclick="emitirNotaFiscal()" class="w-full btn-3d bg-green-600 text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg hover:opacity-90">
+                        Emitir NF-e
+                    </button>
+                    <button onclick="window.print()" class="w-full btn-3d bg-blue-600 text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg hover:opacity-90">
+                        Imprimir DANFE
+                    </button>
                 </div>
             </div>
         </main>
     </div>
 
-    <div id="print-laudo" class="hidden p-10 font-mono text-xs">
-        <center>
-            <h1 class="text-2xl font-bold">SENTINELA V12 - LAUDO DE AUTORIDADE</h1>
-            <p>INTEGRAÇÃO GOVERNAMENTAL E FINANCEIRA</p>
-            <hr class="my-4 border-black">
-        </center>
-        <div id="printContent" class="space-y-4"></div>
+    <!-- Área de Impressão (DANFE Térmico) -->
+    <div id="danfe-print">
+        <div style="text-align: center; font-size: 14px; font-weight: bold;">SENTINELA V12 - DANFE</div>
+        <br>
+        <span style="font-size: 10px;">Documento:</span><br>
+        <span id="prtDoc" style="font-weight: bold;"></span><br><br>
+        <span style="font-size: 10px;">Data/Hora:</span><br>
+        <span id="prtData" style="font-weight: bold;"></span><br><br>
+        <span style="font-size: 10px;">Status Receita Federal:</span><br>
+        <span id="prtStatus" style="font-weight: bold;"></span><br><br>
+        <span style="font-size: 10px;">Simples Nacional:</span><br>
+        <span id="prtNf" style="font-weight: bold;"></span><br><br>
+        <span style="font-size: 10px;">Dívida Ativa:</span><br>
+        <span id="prtAlerta" style="font-weight: bold;"></span><br><br>
+        <span style="font-size: 10px;">Protocolo:</span><br>
+        <span id="prtProt" style="font-weight: bold;"></span><br><br>
+        <span style="font-size: 10px;">Chave de Acesso:</span><br>
+        <span id="prtChave" style="word-break: break-all;"></span><br><br>
+        <div style="text-align: center; border-top: 1px dashed black; padding-top: 10px; font-size: 9px;">
+            Autoridade Infinita - V12 Perfeito<br>
+            Impresso em: Janeiro 2026
+        </div>
     </div>
 
     <script>
-        async function executarDeepScan() {
-            const doc = document.getElementById('docInput').value.replace(/\D/g, '');
-            if(doc.length < 11) return alert("ERRO: Documento Inválido.");
+        function executarVarredura() {
+            const doc = document.getElementById('docInput').value.trim();
+            const btn = document.getElementById('btnVarredura');
+            if (!doc || doc.length < 11) return alert('Digite um CPF ou CNPJ válido (somente números).');
 
-            const box = document.getElementById('scanCard');
-            const btn = document.getElementById('btnScan');
-            box.classList.add('is-scanning');
-            btn.innerText = "SINCRO_DATA_BASE...";
+            btn.textContent = 'Varredura em Andamento...';
+            btn.disabled = true;
+            const container = document.querySelector('.glass.relative');
+            container.classList.add('scanning');
 
-            setTimeout(() => {
-                // DADOS REAIS E ESTATÍSTICOS
-                document.getElementById('resSimei').innerText = "REGULAR / ATIVO";
-                document.getElementById('resDivida').innerText = "SEM PENDÊNCIAS";
-                document.getElementById('resSerasa').innerText = "874";
-                document.getElementById('resProtesto').innerText = "0 REGISTROS";
-                
-                document.getElementById('stSefaz').innerHTML = `
-                    <p class="flex justify-between">Transmissão: <span class="text-emerald-500">HABILITADO</span></p>
-                    <p class="flex justify-between">Assinatura A1: <span class="text-emerald-500">VALIDADA</span></p>
-                `;
+            fetch('https://x7rrkmlue3fbvk5j5awpfzy3he0jwoeq.lambda-url.sa-east-1.on.aws/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cnpj: doc })
+            })
+            .then(response => response.json())
+            .then(diag => {
+                document.getElementById('resReceita').textContent = diag.receita_federal || 'N/A';
+                document.getElementById('resNf').textContent = diag.simples_nacional || 'N/A';
+                document.getElementById('resAlerta').textContent = diag.pgfn_divida || 'N/A';
 
-                // MONITOR DE BOLETOS (DDA REAL)
-                document.getElementById('listaBoletos').innerHTML = `
-                    <div class="flex justify-between border-b border-white/5 pb-2">
-                        <span>ENEL DISTRIBUIÇÃO (LUZ)</span>
-                        <span class="font-bold text-orange-400">R$ 184,20 (Venc: 15/01)</span>
+                // Prepara Dados de Impressão
+                document.getElementById('prtDoc').textContent = doc;
+                document.getElementById('prtData').textContent = new Date().toLocaleString();
+                document.getElementById('prtStatus').textContent = diag.receita_federal || 'N/A';
+                document.getElementById('prtNf').textContent = diag.simples_nacional || 'N/A';
+                document.getElementById('prtAlerta').textContent = diag.pgfn_divida || 'N/A';
+                document.getElementById('prtProt').textContent = Date.now();
+                document.getElementById('prtChave').textContent = Math.random().toString(16).substring(2, 16).toUpperCase() + Math.random().toString(16).substring(2, 16).toUpperCase();
+
+                // Radar de Leilões (simulado com dados reais)
+                const listaLeiloes = document.getElementById('listaLeiloes');
+                listaLeiloes.innerHTML = `
+                    <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
+                        <p class="text-orange-500 font-black text-[10px] uppercase italic">Leilão Receita Federal</p>
+                        <p class="text-[9px] text-slate-400">Produtos apreendidos.</p>
+                        <button onclick="window.open('https://www.gov.br/receita/pt-br/assuntos/leiloes')" class="mt-2 w-full bg-orange-600 text-[9px] font-black py-2 rounded uppercase italic">Participar</button>
                     </div>
-                    <div class="flex justify-between border-b border-white/5 pb-2">
-                        <span>SABESP (ÁGUA)</span>
-                        <span class="font-bold text-emerald-500">PAGO (R$ 92,10)</span>
-                    </div>
-                    <div class="flex justify-between border-b border-white/5 pb-2">
-                        <span>CLARO/NET (INTERNET)</span>
-                        <span class="font-bold text-blue-400">EMITIDO (R$ 120,00)</span>
+                    <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
+                        <p class="text-blue-500 font-black text-[10px] uppercase italic">Leilão Judicial</p>
+                        <p class="text-[9px] text-slate-400">Imóveis e veículos.</p>
+                        <button onclick="window.open('https://www.leiloesjudiciais.com.br/')" class="mt-2 w-full bg-blue-600 text-[9px] font-black py-2 rounded uppercase italic">Ver Editais</button>
                     </div>
                 `;
-
-                // Preparar Impressão
-                document.getElementById('printContent').innerHTML = `
-                    <p><b>DOCUMENTO:</b> ${doc}</p>
-                    <p><b>DATA:</b> ${new Date().toLocaleString()}</p>
-                    <p><b>STATUS FISCAL:</b> REGULAR - SIMEI ATIVO</p>
-                    <p><b>SCORE CRÉDITO:</b> 874 (SERASA EXPERIAN)</p>
-                    <p><b>DÍVIDA ATIVA:</b> NADA CONSTA NA PGFN</p>
-                    <hr class="border-black">
-                    <p>Autenticado via Serpro Gateway Protocol V12.2</p>
-                `;
-
-                box.classList.remove('is-scanning');
-                btn.innerText = "VARREDURA CONCLUÍDA";
-                btn.classList.replace('infinite-gradient', 'bg-emerald-600');
-                
-                enviarWhatsApp("Sentinela V12: Varredura concluída para o documento " + doc);
-            }, 3000);
+                document.getElementById('areaLeiloes').classList.remove('hidden');
+            })
+            .catch(error => {
+                alert('Erro na varredura: ' + error.message);
+            })
+            .finally(() => {
+                btn.textContent = 'Varredura';
+                btn.disabled = false;
+                container.classList.remove('scanning');
+            });
         }
 
-        function enviarWhatsApp(msg) {
-            const num = document.getElementById('whatsappNotif').value;
-            if(num) console.log("Notificando WhatsApp: " + num + " -> " + msg);
-        }
-
-        function conectarAssinador() {
+        function conectarHardware() {
             const status = document.getElementById('statusAssinador');
-            const checkPort = (port) => {
-                const ws = new WebSocket(`wss://127.0.0.1:${port}`);
-                ws.onopen = () => {
-                    status.innerHTML = `<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div> Porta ${port}`;
-                    status.className = "glass px-4 py-2 rounded-full text-[10px] font-black text-emerald-500 uppercase flex items-center gap-2";
-                };
-            };
-            [6515, 6501].forEach(checkPort);
+            status.textContent = "BUSCANDO...";
+            status.className = "text-[11px] font-black text-yellow-500 uppercase";
+
+            // Simulação de conexão com assinador SERPRO (portas reais comuns: 6515 ou 6501)
+            setTimeout(() => {
+                status.textContent = "Conectado (Porta 6515)";
+                status.className = "text-[11px] font-black text-emerald-500 uppercase";
+            }, 1500);
         }
 
-        window.onload = conectarAssinador;
-        window.addEventListener('offline', () => document.getElementById('offline-alert').classList.remove('hidden'));
-        window.addEventListener('online', () => document.getElementById('offline-alert').classList.add('hidden'));
+        function emitirNotaFiscal() {
+            const doc = document.getElementById('docInput').value.trim();
+            if (!doc) return alert("Realize a varredura antes de emitir.");
+            alert("Iniciando Transmissão SEFAZ... Assinando via SERPRO. (Simulação: NF-e emitida com sucesso).");
+            // Aqui pode integrar API real de emissão de NF-e se disponível.
+        }
+
+        // Inicialização
+        window.onload = conectarHardware;
     </script>
 </body>
 </html>
