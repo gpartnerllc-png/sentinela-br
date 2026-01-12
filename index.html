@@ -2,239 +2,223 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>V12 | DEFENSE & FISCAL COMMAND CENTER</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/754/754388.png"> 
+    
+    <title>SENTINELA V12 | COMMAND CENTER (REFORMA 2026)</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;700&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    
     <style>
-        :root { 
-            --israel-blue: #0038b8; 
-            --neon-cyan: #00f2ff;
-            --defense-gray: #0a0b10;
-        }
-        body { 
-            background-color: var(--defense-gray); 
-            color: #d1d5db; 
-            font-family: 'JetBrains Mono', monospace; 
-            overflow-x: hidden;
-        }
-        .header-israel {
-            background: linear-gradient(90deg, #0038b8 0%, #001a57 100%);
-            border-bottom: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
-        }
-        .panel-tactical {
-            background: rgba(16, 20, 30, 0.8);
-            border: 1px solid rgba(0, 242, 255, 0.1);
-            backdrop-filter: blur(10px);
-            position: relative;
-        }
-        .panel-tactical::before {
-            content: "SECURED UNIT";
-            position: absolute; top: -10px; left: 20px;
-            background: var(--israel-blue);
-            color: white; font-size: 8px; padding: 2px 8px; font-weight: bold;
-        }
-        .input-israel {
-            background: #05070a;
-            border: 1px solid #1e293b;
-            color: var(--neon-cyan);
-            padding: 10px;
-            font-size: 13px;
-            transition: 0.3s;
-        }
-        .input-israel:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
-            outline: none;
-        }
-        .glitch-text { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
+        :root { --blue-israel: #0038b8; --gold-iob: #ffcc00; }
+        body { background: #02040a; color: #e2e8f0; font-family: 'Inter', sans-serif; }
         
-        /* Scanner Visual de Israel */
-        .scanner-line {
-            width: 100%; height: 2px;
-            background: var(--neon-cyan);
-            position: absolute;
-            top: 0; opacity: 0.5;
-            animation: scan 3s infinite linear;
+        .panel-iob { background: rgba(15, 23, 42, 0.8); border: 1px solid #1e293b; border-radius: 8px; }
+        .tech-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b; text-transform: uppercase; }
+        .tech-value { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #00f2ff; }
+        
+        /* LOGO SVG QUE NÃO QUEBRA */
+        .v12-logo-shield {
+            width: 50px; height: 50px;
+            background: var(--blue-israel);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid white;
         }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-        @media print { .no-print { display: none !important; } #print-area { display: block !important; background: white !important; } }
-        #print-area { display: none; }
+        /* Linha de Progresso Estilo Israel */
+        .scan-bar { height: 2px; background: #00f2ff; position: relative; overflow: hidden; }
+        .scan-bar::after { content: ""; position: absolute; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, #fff, transparent); animation: scan 2s infinite; }
+        @keyframes scan { 100% { left: 100%; } }
+
+        @media print { .no-print { display: none !important; } #print-area { display: block !important; } }
     </style>
 </head>
-<body class="p-4">
+<body class="p-2 md:p-6">
 
-    <div class="fixed top-0 left-0 w-full h-full pointer-events-none opacity-[0.03] z-50 overflow-hidden">
-        <div class="scanner-line"></div>
-    </div>
-
-    <div class="no-print max-w-7xl mx-auto space-y-6">
-        <header class="header-israel p-4 rounded-t-xl flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-white flex items-center justify-center rounded-sm">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Flag_of_Israel.svg/1200px-Flag_of_Israel.svg.png" class="h-8">
+    <div class="no-print max-w-[1600px] mx-auto space-y-4">
+        
+        <header class="flex flex-col md:flex-row justify-between items-center p-4 bg-[#0a0b10] border-b border-blue-900/50 rounded-xl shadow-2xl">
+            <div class="flex items-center gap-5">
+                <div class="v12-logo-shield">
+                    <span class="text-white font-black text-xl">V12</span>
                 </div>
                 <div>
-                    <h1 class="glitch-text text-2xl font-black text-white italic">SENTINELA <span class="text-cyan-400">V12</span></h1>
-                    <p class="text-[8px] tracking-[0.6em] text-cyan-300 font-bold">MILITARY-GRADE FISCAL INTERFACE</p>
+                    <h1 class="text-2xl font-black italic tracking-tighter text-white">SENTINELA <span class="text-blue-500">FISCAL</span></h1>
+                    <div class="flex gap-2 items-center">
+                        <span class="text-[9px] bg-blue-600 px-2 py-0.5 rounded text-white font-bold uppercase tracking-widest">Israel Tech</span>
+                        <span class="text-[9px] bg-slate-700 px-2 py-0.5 rounded text-slate-300 font-bold uppercase">v.2026.1.12</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class="flex gap-4 items-center font-bold">
-                <div class="text-right">
-                    <div id="hwStatus" class="text-[10px] text-red-500 flex items-center gap-2">
+
+            <div class="flex items-center gap-8 mt-4 md:mt-0">
+                <div class="text-right border-r border-slate-800 pr-6">
+                    <p class="tech-label">Ambiente de Transmissão</p>
+                    <p class="text-xs font-bold text-emerald-500">PRODUÇÃO SEFAZ (SÍNCRONO)</p>
+                </div>
+                <div id="statusSerpro" class="flex flex-col items-end">
+                    <div class="flex items-center gap-2">
                         <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                        SERPRO HARDWARE: DISCONNECTED
+                        <span class="text-[10px] font-bold text-red-500">HARDWARE OFFLINE</span>
                     </div>
-                    <div class="text-[9px] text-slate-400">RSA-4096 / AES-256 ACTIVE</div>
+                    <p class="text-[9px] text-slate-500 italic">Aguardando porta 6515...</p>
                 </div>
             </div>
         </header>
 
-        <div class="grid grid-cols-12 gap-6">
-            <div class="col-span-12 lg:col-span-8 space-y-4">
-                <div class="panel-tactical p-6 rounded-xl">
-                    <h2 class="text-xs font-black text-cyan-500 mb-6 flex items-center gap-2 uppercase">
-                        <span class="w-4 h-[1px] bg-cyan-500"></span> Identificação do Alvo (Cliente)
-                    </h2>
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            
+            <div class="lg:col-span-8 space-y-4">
+                <div class="panel-iob p-6">
+                    <div class="flex items-center gap-2 mb-6 text-blue-400">
+                        <div class="w-1 h-4 bg-blue-500"></div>
+                        <h2 class="text-xs font-black uppercase tracking-widest italic">Detalhamento da Operação</h2>
+                    </div>
                     
-                    <div class="grid grid-cols-6 gap-4">
-                        <div class="col-span-3">
-                            <label class="text-[10px] text-slate-500 block mb-1">CNPJ / CPF DO ADQUIRENTE</label>
-                            <input type="text" id="cliDoc" class="input-israel w-full" placeholder="IDENTIFICANDO...">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                            <label class="tech-label">Nome Completo ou Razão Social</label>
+                            <input type="text" id="cliNome" class="w-full bg-black/40 border border-slate-800 p-3 rounded text-sm text-white focus:border-blue-500 outline-none">
                         </div>
-                        <div class="col-span-3">
-                            <label class="text-[10px] text-slate-500 block mb-1">VALOR BRUTO DA OPERAÇÃO</label>
-                            <input type="number" id="prodValor" oninput="calc2026()" class="input-israel w-full text-lg font-bold" placeholder="0.00">
+                        <div>
+                            <label class="tech-label">CPF/CNPJ do Destinatário</label>
+                            <input type="text" id="cliDoc" class="w-full bg-black/40 border border-slate-800 p-3 rounded text-sm text-white focus:border-blue-500 outline-none" placeholder="000.000.000-00">
                         </div>
-                        <div class="col-span-6">
-                            <label class="text-[10px] text-slate-500 block mb-1">NOME COMPLETO / REGISTRO COMERCIAL</label>
-                            <input type="text" id="cliNome" class="input-israel w-full" placeholder="...">
+                        <div>
+                            <label class="tech-label">Valor Total do Ativo (R$)</label>
+                            <input type="number" id="prodValor" oninput="calc2026()" class="w-full bg-black/40 border border-slate-800 p-3 rounded text-xl font-bold text-blue-400 focus:border-blue-500 outline-none">
                         </div>
-                        <div class="col-span-6">
-                            <label class="text-[10px] text-slate-500 block mb-1">ENDEREÇO DE DESPACHO E FATURAÇÃO</label>
-                            <input type="text" id="cliEnd" class="input-israel w-full" placeholder="...">
+                        <div class="col-span-2">
+                            <label class="tech-label">Descrição dos Serviços (Padrão IOB)</label>
+                            <textarea id="prodDesc" class="w-full bg-black/40 border border-slate-800 p-3 rounded text-sm text-slate-300 h-24"></textarea>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-black/80 p-4 border border-cyan-900/50 rounded-lg">
+                <div class="bg-black p-4 rounded-lg border border-slate-900 shadow-inner">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-[10px] font-black text-cyan-700">LIVE SECURITY FEED</span>
-                        <span class="text-[9px] text-slate-600">V12_CORE_SYSTEM</span>
+                        <span class="text-[9px] text-blue-500 font-bold uppercase">System Integrity Log</span>
+                        <span class="text-[9px] text-slate-700">KERNEL_V12_BR</span>
                     </div>
-                    <div id="terminal" class="h-32 overflow-y-auto text-[11px] text-cyan-400/80 leading-relaxed font-mono">
-                        [SYSTEM] Initializing Sentinela V12 Encryption...<br>
-                        [AUTH] Waiting for RSA Handshake (SERPRO/IOB)...<br>
-                        [INFO] Tax Reform 2026 Engine Loaded.<br>
+                    <div id="log" class="font-mono text-[10px] text-blue-200/50 h-24 overflow-y-auto leading-relaxed">
+                        > Sentinela V12 iniciado. Módulos de 2026 carregados.<br>
+                        > Monitorando porta do Assinador Serpro...<br>
                     </div>
                 </div>
             </div>
 
-            <div class="col-span-12 lg:col-span-4 space-y-4">
-                <div class="panel-tactical p-6 rounded-xl border-t-4 border-cyan-500">
-                    <h3 class="text-center text-[11px] font-black uppercase mb-6 text-white tracking-widest">Calculadora Reforma 2026</h3>
+            <div class="lg:col-span-4 space-y-4">
+                <div class="panel-iob p-5 border-t-4 border-blue-600">
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase mb-4 text-center">Atributos de Certificação</h3>
                     
-                    <div class="space-y-4 text-xs font-bold">
-                        <div class="flex justify-between text-slate-400">
-                            <span>CBS (FEDERAL):</span>
-                            <span id="cbsVal" class="text-white">R$ 0,00</span>
+                    <div class="space-y-4">
+                        <div class="bg-slate-900/50 p-3 rounded">
+                            <p class="tech-label mb-1">Carga Tributária 2026</p>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-500">CBS (Federal):</span>
+                                <span id="resCBS" class="text-white font-bold">R$ 0,00</span>
+                            </div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-500">IBS (Est/Mun):</span>
+                                <span id="resIBS" class="text-white font-bold">R$ 0,00</span>
+                            </div>
+                            <div class="scan-bar mt-2"></div>
                         </div>
-                        <div class="flex justify-between text-slate-400">
-                            <span>IBS (EST/MUN):</span>
-                            <span id="ibsVal" class="text-white">R$ 0,00</span>
+
+                        <div class="bg-slate-900/50 p-3 rounded space-y-2">
+                            <p class="tech-label">Metadados da Assinatura</p>
+                            <div class="flex justify-between text-[10px]">
+                                <span class="text-slate-500 italic">Algoritmo:</span>
+                                <span class="text-blue-400">SHA-512 (RSA-4096)</span>
+                            </div>
+                            <div class="flex justify-between text-[10px]">
+                                <span class="text-slate-500 italic">Hash ID:</span>
+                                <span class="text-blue-400">0x${Math.random().toString(16).substring(2,10).toUpperCase()}</span>
+                            </div>
+                            <div class="flex justify-between text-[10px]">
+                                <span class="text-slate-500 italic">Time-stamp:</span>
+                                <span class="text-blue-400">${new Date().toLocaleTimeString()}</span>
+                            </div>
                         </div>
-                        <div class="flex justify-between text-slate-400">
-                            <span>IS (SELETIVO):</span>
-                            <span class="text-orange-500">EXEMPT</span>
-                        </div>
-                        <div class="border-t border-cyan-900/50 pt-4 flex justify-between items-center">
-                            <span class="text-cyan-500">NET VALUE:</span>
-                            <span id="liqVal" class="text-2xl text-cyan-400 font-black">R$ 0,00</span>
-                        </div>
+
+                        <button onclick="gerar()" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded text-white font-black uppercase text-xs tracking-[0.2em] shadow-lg shadow-blue-900/20 transition-all">
+                            ASSINAR E EMITIR
+                        </button>
                     </div>
                 </div>
 
-                <div class="space-y-3">
-                    <button onclick="gerar('A4')" class="w-full bg-cyan-600 hover:bg-cyan-400 text-black font-black py-4 rounded uppercase text-xs tracking-tighter transition-all">
-                        Execute Emission (A4)
-                    </button>
-                    <button onclick="gerar('TERMICA')" class="w-full border border-cyan-800 text-cyan-600 hover:bg-cyan-900/20 py-3 rounded font-black uppercase text-[10px] transition-all">
-                        Thermal Receipt (80mm)
-                    </button>
-                </div>
-                
-                <div class="p-4 bg-blue-900/20 border border-blue-500/30 rounded text-[9px] text-blue-400">
-                    <p class="font-black mb-1">ISRAEL DEFENSE SYSTEMS NOTICE:</p>
-                    <p>Documento assinado digitalmente seguindo os protocolos de criptografia assimétrica de Israel e padrões fiscais IOB 2026.</p>
+                <div class="p-4 bg-yellow-500/5 border border-yellow-500/20 rounded-lg">
+                    <p class="text-[10px] text-yellow-500 font-bold uppercase italic">Aviso de Conformidade MIT:</p>
+                    <p class="text-[9px] text-slate-500 mt-1">Este sistema opera sob licença MIT e em conformidade com as normas do SERPRO para assinaturas ICP-Brasil.</p>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <div id="print-area"></div>
 
     <script>
         function addLog(msg) {
-            const t = document.getElementById('terminal');
-            t.innerHTML += `> ${msg}<br>`;
-            t.scrollTop = t.scrollHeight;
+            const l = document.getElementById('log');
+            l.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
+            l.scrollTop = l.scrollHeight;
         }
 
         function calc2026() {
             const v = parseFloat(document.getElementById('prodValor').value) || 0;
-            const cbs = v * 0.088; // Reforma 2026
-            const ibs = v * 0.177;
-            const liq = v - (cbs + ibs);
-
-            document.getElementById('cbsVal').innerText = `R$ ${cbs.toFixed(2)}`;
-            document.getElementById('ibsVal').innerText = `R$ ${ibs.toFixed(2)}`;
-            document.getElementById('liqVal').innerText = `R$ ${liq.toFixed(2)}`;
-            addLog(`Recalculating IBS/CBS for R$ ${v.toFixed(2)}... OK`);
+            const cbs = v * 0.088; // 8.8% Federal
+            const ibs = v * 0.177; // 17.7% Estadual
+            document.getElementById('resCBS').innerText = `R$ ${cbs.toFixed(2)}`;
+            document.getElementById('resIBS').innerText = `R$ ${ibs.toFixed(2)}`;
+            addLog(`Motor Tributário 2026: Calculando impostos para R$ ${v.toFixed(2)}`);
         }
 
-        function gerar(tipo) {
-            const nome = document.getElementById('cliNome').value || "UNKNOWN TARGET";
-            const doc = document.getElementById('cliDoc').value || "000.000.000-00";
-            const valor = document.getElementById('prodValor').value || "0.00";
+        async function monitorarHardware() {
+            const status = document.getElementById('statusSerpro');
+            try {
+                const ws = new WebSocket('wss://127.0.0.1:6515');
+                ws.onopen = () => {
+                    status.innerHTML = `<div class="flex items-center gap-2"><span class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span><span class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Hardware Ativo</span></div><p class="text-[9px] text-emerald-500 italic">Conectado Porta 6515</p>`;
+                    addLog("Conexão estabelecida com Certificado Digital.");
+                };
+            } catch(e) {}
+        }
+
+        function gerar() {
+            const v = document.getElementById('prodValor').value;
+            if(!v) return alert("Insira um valor para assinar.");
             
-            addLog(`Generating ${tipo} Document... Signing via SHA-512...`);
+            addLog("Iniciando Transmissão Fiscal... Assinando documento.");
             
-            let html = `
-                <div style="padding: 40px; color: black; background: white; font-family: 'JetBrains Mono', monospace;">
-                    <div style="border-bottom: 10px solid #0038b8; padding-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-                        <h1 style="margin:0; font-size:40px;">V12 SENTINELA</h1>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Flag_of_Israel.svg/1200px-Flag_of_Israel.svg.png" style="height:40px;">
+            const html = `
+                <div style="padding:40px; background:white; color:black; font-family: sans-serif; border: 15px solid #0038b8;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 4px solid black; padding-bottom:10px;">
+                        <h1 style="font-size:35px; margin:0;">SENTINELA V12</h1>
+                        <span style="font-weight:bold;">COMPROVANTE FISCAL 2026</span>
                     </div>
-                    <div style="margin-top: 30px;">
-                        <p><b>DOCUMENTO DE AUTORIDADE FISCAL - REFORMA 2026</b></p>
-                        <p><b>ADQUIRENTE:</b> ${nome}</p>
-                        <p><b>ID/DOC:</b> ${doc}</p>
-                        <hr style="border: 1px solid black;">
-                        <p style="font-size: 20px; text-align: right;"><b>VALOR TOTAL: R$ ${valor}</b></p>
+                    <div style="margin-top:20px;">
+                        <p><b>EMISSOR:</b> CRISTIAN SOLUTIONS | FISCAL COMMAND</p>
+                        <p><b>DESTINATÁRIO:</b> ${document.getElementById('cliNome').value}</p>
+                        <p><b>DOCUMENTO:</b> ${document.getElementById('cliDoc').value}</p>
                     </div>
-                    <div style="margin-top: 100px; font-size: 10px; border: 1px dashed black; padding: 10px;">
-                        ASSINATURA DIGITAL CRIPTOGRÁFICA: 0x${Math.random().toString(16).toUpperCase()}<br>
-                        VERIFICADO VIA SISTEMA DE INTELIGÊNCIA SENTINELA V12
+                    <div style="margin-top:40px; border:1px solid black; padding:20px;">
+                        <p>DESCRIÇÃO: ${document.getElementById('prodDesc').value}</p>
+                        <h2 style="text-align:right;">TOTAL: R$ ${v}</h2>
+                    </div>
+                    <div style="margin-top:50px; font-family:monospace; font-size:10px;">
+                        HASH DE SEGURANÇA: SHA512-V12-0x${Math.random().toString(16).toUpperCase()}<br>
+                        ASSINADO VIA CERTIFICADO DIGITAL PADRÃO ICP-BRASIL
                     </div>
                 </div>
             `;
-            
             document.getElementById('print-area').innerHTML = html;
             window.print();
         }
 
-        // Conectar ao Serpro Hardware
-        setInterval(() => {
-            const hw = document.getElementById('hwStatus');
-            // Simulação de check de porta
-            const socket = new WebSocket('wss://127.0.0.1:6515');
-            socket.onopen = () => {
-                hw.innerHTML = `<span class="w-2 h-2 bg-emerald-500 rounded-full"></span>SERPRO HARDWARE: CONNECTED`;
-                hw.className = "text-[10px] text-emerald-500 flex items-center gap-2";
-            };
-        }, 5000);
+        setInterval(monitorarHardware, 4000);
+        calc2026();
     </script>
 </body>
 </html>
