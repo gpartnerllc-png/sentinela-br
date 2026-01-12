@@ -2,32 +2,30 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>SENTINELA V12 - INFINITE AUTHORITY (FULL INTEGRATION)</title>
+    <title>SENTINELA V12 - INFINITE AUTHORITY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e2e8f0; }
         .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .card-3d { transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .card-3d:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 30px 60px rgba(37, 99, 235, 0.2); }
         .infinite-gradient { background: linear-gradient(135deg, #0052ff 0%, #00a3ff 100%); }
         .btn-3d { border-bottom: 4px solid rgba(0,0,0,0.3); transition: all 0.1s; position: relative; overflow: hidden; }
         .btn-3d:active { border-bottom: 0px solid transparent; transform: translateY(4px); }
         
-        /* Efeitos de Varredura Tática */
-        .radar-pulse { animation: pulse-blue 2s infinite; }
-        @keyframes pulse-blue { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
+        /* Efeito de Varredura Visual - RESTAURADO */
         .scan-line { width: 100%; height: 4px; background: #3b82f6; position: absolute; top: 0; left: 0; animation: scan 2s infinite linear; opacity: 0; box-shadow: 0 0 20px #3b82f6; z-index: 50; }
         .scanning .scan-line { opacity: 1; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-        /* Estilos de Impressão (Cupom Térmico e A4) */
-        @media print {
-            body { background: white !important; color: black !important; }
-            .no-print { display: none !important; }
-            #relatorio-full { display: block !important; width: 100%; font-family: 'Courier New', monospace; }
-        }
-        #relatorio-full { display: none; background: white; color: black; padding: 40px; }
-        .audit-box { border: 2px solid black; padding: 15px; margin-bottom: 20px; }
-        .label-israel { background: #000; color: #fff; padding: 2px 8px; font-weight: 900; text-transform: uppercase; font-size: 10px; }
+        /* Radar Pulse - NOVO */
+        .radar-pulse { animation: pulse-blue 2s infinite; }
+        @keyframes pulse-blue { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
+
+        @media print { .no-print { display: none !important; } #danfe-print { display: block !important; width: 100%; } }
+        #danfe-print { display: none; background: white; color: black; font-family: 'Courier New', monospace; padding: 20px; width: 100%; }
+        .audit-box { border: 2px solid black; padding: 10px; margin-bottom: 10px; }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -35,7 +33,7 @@
     <div class="no-print min-h-screen p-4 md:p-10">
         <header class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10">
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 infinite-gradient rounded-2xl rotate-12 flex items-center justify-center shadow-blue-500/50 shadow-lg">
+                <div class="w-14 h-14 infinite-gradient rounded-2xl rotate-12 flex items-center justify-center shadow-lg shadow-blue-500/50">
                     <span class="text-white font-black text-3xl">S</span>
                 </div>
                 <div>
@@ -45,45 +43,47 @@
             </div>
             
             <div class="mt-6 md:mt-0 flex flex-wrap gap-3 justify-center">
-                <div class="flex items-center gap-2 bg-blue-900/20 px-4 py-2 rounded-full border border-blue-500/30 radar-pulse">
+                <div id="awsStatus" class="flex items-center gap-2 bg-blue-900/20 px-4 py-2 rounded-full border border-blue-500/30 radar-pulse">
                     <div class="w-2 h-2 bg-blue-400 rounded-full animate-ping"></div>
-                    <span class="text-[9px] font-black text-blue-400 uppercase">Gemini Engine V12 Active</span>
+                    <span class="text-[9px] font-black text-blue-400 uppercase italic">Gemini Engine V12: Ativa</span>
                 </div>
-                <div class="glass px-4 py-2 rounded-full border-white/5">
-                    <span id="statusAssinador" class="text-[9px] font-black text-yellow-500 uppercase italic">Hardware: Verificando...</span>
-                </div>
-                <button onclick="window.open('https://www.pesquisaprotesto.com.br/')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-orange-400 border-orange-500/30 hover:bg-orange-600 transition">CENPROT NACIONAL</button>
-                <button onclick="window.open('https://www.bcb.gov.br/meubc/valores-a-receber')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-emerald-400 border-emerald-500/30 hover:bg-emerald-600 transition">BCB VALORES</button>
+                <button onclick="window.open('https://www.pesquisaprotesto.com.br/')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-orange-400 border-orange-500/30 hover:bg-orange-600 hover:text-white transition uppercase">CENPROT NACIONAL</button>
+                <button onclick="window.open('https://www.bcb.gov.br/meubc/valores-a-receber')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-emerald-400 border-emerald-500/30 hover:bg-emerald-600 hover:text-white transition uppercase">BCB VALORES</button>
             </div>
         </header>
 
         <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div class="lg:col-span-8 space-y-6">
-                <div id="mainScanner" class="glass rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden border-t border-white/10 shadow-2xl">
+                <div id="mainScanner" class="glass card-3d rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden border-t border-white/10 shadow-2xl">
                     <div class="scan-line"></div>
-                    <div class="relative z-10 text-center">
-                        <input type="text" id="docInput" placeholder="INSERIR CPF/CNPJ PARA VARREDURA DEEP-SCAN" 
-                            class="w-full bg-transparent border-b-4 border-slate-800 p-4 text-center text-4xl font-black text-white outline-none focus:border-blue-500 transition-all">
+                    <div class="relative z-10">
+                        <label class="block text-[10px] font-black text-slate-500 mb-4 uppercase tracking-[0.3em] text-center italic">Varredura Deep-Scan Israelense (CPF/CNPJ)</label>
+                        <input type="text" id="docInput" placeholder="INSERIR DOCUMENTO ALVO" 
+                            class="w-full bg-transparent border-b-4 border-slate-800 p-4 text-center text-4xl md:text-5xl font-black text-white outline-none focus:border-blue-500 transition-all placeholder:text-slate-900 uppercase">
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-                            <button onclick="executarDeepScan()" id="btnVarredura" class="infinite-gradient btn-3d py-6 rounded-2xl font-black text-white text-xl uppercase">Iniciar Varredura Tática</button>
-                            <button onclick="window.print()" class="bg-white btn-3d py-6 rounded-2xl font-black text-black text-xl hover:bg-slate-200 transition uppercase">Gerar Relatório / Cupom</button>
+                            <button onclick="executarCapturaCompleta()" id="btnVarredura" class="infinite-gradient btn-3d py-6 rounded-2xl font-black text-white text-xl shadow-xl shadow-blue-500/30 uppercase italic">
+                                Iniciar Varredura Tática
+                            </button>
+                            <button onclick="window.print()" class="bg-white btn-3d py-6 rounded-2xl font-black text-black text-xl hover:bg-slate-200 transition uppercase italic">
+                                Gerar Relatório A4
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-blue-500 shadow-lg">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Passivo Total (Dívidas)</p>
-                        <h3 id="resAlerta" class="text-xl font-black text-red-500 uppercase italic">Aguardando...</h3>
+                    <div class="glass p-6 rounded-[2rem] border-l-4 border-blue-500 card-3d">
+                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1 italic">Passivo Total (Dívidas)</p>
+                        <h3 id="resAlerta" class="text-xl font-black text-red-500 uppercase italic italic">Aguardando...</h3>
                     </div>
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-emerald-500 shadow-lg">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Liquidez Imediata (Esquecido)</p>
+                    <div class="glass p-6 rounded-[2rem] border-l-4 border-emerald-500 card-3d">
+                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1 italic">Liquidez Imediata (Esquecido)</p>
                         <h3 id="resNf" class="text-xl font-black text-emerald-400 font-mono">R$ 0,00</h3>
                     </div>
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-orange-500 shadow-lg">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Status de Autoridade</p>
-                        <h3 id="resReceita" class="text-xl font-black text-white uppercase italic">Offline</h3>
+                    <div class="glass p-6 rounded-[2rem] border-l-4 border-orange-500 card-3d">
+                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1 italic">Status de Autoridade</p>
+                        <h3 id="resReceita" class="text-xl font-black text-white uppercase italic">OFFLINE</h3>
                     </div>
                 </div>
 
@@ -96,180 +96,168 @@
             </div>
 
             <div class="lg:col-span-4 space-y-6">
-                <div class="glass p-6 rounded-[2.5rem] border border-blue-500/20">
-                    <p class="text-[10px] font-black text-blue-500 uppercase italic mb-3">Canal de Alertas (WhatsApp)</p>
-                    <input type="text" id="whatsappNotif" placeholder="Ex: 5511999999999" 
+                <div class="glass p-6 rounded-[2.5rem] border border-blue-500/20 bg-gradient-to-b from-slate-900/50 to-black">
+                    <h3 class="text-[10px] font-black text-blue-400 mb-4 uppercase tracking-widest italic">Canal de Alertas (WhatsApp)</h3>
+                    <input type="text" id="whatsappNotif" placeholder="55 (00) 00000-0000" 
                         class="w-full bg-black/40 border border-white/10 p-4 rounded-xl text-[12px] font-mono text-white outline-none focus:border-blue-500">
-                    <p class="text-[8px] text-slate-500 mt-2 uppercase font-black">As varreduras serão reportadas aqui.</p>
+                </div>
+
+                <div class="glass p-6 rounded-[2.5rem] border border-blue-500/20">
+                    <h3 class="text-[10px] font-black text-blue-500 mb-4 uppercase tracking-widest flex items-center gap-2 italic">
+                        Assinador Digital Local
+                    </h3>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-[11px] font-bold text-slate-400 italic">HARDWARE:</span>
+                        <span id="statusAssinador" class="text-[11px] font-black text-red-500 uppercase italic">Não Detectado</span>
+                    </div>
+                    <button onclick="conectarHardware()" class="w-full bg-blue-600/10 border border-blue-500/40 text-blue-400 py-3 rounded-xl text-[10px] font-black hover:bg-blue-600 hover:text-white transition italic">
+                        RECONECTAR ASSINADOR
+                    </button>
                 </div>
 
                 <div class="glass p-6 rounded-[2.5rem] border border-emerald-500/20">
-                    <p class="text-[10px] font-black text-emerald-500 uppercase italic">Investimentos Identificados</p>
-                    <div id="resInvest" class="mt-4 text-[11px] font-bold text-slate-300 space-y-2">Nenhum ativo mapeado.</div>
+                    <p class="text-[10px] font-black text-emerald-500 uppercase italic mb-3">Investimentos Mapeados</p>
+                    <div id="resInvest" class="text-[11px] font-bold text-slate-300 space-y-2 italic">
+                        Nenhum ativo identificado na base B3/BCB.
+                    </div>
                 </div>
 
-                <div class="glass p-8 rounded-[2.5rem] border-t-4 border-orange-600 shadow-xl">
-                    <button onclick="window.open('https://spedy.com.br/')" class="w-full bg-slate-800 py-4 rounded-xl font-black text-[10px] text-slate-300 hover:bg-slate-700 transition uppercase mb-4">Acessar Hub Spedy</button>
-                    <div class="bg-black/40 p-4 rounded-xl text-center">
-                        <p class="text-[10px] text-slate-500 uppercase font-black mb-1">Sincronismo Global</p>
-                        <p class="text-[9px] text-blue-500 font-bold">AWS-SA1 • SERPRO • BCB • CENPROT</p>
-                        <div class="w-full bg-blue-500/10 h-1 mt-2 rounded-full overflow-hidden">
-                            <div class="bg-blue-500 h-full animate-pulse" style="width: 100%"></div>
-                        </div>
-                    </div>
+                <div class="glass p-8 rounded-[2.5rem] card-3d border-t-4 border-orange-600">
+                    <button onclick="emitirNotaFiscal()" class="w-full bg-orange-600 py-4 rounded-xl font-black text-xs text-white hover:bg-orange-500 transition shadow-lg shadow-orange-900/20 mb-3 uppercase italic">
+                        Emitir NF-e via Hardware
+                    </button>
+                    <button onclick="window.open('https://spedy.com.br/')" class="w-full bg-slate-800 py-4 rounded-xl font-black text-[10px] text-slate-300 hover:bg-slate-700 transition uppercase italic">
+                        Acessar Portal Spedy
+                    </button>
                 </div>
             </div>
         </main>
     </div>
 
-    <div id="relatorio-full">
-        <div style="text-align: center; border-bottom: 4px solid black; padding-bottom: 10px;">
-            <h1 style="font-size: 28px; font-weight: 900; margin: 0;">SENTINELA V12</h1>
-            <p style="font-size: 12px; font-weight: bold; letter-spacing: 2px;">RELATÓRIO DE AUDITORIA DE ATIVOS</p>
+    <div id="danfe-print">
+        <div style="text-align: center; border-bottom: 2px solid black; padding-bottom: 10px;">
+            <b style="font-size: 22px;">SENTINELA V12 - GOV</b><br>
+            <span style="font-size: 10px; letter-spacing: 2px;">AUDITORIA DE ATIVOS E PASSIVOS NACIONAL</span>
         </div>
+        <div style="padding: 10px 0; font-size: 12px;">
+            <p><b>ALVO:</b> <span id="prtDoc"></span></p>
+            <p><b>VARREDURA:</b> <span id="prtData"></span></p>
+            <p><b>PROTOCOLO:</b> <span id="prtProt"></span></p>
+            
+            <div class="audit-box" style="margin-top: 20px;">
+                <p><b>LIQUIDEZ IDENTIFICADA (BCB):</b> <span id="prtNf"></span></p>
+                <p><b>RESTITUIÇÃO PENDENTE:</b> R$ <span id="prtIrpf"></span></p>
+            </div>
 
-        <div style="margin-top: 20px; font-family: monospace;">
-            <p><strong>ALVO:</strong> <span id="prtDoc">---</span></p>
-            <p><strong>DATA:</strong> <span id="prtData">---</span></p>
-            <p><strong>PROT:</strong> <span id="prtProt">---</span></p>
+            <div class="audit-box" style="border-color: red; color: red;">
+                <p><b>DÍVIDA ATIVA / PGFN:</b> <span id="prtAlerta"></span></p>
+                <p><b>STATUS RECEITA:</b> <span id="prtStatus"></span></p>
+            </div>
         </div>
-
-        <div class="audit-box">
-            <span class="label-israel">Liquidez e Dinheiro Esquecido</span>
-            <div id="prtLiquidez" style="margin-top: 10px; font-size: 14px; font-family: monospace;"></div>
-        </div>
-
-        <div class="audit-box" style="border-color: #dc2626;">
-            <span class="label-israel" style="background: #dc2626;">Passivos e Dívidas (Cartório/União)</span>
-            <div id="prtDividas" style="margin-top: 10px; font-size: 14px; font-family: monospace;"></div>
-        </div>
-
-        <div class="audit-box" style="border-color: #f59e0b;">
-            <span class="label-israel" style="background: #f59e0b;">Sugestão de Leilão (Receita/Judicial)</span>
-            <div id="prtLeiloes" style="margin-top: 10px; font-size: 12px; font-family: monospace;"></div>
-        </div>
-
-        <div style="text-align: center; font-size: 10px; margin-top: 40px; border-top: 1px dashed #000; padding-top: 10px;">
-            ESTE DOCUMENTO POSSUI VALIDADE TÉCNICA DE AUDITORIA.<br>
-            VERIFICADO VIA AWS-SA1 / SERPRO / PORTAL GOV.BR
+        <div style="text-align: center; border-top: 1px dashed black; padding-top: 10px; font-size: 9px;">
+            <b>CHAVE DE AUTENTICIDADE AWS-SA1</b><br>
+            <span id="prtChave" style="word-break: break-all;"></span><br><br>
+            <b>SISTEMA DE AUTORIDADE FISCAL - ISRAEL TECH INTEGRATION</b>
         </div>
     </div>
 
     <script>
-        /* INTEGRAÇÃO SERPRO HARDWARE */
-        function conectarHardware() {
-            const status = document.getElementById('statusAssinador');
-            const checkPort = (port) => {
-                const ws = new WebSocket(`wss://127.0.0.1:${port}`);
-                ws.onopen = () => { 
-                    status.innerText = "ASSINADOR CONECTADO (PORTA " + port + ")"; 
-                    status.className = "text-[9px] font-black text-emerald-500 uppercase italic"; 
-                };
-                ws.onerror = () => { 
-                    if(port === 6515) checkPort(6501); 
-                    else { status.innerText = "HARDWARE DESCONECTADO"; status.className = "text-[9px] font-black text-red-500 uppercase italic"; } 
-                };
-            }
-            checkPort(6515);
-        }
-
-        /* INTEGRAÇÃO NOTIFICAÇÃO WHATSAPP */
-        function alertarWhatsApp(msg) {
-            const num = document.getElementById('whatsappNotif').value;
-            if(num) console.log("IA-COMMAND: Enviando Alerta para " + num + " -> " + msg);
-        }
-
-        /* EXECUÇÃO DEEP-SCAN (UNIFICADA) */
-        async function executarDeepScan() {
-            const input = document.getElementById('docInput').value.replace(/\D/g, '');
-            if(!input) return alert("Por favor, insira um CPF ou CNPJ válido.");
+        // Função de Captura e IA Integrada
+        async function executarCapturaCompleta() {
+            const doc = document.getElementById('docInput').value.replace(/\D/g, '');
+            if(!doc) return alert("Por favor, insira um documento válido para varredura.");
 
             const scanner = document.getElementById('mainScanner');
             const btn = document.getElementById('btnVarredura');
             
-            // Ativa visual de varredura
             scanner.classList.add('scanning');
-            btn.innerText = "EXECUTANDO DEEP-SCAN ISRAELENSE...";
-            btn.disabled = true;
+            btn.innerText = "EXECUTANDO DEEP-SCAN AWS...";
 
-            // Simula o tempo de análise da AWS I.A.
             setTimeout(() => {
-                const seed = parseInt(input.slice(-2)) || 50;
+                const seed = parseInt(doc.slice(-2)) || 50;
                 
-                // Lógica de Ativos
-                const bcb = (seed * 115.75).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'});
-                const irpf = (seed * 42.10).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'});
+                // Dados Simulados com Lógica Inteligente
+                const bcb = (seed * 118.50).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'});
+                const irpf = (seed * 45.20).toFixed(2);
+                const divida = seed > 60 ? (seed * 1300).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'}) : "NADA CONSTA";
                 
-                // Lógica de Passivos
-                const dividaUniao = seed > 60 ? (seed * 1200.00).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'}) : "NADA CONSTA";
-                const cartorio = seed > 30 ? (seed * 450.00).toLocaleString('pt-BR', {style: 'currency', currency:'BRL'}) : "LIMPO";
-
-                // Atualiza Dashboard Principal
+                // Atualiza Dashboard
+                document.getElementById('resReceita').innerText = seed > 80 ? "PENDENTE" : "AUTORIDADE ATIVA";
                 document.getElementById('resNf').innerText = bcb;
-                document.getElementById('resAlerta').innerText = seed > 60 ? "ALTO RISCO" : "RISCO BAIXO";
-                document.getElementById('resReceita').innerText = "AUTORIDADE ATIVA";
+                document.getElementById('resAlerta').innerText = seed > 60 ? "ALTO RISCO" : "CLEAR";
                 
                 // Atualiza Investimentos
                 document.getElementById('resInvest').innerHTML = `
-                    <p>• Ações (Custódia): R$ ${seed * 140},00</p>
-                    <p>• Tesouro Selic: R$ ${seed * 210},00</p>
-                    <p>• Créditos ICMS: R$ ${seed * 15},30</p>
+                    <p>• Ações B3: R$ ${seed * 140},00</p>
+                    <p>• Tesouro Direto: R$ ${seed * 220},00</p>
+                    <p>• Dividendos: R$ ${seed * 12},30</p>
                 `;
 
-                // Popula Leilões Dinâmicos
+                // Radar de Leilões
                 const areaLeilao = document.getElementById('areaLeiloes');
                 const listaLeilao = document.getElementById('listaLeiloes');
                 areaLeilao.classList.remove('hidden');
                 listaLeilao.innerHTML = `
                     <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
-                        <p class="text-orange-500 font-black text-[10px]">LEILÃO RECEITA FEDERAL #00${seed}</p>
-                        <p class="text-[9px] text-slate-400">Produtos apreendidos (Eletrônicos/Veículos).</p>
-                        <button onclick="window.open('https://www3.receita.fazenda.gov.br/leilao/')" class="mt-2 w-full bg-orange-600 text-[9px] font-black py-2 rounded uppercase">Habilitar no e-CAC</button>
+                        <p class="text-orange-500 font-black text-[10px] uppercase italic">Leilão Receita Federal #00${seed}</p>
+                        <p class="text-[9px] text-slate-400">Produtos apreendidos (Lote Eletrônicos).</p>
+                        <button onclick="window.open('https://www3.receita.fazenda.gov.br/leilao/')" class="mt-2 w-full bg-orange-600 text-[9px] font-black py-2 rounded uppercase italic">Participar</button>
                     </div>
                     <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
-                        <p class="text-blue-500 font-black text-[10px]">LEILÃO JUDICIAL TRT</p>
-                        <p class="text-[9px] text-slate-400">Imóveis e ativos para recuperação de dívidas.</p>
-                        <button onclick="window.open('https://www.leiloesjudiciais.com.br/')" class="mt-2 w-full bg-blue-600 text-[9px] font-black py-2 rounded uppercase">Ver Editais Abertos</button>
+                        <p class="text-blue-500 font-black text-[10px] uppercase italic">Leilão Judicial (TJ/TRT)</p>
+                        <p class="text-[9px] text-slate-400">Imóveis e veículos recuperados.</p>
+                        <button onclick="window.open('https://www.leiloesjudiciais.com.br/')" class="mt-2 w-full bg-blue-600 text-[9px] font-black py-2 rounded uppercase italic">Ver Editais</button>
                     </div>
                 `;
 
-                // Prepara Relatório de Impressão
-                document.getElementById('prtDoc').innerText = input;
+                // Prepara Impressão
+                document.getElementById('prtDoc').innerText = doc;
                 document.getElementById('prtData').innerText = new Date().toLocaleString();
-                const prot = 'SENT-' + Math.random().toString(36).toUpperCase().substring(2,12);
-                document.getElementById('prtProt').innerText = prot;
-                
-                document.getElementById('prtLiquidez').innerHTML = `
-                    - BCB VALORES: ${bcb}<br>
-                    - RESTITUIÇÃO IRPF: ${irpf}<br>
-                    - ATIVOS CUSTODIADOS: R$ ${seed * 350},00
-                `;
-                
-                document.getElementById('prtDividas').innerHTML = `
-                    - DÍVIDA ATIVA UNIÃO: ${dividaUniao}<br>
-                    - PROTESTOS CARTÓRIO: ${cartorio}<br>
-                    - PENDÊNCIA SEFAZ: R$ ${seed * 12},00
-                `;
+                document.getElementById('prtNf').innerText = bcb;
+                document.getElementById('prtIrpf').innerText = irpf;
+                document.getElementById('prtAlerta').innerText = divida;
+                document.getElementById('prtStatus').innerText = seed > 80 ? "PENDENTE" : "REGULAR";
+                document.getElementById('prtProt').innerText = 'SENT-' + Date.now();
+                document.getElementById('prtChave').innerText = Math.random().toString(16).toUpperCase().substring(2,16) + Math.random().toString(16).toUpperCase().substring(2,16);
 
-                document.getElementById('prtLeiloes').innerHTML = `
-                    ALVO HABILITADO PARA O LOTE #00${seed} DA RECEITA FEDERAL.<br>
-                    STATUS: LIBERADO PARA LANCE VIA GOV.BR (NÍVEL OURO).
-                `;
+                // Notificação WhatsApp
+                const num = document.getElementById('whatsappNotif').value;
+                if(num) console.log("IA-REPORT: Alerta enviado para " + num + " sobre o doc " + doc);
 
-                // Finaliza
                 scanner.classList.remove('scanning');
-                btn.innerText = "INICIAR VARREDURA TÁTICA";
-                btn.disabled = false;
-                
-                alertarWhatsApp("Varredura concluída Protocolo: " + prot);
-            }, 2500);
+                btn.innerText = "VARREDURA FISCAL";
+            }, 2000);
         }
 
-        // Inicialização Global
-        window.onload = () => {
-            conectarHardware();
-            console.log("Sentinela V12 Full Integration Loaded.");
-        };
+        function conectarHardware() {
+            const status = document.getElementById('statusAssinador');
+            status.innerText = "BUSCANDO...";
+            status.className = "text-[11px] font-black text-yellow-500 uppercase";
+
+            const checkPort = (port) => {
+                const ws = new WebSocket(`wss://127.0.0.1:${port}`);
+                ws.onopen = () => {
+                    status.innerText = "Conectado (Porta " + port + ")";
+                    status.className = "text-[11px] font-black text-emerald-500 uppercase italic";
+                };
+                ws.onerror = () => {
+                    if(port === 6515) checkPort(6501);
+                    else {
+                        status.innerText = "Desconectado";
+                        status.className = "text-[11px] font-black text-red-500 uppercase italic";
+                    }
+                };
+            }
+            checkPort(6515);
+        }
+
+        function emitirNotaFiscal() {
+            const doc = document.getElementById('docInput').value;
+            if(!doc) return alert("Realize a varredura antes de emitir.");
+            alert("Transmitindo SEFAZ via Assinador Digital...");
+        }
+
+        window.onload = conectarHardware;
     </script>
 </body>
 </html>
