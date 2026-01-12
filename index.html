@@ -3,113 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENTINELA V12 - ELITE DESIGN</title>
+    <title>SENTINELA V12 - EMISSOR DE ELITE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #00f2ff; --deep: #0a0a0c; }
-        body { background-color: var(--deep); color: #fff; font-family: 'Space Grotesk', sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; }
+        body { background: #050505; color: #fff; font-family: 'Space Grotesk', sans-serif; }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; }
         
-        /* SISTEMA DE IMPRESSÃO ULTRA-MODERNO */
+        /* CORREÇÃO DO SISTEMA DE IMPRESSÃO */
         @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; }
             .no-print { display: none !important; }
-            #print-area { display: block !important; background: #fff !important; color: #000 !important; }
-            
-            /* A4 ELITE */
-            .a4-modern { width: 210mm; min-height: 297mm; padding: 20mm; font-family: 'Inter', sans-serif; background: #fff; }
-            .a4-header { border-left: 8px solid #000; padding-left: 20px; margin-bottom: 40px; }
-            .a4-grid { display: grid; grid-template-cols: 1fr 1fr; gap: 20px; border-top: 1px solid #eee; padding-top: 20px; }
-            
-            /* TÉRMICA MODERN */
-            .thermal-modern { width: 80mm; padding: 5mm; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.2; }
-            .thermal-modern b { font-weight: 700; text-transform: uppercase; }
         }
-        #print-area { display: none; }
-        .neon-input { background: #111; border: 1px solid #222; padding: 16px; border-radius: 12px; transition: 0.3s; width: 100%; }
-        .neon-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); outline: none; }
+
+        .input-v12 { background: #111; border: 1px solid #222; padding: 14px; border-radius: 12px; width: 100%; outline: none; transition: 0.3s; }
+        .input-v12:focus { border-color: #00f2ff; box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
     </style>
 </head>
-<body class="p-6 md:p-12">
+<body class="p-4 md:p-10">
 
-    <div class="no-print max-w-5xl mx-auto space-y-8">
-        <header class="flex flex-col md:flex-row justify-between items-center bg-white/5 p-8 rounded-[32px] border border-white/10">
-            <div class="flex items-center gap-6">
-                <div class="h-16 w-16 bg-cyan-500 rounded-2xl flex items-center justify-center rotate-3 shadow-[0_0_30px_rgba(6,182,212,0.5)]">
-                    <span class="text-black font-black text-2xl">V12</span>
-                </div>
-                <div>
-                    <h1 class="text-3xl font-bold tracking-tight">SENTINELA <span class="text-cyan-400">COMMAND</span></h1>
-                    <p class="text-[10px] uppercase tracking-widest text-white/40">Israel Data Technology | Fiscal Authority</p>
-                </div>
+    <div class="no-print max-w-5xl mx-auto space-y-6">
+        <header class="glass p-8 flex justify-between items-center border-b-4 border-cyan-500">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tighter">SENTINELA <span class="text-cyan-400">V12</span></h1>
+                <p class="text-[10px] uppercase tracking-[0.3em] text-white/40">Israel Military Grade Fiscal System</p>
             </div>
-            <div id="status" class="text-right text-[10px] font-bold text-cyan-500 bg-cyan-500/10 px-4 py-2 rounded-full border border-cyan-500/20">
-                SYSTEM SECURE // SEFAZ ONLINE
+            <div class="text-right">
+                <span class="text-emerald-500 font-black text-xs">● SEFAZ/IOB CONNECTED</span>
             </div>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 glass-card p-10 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="col-span-2">
-                        <label class="text-[10px] uppercase font-bold text-white/30 ml-2 mb-2 block">Identificação do Destinatário</label>
-                        <input type="text" id="cliNome" placeholder="Razão Social / Nome Completo" class="neon-input text-lg">
-                    </div>
-                    <input type="text" id="cliDoc" placeholder="CPF ou CNPJ" class="neon-input">
-                    <input type="text" id="cliWhats" placeholder="WhatsApp (DDD+Número)" class="neon-input">
-                    <input type="text" id="cliEnd" placeholder="Endereço de Faturamento" class="neon-input col-span-2">
-                </div>
-                <div class="pt-6 border-t border-white/5">
-                    <label class="text-[10px] uppercase font-bold text-white/30 ml-2 mb-2 block">Especificação do Pedido</label>
-                    <div class="flex gap-4">
-                        <input type="text" id="prodDesc" placeholder="Descrição do Ativo/Serviço" class="neon-input flex-1">
-                        <input type="number" id="prodValor" placeholder="R$" class="neon-input w-32">
-                    </div>
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass p-8 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" id="cliNome" placeholder="NOME / RAZÃO SOCIAL" class="input-v12 col-span-2">
+                    <input type="text" id="cliDoc" placeholder="CPF ou CNPJ" class="input-v12">
+                    <input type="text" id="cliWhats" placeholder="WHATSAPP (55...)" class="input-v12">
+                    <input type="text" id="cliEnd" placeholder="ENDEREÇO COMPLETO" class="input-v12 col-span-2">
+                    <input type="text" id="prodDesc" placeholder="DESCRIÇÃO DA VENDA" class="input-v12 col-span-2">
+                    <input type="number" id="prodValor" placeholder="VALOR R$" class="input-v12">
                 </div>
             </div>
 
             <div class="space-y-4">
-                <button onclick="gerarDoc('A4')" class="w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-xs hover:scale-[1.02] transition active:scale-95 shadow-2xl">
-                    Emitir Nota A4 Elite
+                <button onclick="imprimir('A4')" class="w-full bg-white text-black py-5 rounded-2xl font-black uppercase text-sm hover:bg-cyan-500 hover:text-white transition-all shadow-xl">
+                    📄 Imprimir Nota A4 Elite
                 </button>
-                <button onclick="gerarDoc('TERMICA')" class="w-full bg-cyan-500 text-black py-6 rounded-3xl font-black uppercase text-xs hover:bg-cyan-400 transition shadow-2xl">
-                    Cupom Térmico Moderno
+                <button onclick="imprimir('TERMICA')" class="w-full border border-cyan-500 text-cyan-500 py-5 rounded-2xl font-black uppercase text-sm hover:bg-cyan-500 hover:text-white transition-all">
+                    🧾 Imprimir Térmica 80mm
                 </button>
-                <button onclick="enviarWhats()" class="w-full border border-white/10 bg-white/5 py-6 rounded-3xl font-bold uppercase text-xs hover:bg-white/10 transition">
-                    Enviar via WhatsApp
+                <button onclick="window.open('https://api.whatsapp.com/send?text=Nota Gerada!')" class="w-full bg-emerald-600 py-5 rounded-2xl font-black uppercase text-sm">
+                    Enviar WhatsApp
                 </button>
             </div>
         </main>
     </div>
 
-    <div id="print-area">
-        <div id="render-target"></div>
-    </div>
+    <div id="print-area"></div>
 
     <script>
-        function gerarDoc(tipo) {
-            const val = {
-                nome: document.getElementById('cliNome').value,
-                doc: document.getElementById('cliDoc').value,
-                end: document.getElementById('cliEnd').value,
-                desc: document.getElementById('prodDesc').value,
-                valor: document.getElementById('prodValor').value,
-                data: new Date().toLocaleDateString('pt-BR'),
-                hora: new Date().toLocaleTimeString('pt-BR'),
-                chave: Math.random().toString().slice(2,16) + Math.random().toString().slice(2,16)
-            };
+        function imprimir(tipo) {
+            const n = document.getElementById('cliNome').value || "CLIENTE CONSUMIDOR";
+            const d = document.getElementById('cliDoc').value || "000.000.000-00";
+            const e = document.getElementById('cliEnd').value || "NÃO INFORMADO";
+            const p = document.getElementById('prodDesc').value || "PRODUTO/SERVIÇO V12";
+            const v = document.getElementById('prodValor').value || "0,00";
+            const data = new Date().toLocaleString();
+            const chave = Math.random().toString().slice(2,14) + Math.random().toString().slice(2,14);
 
-            let html = "";
+            let conteudo = "";
 
             if(tipo === 'A4') {
-                html = `
-                    <div class="a4-modern">
-                        <div class="a4-header">
-                            <h1 style="font-size: 48px; margin: 0; font-weight: 900; letter-spacing: -2px;">SENTINELA V12</h1>
-                            <p style="font-size: 14px; text-transform: uppercase; color: #666; letter-spacing: 4px;">Fiscal Authority Certificate</p>
+                conteudo = `
+                    <div style="padding: 40px; color: #000; background: #fff; min-height: 297mm; font-family: sans-serif;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 5px solid #000; padding-bottom: 20px;">
+                            <div style="font-size: 30px; font-weight: 900;">SENTINELA V12</div>
+                            <div style="text-align: right;"><b>DOCUMENTO FISCAL</b><br>Nº ${Math.floor(Math.random()*99999)}</div>
                         </div>
-                        
-                        <div class="a4-grid">
+                        <div style="margin-top: 30px; display: grid; grid-template-cols: 1fr 1fr; gap: 40px;">
                             <div>
-                                <small style="text-transform: uppercase; color: #999;">Emissor</small>
-                                <p><b>SENTINELA DATA SYSTEMS</b><br>Unidade de Operações F
+                                <small>EMISSOR</small><br><b>SENTINELA COMMAND INTEGRATION</b><br>CRISTIAN V12 SYSTEMS
+                            </div>
+                            <div>
+                                <small>DESTINATÁRIO</small><br><b>${n}</b><br>DOC: ${d}<br>${e}
+                            </div>
+                        </div>
+                        <table style="width: 100%; margin-top: 50px; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f0f0f0; text-align: left;">
+                                    <th style="padding: 10px; border: 1px solid #ddd;">DESCRIÇÃO</th>
+                                    <th style="padding: 10px; border: 1px solid #ddd; text-align: right;">TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 20px; border: 1px solid #ddd;">${p}</td>
+                                    <td style="padding: 20px; border: 1px solid #ddd; text-align: right; font-size: 20px;"><b>R$ ${v}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="margin-top: 100px; display: flex; justify-content: space-between;">
+                            <div style="width: 45%; border-top: 2px solid #000; text-align: center; padding-top: 10px;">ASSINATURA AUTORIDADE</div>
+                            <div style="width: 45%; border-top: 2px solid #000; text-align: center; padding-top: 10px;">ASSINATURA CLIENTE</div>
+                        </div>
+                        <div style="margin-top: 50px; font-size: 10px; color: #666; text-align: center;">
+                            CHAVE DE ACESSO: ${chave}
+                        </div>
+                    </div>
+                `;
+            } else {
+                conteudo = `
+                    <div style="width: 80mm; padding: 5mm; color: #000; font-family: 'Courier New', monospace; font-size: 12px;">
+                        <center>
+                            <b style="font-size: 18px;">SENTINELA V12</b><br>
+                            ALTA TECNOLOGIA FISCAL<br>
+                            ----------------------------<br>
+                            <b>RECIBO DE VENDA</b><br>
+                            ----------------------------
+                        </center>
+                        <p>DATA: ${data}</p>
+                        <p>CLI: ${n}</p>
+                        <p>DOC: ${d}</p>
+                        <p>----------------------------</p>
+                        <p>${p}</p>
+                        <p style="font-size: 16px; text-align: right;"><b>TOTAL: R$ ${v}</b></p>
+                        <p>----------------------------</p>
+                        <center>
+                            <p>OBRIGADO PELA PREFERÊNCIA</p>
+                            <p>Cristian V12 Integration</p>
+                        </center>
+                    </div>
+                `;
+            }
+
+            // Injeta o conteúdo na área de impressão
+            document.getElementById('print-area').innerHTML = conteudo;
+            
+            // Dispara a impressão
+            window.print();
+        }
+    </script>
+</body>
+</html>
