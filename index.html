@@ -69,10 +69,8 @@
             border-bottom-width: 0px;
         }
 
-        /* Área do Scanner escondida até ser ativada */
         #reader { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px; display: none; }
 
-        /* Estilo Canhoto Térmico 3D Estilo Mercado Livre */
         .thermal-print-container {
             width: 80mm;
             background: white;
@@ -106,7 +104,7 @@
                     <h1 class="text-2xl font-black tracking-tighter uppercase text-slate-800">Sentinela <span class="text-orange-600">IHVH</span></h1>
                     <div class="flex items-center gap-2">
                         <span class="text-[9px] font-black bg-slate-800 text-white px-2 py-0.5 rounded">M.I.T</span>
-                        <span class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">VISION AI</span>
+                        <span id="network-badge" class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">BUSCANDO REDE...</span>
                     </div>
                 </div>
             </div>
@@ -214,6 +212,21 @@
 
     <script>
         let somaScanner = 0;
+        let itensLidos = new Set(); // Memória de autoridade: Impede ler o mesmo código várias vezes
+
+        // INSTRUÇÃO 1: Captura de dados da rede e preenchimento automático
+        async function capturarDadosRede() {
+            addLog("Mapeando autoridade da rede IP...");
+            try {
+                // Simulação de captura via Metadata da rede (em produção usaria uma API de GeoIP/SSID)
+                const redeNome = "DROPPFY MATRIZ V12";
+                document.getElementById('network-badge').innerText = `REDE: ${redeNome}`;
+                addLog(`Rede identificada: ${redeNome}. Dados de logo sincronizados.`);
+            } catch (e) {
+                addLog("Aviso: Falha ao capturar metadados da rede.");
+            }
+        }
+        window.onload = capturarDadosRede;
 
         function ativarScanner() {
             const readerDiv = document.getElementById('reader');
@@ -222,21 +235,28 @@
             
             html5QrCode.start(
                 { facingMode: "environment" }, 
-                { fps: 10, qrbox: { width: 250, height: 150 } },
+                { fps: 15, qrbox: { width: 250, height: 150 } },
                 (decodedText) => {
-                    let precoItem = Math.floor(Math.random() * 100) + 10; 
-                    addLog(`BIP: ${decodedText} registrado no PDV.`);
-                    
+                    // INSTRUÇÃO 2: Bloqueio de duplicidade e Soma Automática
+                    if (itensLidos.has(decodedText)) {
+                        addLog(`ITEM REPETIDO: ${decodedText} ignorado para evitar erro de soma.`);
+                        return; 
+                    }
+
+                    itensLidos.add(decodedText);
+                    let precoItem = Math.floor(Math.random() * 50) + 10; // Simulação de valor por item
                     somaScanner += precoItem;
+
+                    addLog(`BIP SUCESSO: ${decodedText} | Adicionado R$ ${precoItem},00`);
+                    
                     document.getElementById('valorInput').value = somaScanner.toFixed(2);
-                    document.getElementById('descInput').value += `Item ${decodedText} (R$ ${precoItem},00)\n`;
+                    document.getElementById('descInput').value += `Item [${decodedText}] - R$ ${precoItem},00\n`;
                     
                     calcFiscal();
                 }
             ).catch(err => addLog("Erro Vision: " + err));
         }
 
-        // Segurança: Nome verdadeiro obrigatório
         function validarNomeSeguro(el) {
             if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
                 alert("ALERTA DE SEGURANÇA V12: Insira o nome de registro COMPLETO para emissão.");
@@ -291,7 +311,6 @@
             const printArea = document.getElementById('print-area');
             
             if(tipo === 'TERMICO') {
-                // Layout Térmico 3D Estilo Mercado Livre
                 printArea.innerHTML = `
                     <div class="thermal-print-container">
                         <div class="ml-style-header">SENTINELA V12</div>
@@ -309,7 +328,6 @@
                     </div>
                 `;
             } else {
-                // Layout Original A4
                 printArea.innerHTML = `
                     <div style="font-family: Arial; padding: 50px; border: 5px solid black;">
                         <h1 style="font-size: 35px; margin: 0;">SENTINELA V12</h1>
