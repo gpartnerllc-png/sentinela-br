@@ -85,7 +85,7 @@
                     <h1 class="text-2xl font-black tracking-tighter uppercase text-slate-800">Sentinela <span class="text-orange-600">Authority</span></h1>
                     <div class="flex items-center gap-2">
                         <span class="text-[9px] font-black bg-slate-800 text-white px-2 py-0.5 rounded">MIT STANDARD</span>
-                        <span class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">ISRAEL TECH SYSTEM</span>
+                        <span class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">I TECH SYSTEM</span>
                     </div>
                 </div>
             </div>
@@ -141,8 +141,8 @@
                     </div>
                     <div id="logContent" class="h-32 overflow-y-auto leading-relaxed">
                         > Sistema Sentinela V12 Inicializado...<br>
-                        > Protocolos de Israel Ativos. Monitorando porta SERPRO 6515...<br>
-                        > Módulo Reforma 2026 Carregado (IBS/CBS Ready).<br>
+                        > Protocolos de Isel Ativos. Monitorando porta SERPRO 6515...<br>
+                        > Módulo Ref Carregado (IBS/CBS Ready).<br>
                     </div>
                 </div>
             </div>
@@ -153,11 +153,11 @@
                     
                     <div class="space-y-6 bg-orange-50/50 p-6 rounded-2xl border border-orange-100 shadow-inner">
                         <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">CBS (FEDERAL) 8.8%:</span>
+                            <span class="font-black text-slate-500 uppercase text-[11px]">CBS (FEDERAL) 0.9%:</span>
                             <span id="cbsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">IBS (EST/MUN) 17.7%:</span>
+                            <span class="font-black text-slate-500 uppercase text-[11px]">IBS (EST/MUN) 0.1%:</span>
                             <span id="ibsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
                         </div>
                         <div class="border-t-2 border-orange-200/50 pt-6 flex justify-between items-center">
@@ -198,9 +198,9 @@
                 setTimeout(() => {
                     loader.classList.add('hidden');
                     if (doc.length === 14) {
-                        nomeInput.value = "CRISTIAN SOLUTIONS TECNOLOGIA LTDA";
+                        nomeInput.value = "SOLUTIONS TECNOLOGIA LTDA";
                     } else {
-                        nomeInput.value = "CRISTIAN DA SILVA (STATUS: REGULAR)";
+                        nomeInput.value = "(STATUS: REGULAR)";
                     }
                     nomeInput.classList.remove('bg-slate-50');
                     nomeInput.classList.add('bg-orange-50', 'text-orange-900', 'border-orange-200');
@@ -211,8 +211,8 @@
 
         function calcFiscal() {
             const v = parseFloat(document.getElementById('valorInput').value) || 0;
-            const cbs = v * 0.088;
-            const ibs = v * 0.177;
+            const cbs = v * 0.9;
+            const ibs = v * 0.1;
             const liq = v - (cbs + ibs);
 
             document.getElementById('cbsVal').innerText = `R$ ${cbs.toFixed(2)}`;
