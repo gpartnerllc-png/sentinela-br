@@ -288,15 +288,6 @@
     <div id="print-area" class="hidden"></div>
 
     <script>
-          
-    let v12_finance = { receita: 0, despesa: 0, invest: 0 };
-    const SERIAL_P2 = "PB1F252F75254";
-    const ACCESS_KEY = "20260112PB1F252F75254";
-    let html5QrCode = null;
-    let somaScanner = 0;
-    let itensLidos = new Set();
-
-    // Funções de Suporte Corrigidas
     function addLog(msg) { 
         const logContent = document.getElementById('logContent');
         if(logContent) logContent.innerHTML += `> ${msg}<br>`;
