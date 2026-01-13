@@ -11,6 +11,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
     <style>
+
+        <head>
+    <style>
+        /* Cole aqui dentro, no final de todos os seus outros estilos */
+
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                display: block !important; 
+            }
+        }
+    <style>
+</head>
         :root { 
             --active-orange: #ff6b00; 
             --deep-orange: #e65f00;
@@ -18,6 +36,8 @@
         }
         
         body { background: var(--gov-bg); font-family: 'Inter', sans-serif; color: #334155; }
+
+        <div id="print-area"></div>
         
         .auth-header {
             background: #ffffff;
@@ -207,10 +227,53 @@
                             <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
                         </div>
 
-                        <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Valor (R$)</label>
-                            <input type="number" id="valorInput" oninput="calcFiscal()" class="input-tactical w-full text-2xl text-orange-600" placeholder="0,00">
-                        </div>
+                       <div class="col-span-3 grid grid-cols-1 gap-6 p-6 bg-slate-900 rounded-3xl border border-slate-800 shadow-[20px_20px_60px_#070a11,-20px_-20px_60px_#111827]">
+    
+    <div class="flex flex-col gap-2">
+        <label class="text-[11px] font-black text-orange-500/70 uppercase tracking-[0.2em] ml-2">Autoridade Financeira (R$)</label>
+        <div class="relative group">
+            <input type="number" id="valorInput" oninput="calcFiscal()" 
+                   class="w-full bg-slate-900 p-5 rounded-2xl text-3xl font-bold text-orange-600 
+                          shadow-[inset_6px_6px_12px_#070a11,inset_-6px_-6px_12px_#111827] 
+                          border-none outline-none focus:ring-2 focus:ring-orange-500/30 transition-all placeholder-slate-700" 
+                   placeholder="0,00">
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-700 font-black">BRL</div>
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+        <label class="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Destinar Fluxo (Slot V12)</label>
+        <select id="slotDestino" 
+                class="w-full bg-slate-900 p-4 rounded-2xl text-white font-medium
+                       shadow-[6px_6px_12px_#070a11,-6px_-6px_12px_#111827] 
+                       border border-slate-800 outline-none focus:border-orange-500 appearance-none cursor-pointer">
+            <optgroup label="📥 ENTRADAS (RECEITAS)" class="bg-slate-900 text-orange-500">
+                <option value="receita_pix">📥 RECEBIMENTO PIX</option>
+                <option value="receita_cartao">📥 RECEBIMENTO CARTÃO</option>
+            </optgroup>
+            <optgroup label="🏗️ ESTRUTURA E EXPANSÃO" class="bg-slate-900 text-slate-400">
+                <option value="obras">🏗️ OBRAS E REFORMA</option>
+                <option value="energia">⚡ ENERGIA / CONDOMÍNIO</option>
+                <option value="manutencao">🛠️ MANUTENÇÃO / EQUIPAMENTOS</option>
+                <option value="equipamentos">🛒 COMPRA DE EQUIPAMENTOS</option>
+            </optgroup>
+            <optgroup label="👥 OPERACIONAL / PESSOAL" class="bg-slate-900 text-slate-400">
+                <option value="pro_labore">👤 PRO-LABORE (RETIRADA)</option>
+                <option value="func">👥 PAGAMENTO FUNCIONÁRIOS</option>
+                <option value="taxas">💸 TAXAS / IMPOSTOS</option>
+                <option value="servicos">💼 SERVIÇOS EM GERAL</option>
+            </optgroup>
+        </select>
+    </div>
+
+    <button onclick="emitir('A4')" 
+            class="group relative mt-2 overflow-hidden bg-orange-600 p-4 rounded-2xl font-black text-white uppercase tracking-widest
+                   shadow-[6px_6px_12px_#070a11,-2px_-2px_10px_rgba(234,88,12,0.5)]
+                   active:shadow-[inset_4px_4px_8px_#9a3412] active:translate-y-1 transition-all">
+        <span class="relative z-10">Processar e Emitir Nota</span>
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full duration-1000 transition-transform"></div>
+    </button>
+</div>
 
                         <div class="col-span-3">
                             <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail</label>
@@ -338,6 +401,8 @@ window.onload = function() {
     console.log("SENTINELA V12: Sistema Desbloqueado.");
 };
 </script>
+
+    <script>
     
     // 3. Atualiza o painel financeiro (DRE) logo na entrada
     if (typeof updateDRE === "function") {
@@ -470,14 +535,31 @@ let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
     </script>
 
     <script>
-        // --- 5. EMITIR (DANFE PREMIUM) ---
         function emitir(tipo) {
-            const nome = document.getElementById('nomeInput').value;
-            const valor = parseFloat(document.getElementById('valorInput').value) || 0;
-            const desc = document.getElementById('descInput').value;
-            const printArea = document.getElementById('print-area');
-            const dataHora = new Date().toLocaleString('pt-BR');
-       }
+    const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
+    const slot = document.getElementById('slotDestino').value;
+
+    if (vTotal <= 0) return alert("ERRO: Valor de autoridade não definido.");
+
+    // Garante que a estrutura detalhada existe
+    if (!v12_finance.detalhado) v12_finance.detalhado = {};
+
+    // DIRECCIONAMENTO
+    if (slot.startsWith('receita')) {
+        v12_finance.receita += vTotal;
+    } else {
+        v12_finance.despesa += vTotal;
+        // Alimenta o slot específico (ex: obras)
+        v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal;
+    }
+
+    // Persistência
+    salvarTudoV12();
+    if (typeof updateDRE === "function") updateDRE();
+
+    // Com o slot definido, a nota fiscal agora sai detalhada
+    gerarNotaV12(tipo, vTotal, slot);
+}
     </script>
 
     <script>
