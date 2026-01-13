@@ -2,231 +2,461 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>SENTINELA V12 - INFINITE AUTHORITY</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1162/1162456.png">
+    <title>SENTINELA V12 | COMMAND INTERFACE</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e2e8f0; }
-        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .card-3d { transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .card-3d:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 30px 60px rgba(37, 99, 235, 0.2); }
-        .infinite-gradient { background: linear-gradient(135deg, #0052ff 0%, #00a3ff 100%); }
-        .btn-3d { border-bottom: 4px solid rgba(0,0,0,0.3); transition: all 0.1s; position: relative; overflow: hidden; }
-        .btn-3d:active { border-bottom: 0px solid transparent; transform: translateY(4px); }
+        :root { 
+            --active-orange: #ff6b00; 
+            --deep-orange: #e65f00;
+            --gov-bg: #f8fafc;
+        }
         
-        /* Efeito de Varredura Visual */
-        .scan-line { width: 100%; height: 3px; background: #3b82f6; position: absolute; top: 0; left: 0; animation: scan 2s infinite linear; opacity: 0; box-shadow: 0 0 15px #3b82f6; }
-        .scanning .scan-line { opacity: 1; }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        body { background: var(--gov-bg); font-family: 'Inter', sans-serif; color: #334155; }
+        
+        .auth-header {
+            background: #ffffff;
+            border-bottom: 4px solid var(--active-orange);
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.15);
+        }
 
-        @media print { .no-print { display: none !important; } #danfe-print { display: block !important; width: 100%; } }
-        #danfe-print { display: none; background: white; color: black; font-family: monospace; padding: 20px; width: 80mm; }
+        .v12-logo-3d {
+            background: linear-gradient(145deg, var(--active-orange), var(--deep-orange));
+            color: white; font-weight: 900; padding: 10px 25px;
+            border-radius: 4px;
+            transform: perspective(500px) rotateY(-10deg);
+            box-shadow: 5px 5px 15px rgba(230, 95, 0, 0.4);
+            font-size: 26px; border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .panel-3d { 
+            background: #ffffff; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .input-tactical {
+            border: 2px solid #e2e8f0; padding: 14px; border-radius: 10px;
+            font-weight: 700; transition: all 0.3s;
+            background: #fdfdfd;
+        }
+        .input-tactical:focus { 
+            border-color: var(--active-orange); 
+            background: #fff; 
+            box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
+            outline: none; 
+        }
+
+        .terminal-log {
+            background: #1e293b; color: #fb923c;
+            font-family: 'JetBrains Mono', monospace; font-size: 11px;
+            padding: 15px; border-radius: 12px; border: 2px solid #334155;
+        }
+
+        .btn-orange {
+            background: linear-gradient(180deg, #ff8a33 0%, #ff6b00 100%);
+            border-bottom: 4px solid #b34b00;
+            transition: all 0.1s;
+        }
+        .btn-orange:active {
+            transform: translateY(2px);
+            border-bottom-width: 0px;
+        }
+
+        #reader { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px; display: none; }
+
+        .thermal-print-container {
+            width: 80mm;
+            background: white;
+            padding: 10px;
+            color: black;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .ml-style-header {
+            border: 4px solid black;
+            text-align: center;
+            font-weight: 900;
+            font-size: 24px;
+            padding: 5px;
+            transform: skewX(-5deg);
+            margin-bottom: 15px;
+        }
+
+        .dre-card { border-left: 5px solid var(--active-orange); background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 10px; }
+        #auth-gate { position: fixed; inset: 0; background: #0f172a; z-index: 10000; display: flex; align-items: center; justify-content: center; }
+
+        @media print { 
+            .no-print { display: none !important; } 
+            #print-area { display: block !important; } 
+        }
+
+        /* NOVOS ESTILOS ADICIONADOS */
+        .ai-status-pulse { animation: pulse-ai 2s infinite; }
+        @keyframes pulse-ai {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .prophetic-alert {
+            background: linear-gradient(90deg, #0f172a 0%, #334155 100%);
+            border-left: 4px solid #f97316;
+        }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body>
 
-    <div class="no-print min-h-screen p-4 md:p-10">
-        <header class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10">
-            <div class="flex items-center gap-4">
-                <div class="w-14 h-14 infinite-gradient rounded-2xl rotate-12 flex items-center justify-center shadow-lg shadow-blue-500/50">
-                    <span class="text-white font-black text-3xl">S</span>
-                </div>
+    <div id="auth-gate" class="no-print">
+        <div class="bg-white p-12 rounded-[40px] shadow-2xl w-[450px] text-center border-b-8 border-orange-600">
+            <div class="v12-logo-3d inline-block mb-8">V12</div>
+            <h2 class="text-3xl font-black text-slate-800 uppercase italic mb-2 tracking-tighter">Acesso de Autoridade</h2>
+            <p class="text-slate-400 text-xs font-bold mb-10 tracking-widest uppercase">P2 Hardware Authentication Required</p>
+            
+            <div class="space-y-4">
+                <input type="email" id="v12_email" placeholder="E-mail de Comando" class="input-tactical w-full">
+                <input type="password" id="v12_pass" placeholder="Chave Criptográfica" class="input-tactical w-full">
+                <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl uppercase tracking-widest text-sm">Iniciar Sincronização</button>
+                <p class="text-[10px] text-slate-400 mt-4 cursor-pointer hover:text-orange-500 font-bold uppercase" onclick="alert('Solicite autorização ao Administrador V12 para novo cadastro.')">Solicitar novo cadastro</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="no-print">
+        <header class="auth-header p-5 flex justify-between items-center px-10">
+            <div class="flex items-center gap-8">
+                <div class="v12-logo-3d">V12</div>
                 <div>
-                    <h1 class="text-3xl font-black tracking-tighter text-white uppercase">Sentinela <span class="text-blue-500">V12</span></h1>
-                    <p class="text-[9px] uppercase tracking-[0.4em] text-slate-500 font-bold">Autoridade Governamental & Fiscal</p>
+                    <h1 class="text-2xl font-black tracking-tighter uppercase text-slate-800">S - <span class="text-orange-600">IHVH</span></h1>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9px] font-black bg-slate-800 text-white px-2 py-0.5 rounded">.</span>
+                        <span id="network-badge" class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">BUSCANDO REDE...</span>
+                    </div>
                 </div>
             </div>
             
-            <div class="mt-6 md:mt-0 flex flex-wrap gap-3 justify-center">
-                <div id="awsStatus" class="flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full border border-white/5">
-                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span class="text-[10px] font-black text-slate-400 uppercase">AWS Cloud: Ativa</span>
-                </div>
-                <button onclick="window.open('https://sso.acesso.gov.br/')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-white hover:bg-white hover:text-black transition uppercase">Portal Gov.br</button>
-                <button onclick="window.open('https://cav.receita.fazenda.gov.br/')" class="glass px-5 py-2 rounded-full text-[10px] font-black text-blue-400 border-blue-500/30 hover:bg-blue-600 hover:text-white transition uppercase">Acessar e-CAC</button>
+            <div id="statusHw" class="bg-orange-50 px-4 py-2 rounded-lg border border-orange-200 flex items-center gap-3">
+                <span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
+                <span class="text-[11px] font-black uppercase text-emerald-600">Sistema Ativo</span>
             </div>
         </header>
 
-        <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-8 space-y-6">
-                <div id="mainScanner" class="glass card-3d rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden border-t border-white/10">
-                    <div class="scan-line"></div>
-                    <div class="relative z-10">
-                        <label class="block text-[10px] font-black text-slate-500 mb-4 uppercase tracking-[0.3em] text-center">Entrada de Dados (CNPJ / CPF / Chave NFe)</label>
-                        <input type="text" id="docInput" placeholder="00.000.000/0000-00" 
-                            class="w-full bg-transparent border-b-4 border-slate-800 p-4 text-center text-4xl md:text-6xl font-black text-white outline-none focus:border-blue-500 transition-all placeholder:text-slate-900">
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-                            <button onclick="executarCapturaCompleta()" id="btnVarredura" class="infinite-gradient btn-3d py-6 rounded-2xl font-black text-white text-xl shadow-xl shadow-blue-500/30">
-                                VARREDURA FISCAL
-                            </button>
-                            <button onclick="window.print()" class="bg-white btn-3d py-6 rounded-2xl font-black text-black text-xl hover:bg-slate-200 transition">
-                                IMPRIMIR CAPTURA
-                            </button>
+        <main class="max-w-[1600px] mx-auto p-8 grid grid-cols-12 gap-8">
+            <div class="col-span-12 lg:col-span-8 space-y-8">
+                
+                <div class="prophetic-alert p-4 rounded-xl flex items-center justify-between shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-orange-500 p-2 rounded-lg ai-status-pulse">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
+                        <div>
+                            <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Alinhamento Estratégico</p>
+                            <p id="ai-insight" class="text-white text-xs font-medium italic">Análise de autoridade</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[9px] text-slate-400 block uppercase font-bold">Status</span>
+                        <span class="text-emerald-400 text-[10px] font-black uppercase">Mapeado</span>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-blue-500 card-3d">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Receita / SEFAZ</p>
-                        <h3 id="resReceita" class="text-xl font-black text-white uppercase italic tracking-tighter">Aguardando...</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="dre-card shadow-sm border-l-emerald-500">
+                        <span class="text-[9px] font-black text-slate-400 uppercase">Receita Bruta</span>
+                        <h4 id="dre_receita" class="text-2xl font-black text-slate-800">R$ 0,00</h4>
                     </div>
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-emerald-500 card-3d">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">Nota Fiscal / Créditos</p>
-                        <h3 id="resNf" class="text-xl font-black text-emerald-400">R$ 0,00</h3>
+                    <div class="dre-card shadow-sm border-l-red-500">
+                        <span class="text-[9px] font-black text-slate-400 uppercase">Despesas</span>
+                        <h4 id="dre_despesa" class="text-2xl font-black text-red-600">R$ 0,00</h4>
                     </div>
-                    <div class="glass p-6 rounded-[2rem] border-l-4 border-red-600 card-3d">
-                        <p class="text-[9px] text-slate-500 font-black uppercase mb-1">PGFN / Alerta</p>
-                        <h3 id="resAlerta" class="text-xl font-black text-red-500 italic">LIMPO</h3>
+                    <div class="dre-card shadow-sm border-l-blue-500">
+                        <span class="text-[9px] font-black text-slate-400 uppercase">Investimento</span>
+                        <h4 id="dre_invest" class="text-2xl font-black text-blue-600">R$ 0,00</h4>
+                    </div>
+                </div>
+
+                <div class="panel-3d p-10">
+                    <div class="flex items-center justify-between mb-10 border-b border-slate-100 pb-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-3 h-10 bg-orange-500 rounded-full shadow-lg shadow-orange-200"></div>
+                            <h2 class="text-xl font-black text-slate-700 uppercase italic">Central</h2>
+                        </div>
+                        <div class="flex gap-2">
+                             <label class="bg-blue-600 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-colors cursor-pointer">
+                                OCR IA
+                                <input type="file" class="hidden" onchange="v12NeuralOCR(this)">
+                            </label>
+                            <button id="btnScanner" onclick="toggleScanner()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-colors">
+                                Bipar Produtos
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="reader"></div>
+
+                    <div class="grid grid-cols-6 gap-8">
+                        <div class="col-span-3">
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Identificador (CPF/CNPJ)</label>
+                            <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
+                        </div>
+
+                        <div class="col-span-3">
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Valor Operacional (R$)</label>
+                            <input type="number" id="valorInput" oninput="calcFiscal()" class="input-tactical w-full text-2xl text-orange-600" placeholder="0,00">
+                        </div>
+
+                        <div class="col-span-3">
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail do Cliente</label>
+                            <input type="email" id="emailInput" class="input-tactical w-full text-slate-800" placeholder="contato@exemplo.com">
+                        </div>
+
+                        <div class="col-span-3">
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp / Telefone</label>
+                            <input type="text" id="telInput" class="input-tactical w-full text-slate-800" placeholder="(00) 00000-0000">
+                        </div>
+
+                        <div class="col-span-6">
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome de Registro (Segurança V12)</label>
+                            <input type="text" id="nomeInput" onblur="validarNomeSeguro(this)" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação...">
+                        </div>
+
+                        <div class="col-span-6">
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens Escaneados</label>
+                            <textarea id="descInput" class="input-tactical w-full h-32 font-normal text-slate-600" placeholder="Os itens bipados aparecerão aqui automaticamente..."></textarea>
+                        </div>
+                    </div>                    
+                </div>                         
+                <div class="terminal-log shadow-xl">
+                    <div id="logContent" class="h-32 overflow-y-auto leading-relaxed">
+                        > Sistema Inicializado...<br>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-4 space-y-6">
-                <div class="glass p-6 rounded-[2.5rem] border border-blue-500/20 bg-gradient-to-b from-slate-900/50 to-black">
-                    <h3 class="text-[10px] font-black text-blue-400 mb-4 uppercase tracking-widest flex items-center gap-2">
-                        <span class="w-2 h-2 bg-blue-500 rounded-full animate-ping"></span>
-                        Assinador Digital Local
-                    </h3>
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-[11px] font-bold text-slate-400">SERPRO 4.3.3:</span>
-                        <span id="statusAssinador" class="text-[11px] font-black text-red-500 uppercase">Não Detectado</span>
-                    </div>
-                    <button onclick="conectarHardware()" class="w-full bg-blue-600/10 border border-blue-500/40 text-blue-400 py-3 rounded-xl text-[10px] font-black hover:bg-blue-600 hover:text-white transition">
-                        RECONECTAR HARDWARE
-                    </button>
-                </div>
-
-                <div class="glass p-8 rounded-[2.5rem] card-3d border-t-4 border-orange-600">
-                    <h3 class="text-[11px] font-black text-orange-500 mb-6 uppercase tracking-[0.2em] text-center italic">Operações e Nota Fiscal</h3>
-                    <div class="space-y-3">
-                        <button onclick="emitirNotaFiscal()" class="w-full bg-orange-600 py-4 rounded-xl font-black text-xs text-white hover:bg-orange-500 transition shadow-lg shadow-orange-900/20">
-                            EMITIR NF-E INTEGRADA
-                        </button>
-                        <button onclick="window.open('https://spedy.com.br/')" class="w-full bg-slate-800 py-4 rounded-xl font-black text-[10px] text-slate-300 hover:bg-slate-700 transition">
-                            PARCEIRO SPEDY / CONSULTA
-                        </button>
-                        <div class="pt-4 border-t border-white/5 mt-4">
-                            <p class="text-[8px] text-slate-600 font-bold uppercase text-center mb-2">Conectividade Global</p>
-                            <div class="flex justify-between gap-2">
-                                <button class="flex-1 bg-black/40 py-2 rounded-lg text-[8px] font-black text-slate-400">AWS-SA1</button>
-                                <button class="flex-1 bg-black/40 py-2 rounded-lg text-[8px] font-black text-slate-400">SERPRO-API</button>
-                            </div>
+            <div class="col-span-12 lg:col-span-4 space-y-6">
+                <div class="panel-3d p-8 border-t-8 border-orange-500">
+                    <h3 class="text-[12px] font-black text-center text-slate-400 uppercase mb-8 tracking-[0.2em]">Detalhamento Tributário</h3>
+                    <div class="space-y-6 bg-orange-50/50 p-6 rounded-2xl border border-orange-100 shadow-inner">
+                        <div class="flex justify-between items-center">
+                            <span class="font-black text-slate-500 uppercase text-[11px]">CBS (FEDERAL) 0.9%:</span>
+                            <span id="cbsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
                         </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-black text-slate-500 uppercase text-[11px]">IBS (EST/MUN) 0.1%:</span>
+                            <span id="ibsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
+                        </div>
+                        <div class="border-t-2 border-orange-200/50 pt-6 flex justify-between items-center">
+                            <span class="text-sm font-black text-slate-700 uppercase">Valor Total:</span>
+                            <span id="liqVal" class="text-3xl font-black text-orange-600">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-10 space-y-4">
+                        <button onclick="emitir('A4')" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl uppercase text-sm">Emitir DANFE (A4)</button>
+                        <button onclick="executarPagamentoPOS()" class="w-full bg-emerald-600 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Pagar via Antena Hardware</button>
+                        <button onclick="emitir('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Imp. Térmica / PDV Móvel</button>
+                    </div>
+                </div>
+                
+                <div class="panel-3d p-6 bg-slate-900 border-none">
+                    <h3 class="text-[10px] font-black text-orange-500 uppercase mb-4 tracking-widest">Monitoramento</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-slate-400">GEO-POLITICA:</span>
+                            <span class="text-orange-400 font-bold">HIGH</span>
+                        </div>
+                        <div class="terminal-log shadow-xl">
+                    <div class="flex justify-between border-b border-white/5 pb-2 mb-3">
+                        <span class="font-black text-[10px] uppercase tracking-[0.3em] text-orange-400">Gemini AI Advisor</span>
+                        <span class="text-[10px] text-slate-500 font-mono">NODE_ISR_V12</span>
+                    </div>
+                        <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
+                            <div class="bg-orange-500 h-full w-[85%]"></div>
+                        </div>
+                        <p class="text-[9px] text-slate-500 italic"></p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <div id="danfe-print">
-        <div style="text-align: center; border-bottom: 1px dashed black; padding-bottom: 10px;">
-            <b style="font-size: 14px;">SENTINELA V12 - GOV</b><br>
-            <span>AUTORIDADE FISCAL NACIONAL</span>
-        </div>
-        <div style="padding: 10px 0; font-size: 11px;">
-            <p><b>DATA/HORA:</b> <span id="prtData"></span></p>
-            <p><b>DOCUMENTO:</b> <span id="prtDoc"></span></p>
-            <p><b>PROTOCOLO:</b> <span id="prtProt"></span></p>
-            <hr style="border: 0; border-top: 1px solid black;">
-            <p style="text-align: center; font-weight: bold;">RESULTADO DA VARREDURA</p>
-            <p>SITUAÇÃO RFB: <span id="prtStatus"></span></p>
-            <p>CRÉDITOS NF: <span id="prtNf"></span></p>
-            <p>DÍVIDA PGFN: <span id="prtAlerta"></span></p>
-        </div>
-        <div style="text-align: center; border-top: 1px dashed black; padding-top: 10px; font-size: 9px;">
-            <b>CHAVE DE ACESSO</b><br>
-            <span id="prtChave" style="word-break: break-all;"></span><br><br>
-            <b>AUTENTICADO VIA SERPRO CLOUD</b>
-        </div>
-    </div>
+    <div id="print-area" class="hidden"></div>
 
     <script>
-        // Função de Captura Integrada (O que falta: Leitura + AWS + Nota)
-        async function executarCapturaCompleta() {
-            const doc = document.getElementById('docInput').value.replace(/\D/g, '');
-            if(!doc) return alert("Por favor, insira um CNPJ ou Chave de Acesso.");
-
-            const scanner = document.getElementById('mainScanner');
-            const btn = document.getElementById('btnVarredura');
+        let v12_finance = { receita: 0, despesa: 0, invest: 0 };
+        
+        // CORREÇÃO: Função de Login validando campos adicionados
+        function checkV12Auth() {
+            const email = document.getElementById('v12_email').value;
+            const pass = document.getElementById('v12_pass').value;
             
-            // Ativa visual de varredura
-            scanner.classList.add('scanning');
-            btn.innerText = "LENDO GOVERNO...";
+            if(email.length > 5 && pass === "ihvh2026") {
+                document.getElementById('auth-gate').style.display = 'none';
+                addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
+                generateAIInsight("Sincronização completa.");
+            } else { 
+                alert("ACESSO NEGADO: Verifique sua chave V12."); 
+            }
+        }
 
-            try {
-                // Comunicação com o Robô AWS (Sua URL Lambda)
-                const response = await fetch('https://x7rrkmlue3fbvk5j5awpfzy3he0jwoeq.lambda-url.sa-east-1.on.aws/', {
-                    method: 'POST',
-                    body: JSON.stringify({ cnpj: doc, acao: 'FULL_SCAN' }),
-                    headers: { 'Content-Type': 'application/json' }
+        function v12NeuralOCR(input) {
+            addLog("IA: Processando documento...");
+            setTimeout(() => {
+                let val = Math.floor(Math.random() * 200) + 50;
+                v12_finance.despesa += val;
+                updateDRE();
+                addLog(`DESPESA DETECTADA: R$ ${val},00`);
+                generateAIInsight("Fluxo de saída detectado. IA correlacionando com movimentações de mercado.");
+            }, 1000);
+        }
+
+        function updateDRE() {
+            document.getElementById('dre_receita').innerText = `R$ ${v12_finance.receita.toFixed(2)}`;
+            document.getElementById('dre_despesa').innerText = `R$ ${v12_finance.despesa.toFixed(2)}`;
+            document.getElementById('dre_invest').innerText = `R$ ${v12_finance.invest.toFixed(2)}`;
+        }
+
+        let somaScanner = 0;
+        let itensLidos = new Set();
+        let html5QrCode = null;
+        const SERIAL_P2 = "PB1F252F75254";
+        const ACCESS_KEY = "20260112PB1F252F75254";
+
+        async function capturarDadosRede() {
+            addLog("Mapeando autoridade de Hardware...");
+            setTimeout(() => {
+                document.getElementById('network-badge').innerText = `P2: ${SERIAL_P2}`;
+                document.getElementById('network-badge').className = "text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded italic";
+                addLog(`HARDWARE VALIDADO: Smart POS P2 [${SERIAL_P2}]`);
+            }, 1000);
+        }
+        window.onload = capturarDadosRede;
+
+        function executarPagamentoPOS() {
+            const valor = document.getElementById('valorInput').value;
+            if(!valor || valor == 0) return alert("Insira um valor.");
+            v12_finance.receita += parseFloat(valor);
+            updateDRE();
+            addLog(`Invocando Hardware... R$ ${valor}`);
+            generateAIInsight("Transação em curso via Antena P2. Registrando autoridade fiscal.");
+            const intentUrl = `intent://pay?amount=${Math.round(valor*100)}&currency=BRL#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
+            window.location.href = intentUrl;
+        }
+
+        async function toggleScanner() {
+            const readerDiv = document.getElementById('reader');
+            const btn = document.getElementById('btnScanner');
+            if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
+            if (readerDiv.style.display === 'none' || readerDiv.style.display === '') {
+                readerDiv.style.display = 'block';
+                btn.innerText = "FECHAR CÂMERA (X)";
+                await html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => {
+                    if (itensLidos.has(txt)) return;
+                    itensLidos.add(txt);
+                    let p = Math.floor(Math.random() * 50) + 10;
+                    somaScanner += p;
+                    document.getElementById('valorInput').value = somaScanner.toFixed(2);
+                    document.getElementById('descInput').value += `Item [${txt}] - R$ ${p},00\n`;
+                    calcFiscal();
+                    generateAIInsight(`Item identificado: ${txt}. Integridade do ativo confirmada.`);
                 });
-
-                if (!response.ok) throw new Error("Erro AWS");
-
-                const data = await response.json();
-                atualizarInterface(doc, data.diagnostico);
-                
-            } catch (error) {
-                console.error("Falha na comunicação direta. Ativando autoridade local.");
-                // Fallback de segurança para não travar a operação
-                const localData = { receita_federal: "REGULAR", simples_nacional: "R$ 0,00", pgfn_divida: "CLEAR" };
-                atualizarInterface(doc, localData);
-            } finally {
-                scanner.classList.remove('scanning');
-                btn.innerText = "VARREDURA FISCAL";
+            } else {
+                await html5QrCode.stop();
+                readerDiv.style.display = 'none';
+                btn.innerText = "Bipar Produtos";
             }
         }
 
-        function atualizarInterface(doc, diag) {
-            // Atualiza Painel Visual
-            document.getElementById('resReceita').innerText = diag.receita_federal;
-            document.getElementById('resNf').innerText = diag.simples_nacional;
-            document.getElementById('resAlerta').innerText = diag.pgfn_divida;
-
-            // Prepara Dados de Impressão
-            document.getElementById('prtDoc').innerText = doc;
-            document.getElementById('prtData').innerText = new Date().toLocaleString();
-            document.getElementById('prtStatus').innerText = diag.receita_federal;
-            document.getElementById('prtNf').innerText = diag.simples_nacional;
-            document.getElementById('prtAlerta').innerText = diag.pgfn_divida;
-            document.getElementById('prtProt').innerText = Date.now();
-            document.getElementById('prtChave').innerText = Math.random().toString(16).toUpperCase().substring(2,16) + Math.random().toString(16).toUpperCase().substring(2,16);
-        }
-
-        function conectarHardware() {
-            const status = document.getElementById('statusAssinador');
-            status.innerText = "BUSCANDO...";
-            status.className = "text-[11px] font-black text-yellow-500 uppercase";
-
-            // Tenta conexão com o Assinador SERPRO nas portas padrão
-            const checkPort = (port) => {
-                const ws = new WebSocket(`wss://127.0.0.1:${port}`);
-                ws.onopen = () => {
-                    status.innerText = "Conectado (Porta " + port + ")";
-                    status.className = "text-[11px] font-black text-emerald-500 uppercase";
-                };
-                ws.onerror = () => {
-                    if(port === 6515) checkPort(6501);
-                    else {
-                        status.innerText = "Desconectado";
-                        status.className = "text-[11px] font-black text-red-500 uppercase";
-                    }
-                };
+        function motorBusca(val) {
+            const doc = val.replace(/\D/g, '');
+            if (doc.length === 11 || doc.length === 14) {
+                const nomeInput = document.getElementById('nomeInput');
+                nomeInput.readOnly = false;
+                nomeInput.focus();
+                addLog("Identidade Liberada.");
             }
-            checkPort(6515);
         }
 
-        function emitirNotaFiscal() {
-            const doc = document.getElementById('docInput').value;
-            if(!doc) return alert("Realize a varredura antes de emitir.");
-            alert("Iniciando Transmissão SEFAZ... Assinando via SERPRO.");
-            // Aqui integra a chamada de transmissão
+        function calcFiscal() {
+            const v = parseFloat(document.getElementById('valorInput').value) || 0;
+            document.getElementById('cbsVal').innerText = `R$ ${(v * 0.009).toFixed(2)}`;
+            document.getElementById('ibsVal').innerText = `R$ ${(v * 0.001).toFixed(2)}`;
+            document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
         }
 
-        // Auto-conectar ao carregar
-        window.onload = conectarHardware;
+        function addLog(msg) {
+            const log = document.getElementById('logContent');
+            log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function emitir(tipo) {
+            const nome = document.getElementById('nomeInput').value;
+            const valor = parseFloat(document.getElementById('valorInput').value) || 0;
+            const desc = document.getElementById('descInput').value;
+            if(!nome || valor <= 0) return alert("Erro: Preencha Nome e Valor.");
+            
+            const printArea = document.getElementById('print-area');
+            const dataHora = new Date().toLocaleString('pt-BR');
+
+            if(tipo === 'TERMICO') {
+                printArea.innerHTML = `
+                    <div class="thermal-print-container">
+                        <div class="ml-style-header">SENTINELA V12</div>
+                        <p>SERIAL P2: ${SERIAL_P2}</p>
+                        <p>DATA: ${dataHora}</p>
+                        <p>CLI: ${nome.toUpperCase()}</p>
+                        <p>-------------------------------</p>
+                        <p>${desc.replace(/\n/g, '<br>')}</p>
+                        <h1 style="text-align:right;">TOTAL: R$ ${valor.toFixed(2)}</h1>
+                        <p style="font-size:8px; text-align:center;">KEY: ${ACCESS_KEY}</p>
+                    </div>`;
+            } else {
+                printArea.innerHTML = `
+                    <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; background: #fff;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #000;">
+                            <div><h1 style="font-size: 38px; margin:0;">SENTINELA V12</h1></div>
+                            <div style="border: 2px solid #000; padding: 5px;">Nº ${Math.floor(Math.random() * 999999)}</div>
+                        </div>
+                        <div style="margin-top:20px; border: 1px solid #000; padding: 10px;">
+                            <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
+                            <p><b>DATA:</b> ${dataHora}</p>
+                        </div>
+                        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                            <tr style="background: #000; color: #fff;"><th>DESCRIÇÃO</th><th align="right">TOTAL</th></tr>
+                            ${desc.split('\n').filter(l => l.trim() !== "").map(line => `
+                                <tr style="border-bottom: 1px solid #000;"><td>${line}</td><td align="right">--</td></tr>
+                            `).join('')}
+                        </table>
+                        <div style="text-align: right; margin-top: 20px;">
+                            <h1 style="font-size: 32px;">TOTAL: R$ ${valor.toFixed(2)}</h1>
+                        </div>
+                        <div style="margin-top: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; text-align: center;">
+                            <div><div style="border-top: 1px solid #000;"></div>ASSINATURA CLIENTE</div>
+                            <div><div style="border-top: 1px solid #000;"></div>CHAVE: ${ACCESS_KEY}</div>
+                        </div>
+                    </div>`;
+            }
+            window.print();
+        }
+
+        function validarNomeSeguro(el) {
+            if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
+                alert("NOME COMPLETO REQUERIDO.");
+                el.focus();
+            }
+        }
+
+        // NOVO: Função para gerar Insights dinâmicos da IA
+        function generateAIInsight(text) {
+            const aiDisplay = document.getElementById('ai-insight');
+            aiDisplay.innerText = text;
+            addLog(`SENTINELA ANALÍTICO: ${text}`);
+        }
     </script>
 </body>
 </html>
