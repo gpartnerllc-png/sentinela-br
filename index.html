@@ -21,8 +21,8 @@
             #print-area, #print-area * { visibility: visible; }
             #print-area { 
                 position: absolute; 
-                left: 0; 
-                top: 0; 
+                left: 1; 
+                top: 1; 
                 width: 100%; 
                 display: block !important; 
             }
@@ -135,7 +135,7 @@
         <div class="bg-white p-12 rounded-[40px] shadow-2xl w-[450px] text-center border-b-8 border-orange-600">
             <div class="v12-logo-3d inline-block mb-8">V12</div>
             <h2 class="text-3xl font-black text-slate-800 uppercase italic mb-2 tracking-tighter">Acesso de Autoridade</h2>
-            <p class="text-slate-400 text-xs font-bold mb-10 tracking-widest uppercase">P2 H Aion</p>
+            <p class="text-slate-400 text-xs font-bold mb-10 tracking-widest uppercase">P2 H Ayin</p>
             
             <div class="space-y-4">
                 <input type="email" id="v12_email" placeholder="E-mail de Comando" class="input-tactical w-full">
@@ -237,29 +237,29 @@
                           shadow-[inset_6px_6px_12px_#070a11,inset_-6px_-6px_12px_#111827] 
                           border-none outline-none focus:ring-2 focus:ring-orange-500/30 transition-all placeholder-slate-700" 
                    placeholder="0,00">
-            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-700 font-black">BRL</div>
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-black">BRL</div>
         </div>
     </div>
 
     <div class="flex flex-col gap-2">
-        <label class="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Destinar Fluxo (Slot V12)</label>
+        <label class="text-[14px] font-White text-slate-500 uppercase tracking-[0.2em] ml-2">Destinar Fluxo</label>
         <select id="slotDestino" 
                 class="w-full bg-slate-900 p-4 rounded-2xl text-white font-medium
                        shadow-[6px_6px_12px_#070a11,-6px_-6px_12px_#111827] 
-                       border border-slate-800 outline-none focus:border-orange-500 appearance-none cursor-pointer">
-            <optgroup label="📥 ENTRADAS (RECEITAS)" class="bg-slate-900 text-orange-500">
+                       border border-slate-400 outline-none focus:border-orange-200 appearance-none cursor-pointer">
+            <optgroup label="📥 ENTRADAS (RECEITAS)" class="bg-slate-500 text-orange-200">
                 <option value="receita_pix">📥 RECEBIMENTO PIX</option>
                 <option value="receita_cartao">📥 RECEBIMENTO CARTÃO</option>
             </optgroup>
-            <optgroup label="🏗️ ESTRUTURA E EXPANSÃO" class="bg-slate-900 text-slate-400">
+            <optgroup label="🏗️ ESTRUTURA E EXPANSÃO" class="bg-slate-500 text-slate-200">
                 <option value="obras">🏗️ OBRAS E REFORMA</option>
                 <option value="energia">⚡ ENERGIA / CONDOMÍNIO</option>
                 <option value="manutencao">🛠️ MANUTENÇÃO / EQUIPAMENTOS</option>
-                <option value="equipamentos">🛒 COMPRA DE EQUIPAMENTOS</option>
+                <option value="equipamentos">🛒 COMPRAS / MERCADO</option>
             </optgroup>
-            <optgroup label="👥 OPERACIONAL / PESSOAL" class="bg-slate-900 text-slate-400">
-                <option value="pro_labore">👤 PRO-LABORE (RETIRADA)</option>
-                <option value="func">👥 PAGAMENTO FUNCIONÁRIOS</option>
+            <optgroup label="👥 OPERACIONAL / PESSOAL" class="bg-slate-500 text-slate-200">
+                <option value="pro_labore">👤 PRO-LABORE</option>
+                <option value="func">👥 PAG FUNCIONÁRIOS</option>
                 <option value="taxas">💸 TAXAS / IMPOSTOS</option>
                 <option value="servicos">💼 SERVIÇOS EM GERAL</option>
             </optgroup>
@@ -267,7 +267,7 @@
     </div>
 
     <button onclick="emitir('A4')" 
-            class="group relative mt-2 overflow-hidden bg-orange-600 p-4 rounded-2xl font-black text-white uppercase tracking-widest
+            class="group relative mt-2 overflow-hidden bg-orange-400 p-4 rounded-2xl font-black text-white uppercase tracking-widest
                    shadow-[6px_6px_12px_#070a11,-2px_-2px_10px_rgba(234,88,12,0.5)]
                    active:shadow-[inset_4px_4px_8px_#9a3412] active:translate-y-1 transition-all">
         <span class="relative z-10">Processar e Emitir Nota</span>
