@@ -307,7 +307,7 @@
         const user = v12_users.find(u => u.email === email && u.pass === pass);
         }
 
-        if (user)
+        if (user) {
             if (user.status === "AUTHORIZED") {
                 document.getElementById('auth-gate').style.display = 'none';
                 addLog(`ACESSO AUTORIZADO: ${user.email.toUpperCase()}`);
