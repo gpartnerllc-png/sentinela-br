@@ -360,7 +360,6 @@
         const pass = prompt("Defina a Chave Criptográfica (Senha):");
 
         if (email && pass) {
-            // Verifica se já existe
             if (v12_users.find(u => u.email === email)) {
                 alert("Este e-mail já está na fila de espera.");
                 return;
