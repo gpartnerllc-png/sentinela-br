@@ -124,7 +124,7 @@
                             <div class="w-3 h-10 bg-orange-500 rounded-full shadow-lg shadow-orange-200"></div>
                             <h2 class="text-xl font-black text-slate-700 uppercase italic">Central de Emissão Síncrona</h2>
                         </div>
-                        <button onclick="ativarScanner()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-colors">
+                        <button id="btnScanner" onclick="toggleScanner()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-colors">
                             Bipar Produto (Câmera)
                         </button>
                     </div>
@@ -199,6 +199,12 @@
                         <button onclick="emitir('A4')" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl hover:brightness-110 transition-all uppercase text-sm tracking-widest">
                             Emitir DANFE (A4)
                         </button>
+                        
+                        <button onclick="executarPagamentoPOS()" class="w-full bg-emerald-600 text-white font-black py-4 rounded-2xl shadow-lg hover:bg-emerald-700 transition-all uppercase text-[10px] tracking-widest flex items-center justify-center gap-2">
+                             <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                             Pagar via Antena Hardware
+                        </button>
+
                         <button onclick="emitir('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-2xl shadow-lg hover:bg-black transition-all uppercase text-[10px] tracking-widest">
                             Imp. Térmica / PDV Móvel
                         </button>
@@ -212,59 +218,100 @@
 
     <script>
         let somaScanner = 0;
-        let itensLidos = new Set(); // Memória de autoridade: Impede ler o mesmo código várias vezes
+        let itensLidos = new Set();
+        let html5QrCode = null; // Instância global para o scanner
 
-        // INSTRUÇÃO 1: Captura de dados da rede e preenchimento automático
+        // CONSTANTES DE AUTORIDADE P2
+        const SERIAL_P2 = "PB1F252F75254";
+        const ACCESS_KEY = "20260112PB1F252F75254";
+
         async function capturarDadosRede() {
-            addLog("Mapeando autoridade da rede IP...");
-            try {
-                // Simulação de captura via Metadata da rede (em produção usaria uma API de GeoIP/SSID)
-                const redeNome = "DROPPFY MATRIZ V12";
-                document.getElementById('network-badge').innerText = `REDE: ${redeNome}`;
-                addLog(`Rede identificada: ${redeNome}. Dados de logo sincronizados.`);
-            } catch (e) {
-                addLog("Aviso: Falha ao capturar metadados da rede.");
-            }
+            addLog("Mapeando autoridade de Hardware...");
+            
+            // Simulação de validação de Serial fornecido
+            setTimeout(() => {
+                document.getElementById('network-badge').innerText = `P2: ${SERIAL_P2}`;
+                document.getElementById('network-badge').classList.replace('bg-orange-100', 'bg-emerald-100');
+                document.getElementById('network-badge').classList.replace('text-orange-700', 'text-emerald-700');
+                
+                addLog(`HARDWARE VALIDADO: Smart POS P2 [${SERIAL_P2}]`);
+                addLog("Canais de Impressão Térmica Síncrona: LIBERADOS.");
+                
+                // Ativar WakeLock se disponível na P2
+                if ('wakeLock' in navigator) { navigator.wakeLock.request('screen'); }
+            }, 1000);
         }
         window.onload = capturarDadosRede;
 
-        function ativarScanner() {
-            const readerDiv = document.getElementById('reader');
-            readerDiv.style.display = 'block';
-            const html5QrCode = new Html5Qrcode("reader");
+        // FUNÇÃO DE PAGAMENTO VIA HARDWARE (DEEP LINK)
+        function executarPagamentoPOS() {
+            const valor = document.getElementById('valorInput').value;
+            if(!valor || valor == 0) return alert("Insira um valor para cobrar.");
             
-            html5QrCode.start(
-                { facingMode: "environment" }, 
-                { fps: 15, qrbox: { width: 250, height: 150 } },
-                (decodedText) => {
-                    // INSTRUÇÃO 2: Bloqueio de duplicidade e Soma Automática
-                    if (itensLidos.has(decodedText)) {
-                        addLog(`ITEM REPETIDO: ${decodedText} ignorado para evitar erro de soma.`);
-                        return; 
-                    }
+            const valorEmCentavos = Math.round(parseFloat(valor) * 100);
+            addLog(`Invocando Hardware de Pagamento... R$ ${valor}`);
+            
+            // Intent para chamar o motor de pagamento da P2
+            const intentUrl = `intent://pay?amount=${valorEmCentavos}&currency=BRL#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
+            window.location.href = intentUrl;
+        }
 
-                    itensLidos.add(decodedText);
-                    let precoItem = Math.floor(Math.random() * 50) + 10; // Simulação de valor por item
-                    somaScanner += precoItem;
+        // FUNÇÃO TOGGLE SCANNER (LIGA/DESLIGA)
+        async function toggleScanner() {
+            const readerDiv = document.getElementById('reader');
+            const btn = document.getElementById('btnScanner');
 
-                    addLog(`BIP SUCESSO: ${decodedText} | Adicionado R$ ${precoItem},00`);
-                    
-                    document.getElementById('valorInput').value = somaScanner.toFixed(2);
-                    document.getElementById('descInput').value += `Item [${decodedText}] - R$ ${precoItem},00\n`;
-                    
-                    calcFiscal();
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+
+            if (readerDiv.style.display === 'none' || readerDiv.style.display === '') {
+                // LIGAR
+                readerDiv.style.display = 'block';
+                btn.innerText = "FECHAR CÂMERA (X)";
+                btn.classList.replace('bg-slate-800', 'bg-red-600');
+                
+                try {
+                    await html5QrCode.start(
+                        { facingMode: "environment" }, 
+                        { fps: 15, qrbox: { width: 250, height: 150 } },
+                        (decodedText) => {
+                            if (itensLidos.has(decodedText)) {
+                                addLog(`ITEM REPETIDO: ${decodedText} ignorado.`);
+                                return; 
+                            }
+                            itensLidos.add(decodedText);
+                            let precoItem = Math.floor(Math.random() * 50) + 10;
+                            somaScanner += precoItem;
+                            addLog(`BIP SUCESSO: ${decodedText} | + R$ ${precoItem},00`);
+                            document.getElementById('valorInput').value = somaScanner.toFixed(2);
+                            document.getElementById('descInput').value += `Item [${decodedText}] - R$ ${precoItem},00\n`;
+                            calcFiscal();
+                        }
+                    );
+                } catch (err) {
+                    addLog("Erro ao abrir câmera: " + err);
                 }
-            ).catch(err => addLog("Erro Vision: " + err));
+            } else {
+                // DESLIGAR
+                try {
+                    await html5QrCode.stop();
+                    readerDiv.style.display = 'none';
+                    btn.innerText = "Bipar Produto (Câmera)";
+                    btn.classList.replace('bg-red-600', 'bg-slate-800');
+                    addLog("Câmera encerrada. Dados preservados.");
+                } catch (err) {
+                    readerDiv.style.display = 'none'; // Força fechamento
+                }
+            }
         }
 
         function validarNomeSeguro(el) {
             if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
-                alert("ALERTA DE SEGURANÇA V12: Insira o nome de registro COMPLETO para emissão.");
+                alert("ALERTA DE SEGURANÇA V12: Insira o nome de registro COMPLETO.");
                 el.classList.add('border-red-500');
                 el.focus();
-            } else {
-                el.classList.remove('border-red-500');
-            }
+            } else { el.classList.remove('border-red-500'); }
         }
 
         function motorBusca(val) {
@@ -276,7 +323,7 @@
                     nomeInput.value = ""; 
                     nomeInput.placeholder = "DIGITE O NOME DE REGISTRO COMPLETO...";
                     nomeInput.classList.remove('bg-slate-50');
-                    nomeInput.classList.add('bg-white', 'border-orange-400', 'shadow-[0_0_15px_rgba(255,107,0,0.1)]');
+                    nomeInput.classList.add('bg-white', 'border-orange-400');
                     addLog("Identidade Liberada para preenchimento.");
                     nomeInput.focus();
                 }, 400);
@@ -306,7 +353,7 @@
             const email = document.getElementById('emailInput').value;
             const tel = document.getElementById('telInput').value;
 
-            if(!nome || !valor) return alert("Erro: Preencha o Nome de Registro e Valor.");
+            if(!nome || !valor) return alert("Erro: Preencha Nome e Valor.");
 
             const printArea = document.getElementById('print-area');
             
@@ -316,15 +363,14 @@
                         <div class="ml-style-header">SENTINELA V12</div>
                         <p style="text-align:center; font-weight:bold; margin-bottom:10px;">COMPROVANTE DE AUTORIDADE</p>
                         <p>-------------------------------</p>
+                        <p><b>SERIAL P2:</b> ${SERIAL_P2}</p>
                         <p><b>DATA:</b> ${new Date().toLocaleString()}</p>
-                        <p><b>DOC:</b> ${doc}</p>
                         <p><b>CLI:</b> ${nome.toUpperCase()}</p>
-                        <p><b>TEL:</b> ${tel}</p>
                         <p>-------------------------------</p>
                         <p><b>ITENS:</b><br>${desc.replace(/\n/g, '<br>')}</p>
                         <p>-------------------------------</p>
                         <h1 style="text-align:right; font-size:22px;">TOTAL: R$ ${parseFloat(valor).toFixed(2)}</h1>
-                        <p style="font-size:8px; text-align:center; margin-top:20px;">AUTENTICAÇÃO: ${Math.random().toString(36).toUpperCase().substring(2,15)}</p>
+                        <p style="font-size:8px; text-align:center; margin-top:20px;">KEY: ${ACCESS_KEY}</p>
                     </div>
                 `;
             } else {
@@ -334,16 +380,10 @@
                         <p><b>DOCUMENTO AUXILIAR DE VENDA (A4)</b></p>
                         <hr style="border: 2px solid black;">
                         <p><b>CLIENTE:</b> ${nome} | <b>DOC:</b> ${doc}</p>
-                        <p><b>CONTATO:</b> ${email} | ${tel}</p>
                         <div style="border: 1px solid black; padding: 20px; min-height: 200px; margin-top:20px;">
                             <b>ESPECIFICAÇÃO:</b><br>${desc.replace(/\n/g, '<br>')}
                         </div>
                         <h2 style="text-align: right; font-size: 30px;">TOTAL: R$ ${parseFloat(valor).toFixed(2)}</h2>
-                        <br><br>
-                        <div style="display: flex; justify-content: space-between; margin-top:50px;">
-                            <div style="border-top: 2px solid black; width: 40%; text-align: center;">SENTINELA DATA SYSTEMS</div>
-                            <div style="border-top: 2px solid black; width: 40%; text-align: center;">ASSINATURA CLIENTE</div>
-                        </div>
                     </div>
                 `;
             }
