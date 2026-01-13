@@ -23,7 +23,7 @@
                 position: absolute; 
                 left: 0; 
                 top: 0; 
-                width: 200%; 
+                width: 100%; 
                 display: block !important; 
             }
         }
@@ -227,37 +227,37 @@
                             <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
                         </div>
 
-                       <div class="col-span-3 grid grid-cols-1 gap-6 p-6 bg-slate-900 rounded-3xl border border-slate-800 shadow-[20px_20px_60px_#070a11,-20px_-20px_60px_#111827]">
+                       <div class="col-span-3 grid grid-cols-1 gap-6 p-6 bg-slate-90 rounded-3xl border border-slate-80 shadow-[2px_2px_6px_#FFFFFF,-2px_-2px_6px_#D4AF37]">
     
     <div class="flex flex-col gap-2">
-        <label class="text-[11px] font-black text-orange-500/70 uppercase tracking-[0.2em] ml-2">Autoridade Financeira (R$)</label>
+        <label class="text-[11px] font-black text-orange-100/30 uppercase tracking-[0.2em] ml-2">Financeiro (R$)</label>
         <div class="relative group">
             <input type="number" id="valorInput" oninput="calcFiscal()" 
-                   class="w-full bg-slate-900 p-5 rounded-2xl text-3xl font-bold text-orange-600 
-                          shadow-[inset_6px_6px_12px_#070a11,inset_-6px_-6px_12px_#111827] 
-                          border-none outline-none focus:ring-2 focus:ring-orange-500/30 transition-all placeholder-slate-700" 
+                   class="w-full bg-slate-90 p-5 rounded-2xl text-3xl font-bold text-orange-80 
+                          shadow-[inset_2px_62px_8px_#D4AF37,inset_-2px_-2px_8px_#D4AF37] 
+                          border-none outline-none focus:ring-2 focus:ring-orange-50/10 transition-all placeholder-slate-70" 
                    placeholder="0,00">
-            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-black">BRL</div>
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-50 font-black">BRL</div>
         </div>
     </div>
 
     <div class="flex flex-col gap-2">
         <label class="text-[14px] font-White text-slate-300 uppercase tracking-[0.2em] ml-2">D.R.E</label>
         <select id="slotDestino" 
-                class="w-full bg-slate-300 p-4 rounded-2xl text-white font-medium
-                       shadow-[6px_6px_12px_#070a11,-6px_-6px_12px_#111827] 
-                       border border-slate-100 outline-none focus:border-orange-100 appearance-none cursor-pointer">
-            <optgroup label="📥 ENTRADAS (RECEITAS)" class="bg-slate-200 text-orange-400">
+                class="w-full bg-slate-30 p-1 rounded-1x0 text-white font-medium
+                       shadow-[1px_1px_1px_#070a11,-2px_-2px_2px_#111827] 
+                       border border-slate-20 outline-none focus:border-orange-20 appearance-none cursor-pointer">
+            <optgroup label="📥 ENTRADAS (RECEITAS)" class="bg-slate-100 text-orange-100">
                 <option value="receita_pix">📥 RECEBIMENTO PIX</option>
                 <option value="receita_cartao">📥 RECEBIMENTO CARTÃO</option>
             </optgroup>
-            <optgroup label="🏗️ ESTRUTURA E EXPANSÃO" class="bg-slate-400 text-slate-200">
+            <optgroup label="🏗️ ESTRUTURA E EXPANSÃO" class="bg-slate-100 text-slate-100">
                 <option value="obras">🏗️ OBRAS E REFORMA</option>
                 <option value="energia">⚡ ENERGIA / CONDOMÍNIO</option>
                 <option value="manutencao">🛠️ MANUTENÇÃO / EQUIPAMENTOS</option>
                 <option value="equipamentos">🛒 COMPRAS / MERCADO</option>
             </optgroup>
-            <optgroup label="👥 OPERACIONAL / PESSOAL" class="bg-slate-400 text-slate-200">
+            <optgroup label="👥 OPERACIONAL / PESSOAL" class="bg-slate-100 text-slate-100">
                 <option value="pro_labore">👤 PRO-LABORE</option>
                 <option value="func">👥 PAG FUNCIONÁRIOS</option>
                 <option value="taxas">💸 TAXAS / IMPOSTOS</option>
@@ -270,13 +270,13 @@
             class="group relative mt-2 overflow-hidden bg-orange-200 p-4 rounded-2xl font-White text-white uppercase tracking-widest
                    shadow-[2px_2px_8px_#070a11,-2px_-2px_8px_rgba(99,44,6,0.5)]
                    active:shadow-[inset_2px_2px_4px_#FFA500] active:translate-y-1 transition-all">
-        <span class="relative z-10">Processar e Emitir Nota</span>
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full duration-1000 transition-transform"></div>
+        <span class="relative z-10">Emitir Nota</span>
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full duration-400 transition-transform"></div>
     </button>
 </div>
 
                         <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail</label>
+                            <label class="text-[2px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail</label>
                             <input type="email" id="emailInput" class="input-tactical w-full text-slate-800" placeholder="contato@exemplo.com">
                         </div>
 
