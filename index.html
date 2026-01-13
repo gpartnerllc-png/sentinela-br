@@ -307,8 +307,8 @@
 
     <div id="print-area" class="hidden"></div>
 
-    <script>
-    // 1. COMANDO DE BANCO DE DADOS (Inicia o sistema com o seu acesso mestre)
+  <script>
+    // 1. BANCO DE DADOS LOCAL
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
         { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
     ];
@@ -320,104 +320,106 @@
     let somaScanner = 0;
     let itensLidos = new Set();
 
-    // 2. COMANDO DE AUTENTICAÇÃO MULTI-USUÁRIO
+    // Funções de Suporte (Essenciais para não dar erro)
+    function addLog(msg) { console.log(`[LOG]: ${msg}`); }
+    function generateAIInsight(msg) { console.log(`[AI]: ${msg}`); }
+    function updateDRE() { console.log("DRE Atualizado"); }
+
+    // 2. AUTENTICAÇÃO
     function checkV12Auth() {
         const email = document.getElementById('v12_email').value;
         const pass = document.getElementById('v12_pass').value;
 
-        // Busca o usuário na base de dados
         const user = v12_users.find(u => u.email === email && u.pass === pass);
 
-        if(user) {
-            if(user.status === "AUTHORIZED") {
-                // Esconde a tela de login
+        if (user) {
+            if (user.status === "AUTHORIZED") {
                 document.getElementById('auth-gate').style.display = 'none';
-                
                 addLog(`ACESSO AUTORIZADO: ${user.email.toUpperCase()}`);
                 generateAIInsight(`Sincronização via ${user.role} completa.`);
 
-                // NOVO: Se for ADMIN, mostra o painel de liberação
+                // Ativa painel se for ADMIN
                 if (user.role === "ADMIN") {
                     const painel = document.getElementById('admin-panel');
                     if (painel) {
-                        painel.style.display = 'block'; // Torna o painel visível
-                        atualizarPainelAdmin();         // Preenche a tabela com os nomes
+                        painel.style.display = 'block';
+                        atualizarPainelAdmin();
                     }
                 }
-
             } else {
                 alert("ACESSO BLOQUEADO: Aguarde autorização do Administrador.");
             }
-        } else { 
-            alert("ACESSO NEGADO: Credenciais não encontradas."); 
+        } else {
+            alert("ACESSO NEGADO: Credenciais não encontradas.");
         }
     }
 
-    // 3. COMANDO PARA SOLICITAR NOVO CADASTRO
+    // 3. SOLICITAR CADASTRO
     function solicitarCadastro() {
         const email = prompt("Digite o E-mail para o novo comando:");
         const pass = prompt("Defina a Chave Criptográfica (Senha):");
-        
-        if(email && pass) {
+
+        if (email && pass) {
+            // Verifica se já existe
+            if (v12_users.find(u => u.email === email)) {
+                alert("Este e-mail já está na fila de espera.");
+                return;
+            }
             v12_users.push({ email: email, pass: pass, status: "PENDING", role: "OPERATOR" });
             localStorage.setItem('v12_database', JSON.stringify(v12_users));
-            alert("Solicitação enviada! Peça ao Administrador para autorizar seu Hardware.");
+            alert("Solicitação enviada! Peça ao Administrador para autorizar.");
             addLog(`NOVA SOLICITAÇÃO: ${email}`);
         }
     }
-// --- CONTINUAÇÃO DA PARTE 3: GESTÃO DO ADMINISTRADOR ---
 
-// 4. FUNÇÃO PARA DESENHAR A LISTA NA TABELA
-function atualizarPainelAdmin() {
-    const tabela = document.getElementById('user-list-table');
-    if (!tabela) return;
+    // 4. DESENHAR TABELA
+    function atualizarPainelAdmin() {
+        const tabela = document.getElementById('user-list-table');
+        if (!tabela) return;
 
-    tabela.innerHTML = ''; // Limpa a tabela antes de carregar os novos dados
+        tabela.innerHTML = ''; 
 
-    v12_users.forEach((user) => {
-        // O administrador não aparece na própria lista de gestão
-        if (user.role === "ADMIN") return;
+        v12_users.forEach((user) => {
+            if (user.role === "ADMIN") return;
 
-        const corStatus = user.status === "AUTHORIZED" ? "text-green-400" : "text-yellow-500";
-        
-        tabela.innerHTML += `
-            <tr class="border-b border-slate-800">
-                <td class="py-2 px-1 text-[10px]">${user.email}</td>
-                <td class="py-2 px-1 text-[10px] ${corStatus} font-bold">${user.status}</td>
-                <td class="py-2 px-1 flex gap-2">
-                    <button onclick="autorizarAcessoV12('${user.email}')" class="bg-green-600 hover:bg-green-500 px-2 py-1 rounded text-white text-[9px] font-bold">AUTORIZAR</button>
-                    <button onclick="removerUsuarioV12('${user.email}')" class="bg-red-600 hover:bg-red-500 px-2 py-1 rounded text-white text-[9px] font-bold">REMOVER</button>
-                </td>
-            </tr>
-        `;
-    });
-}
+            const corStatus = user.status === "AUTHORIZED" ? "text-green-400" : "text-yellow-500";
 
-// 5. COMANDO PARA LIBERAR O ACESSO (Muda de PENDING para AUTHORIZED)
-function autorizarAcessoV12(email) {
-    const user = v12_users.find(u => u.email === email);
-    if (user) {
-        user.status = "AUTHORIZED";
-        salvarEAtualizarV12();
-        alert("SISTEMA: Acesso autorizado para " + email);
-        addLog(`AUTORIDADE: Liberado acesso para ${email}`);
+            tabela.innerHTML += `
+                <tr class="border-b border-slate-800">
+                    <td class="py-2 px-1 text-[10px] text-white">${user.email}</td>
+                    <td class="py-2 px-1 text-[10px] ${corStatus} font-bold">${user.status}</td>
+                    <td class="py-2 px-1 flex gap-2">
+                        <button onclick="autorizarAcessoV12('${user.email}')" class="bg-green-600 px-2 py-1 rounded text-white text-[9px] font-bold">AUTORIZAR</button>
+                        <button onclick="removerUsuarioV12('${user.email}')" class="bg-red-600 px-2 py-1 rounded text-white text-[9px] font-bold">REMOVER</button>
+                    </td>
+                </tr>
+            `;
+        });
     }
-}
 
-// 6. COMANDO PARA DESCADASTRAR (Remove do Banco de Dados)
-function removerUsuarioV12(email) {
-    if (confirm("Deseja remover este usuário permanentemente?")) {
-        v12_users = v12_users.filter(u => u.email !== email);
-        salvarEAtualizarV12();
-        addLog(`HARDWARE PURGE: ${email} removido.`);
+    // 5. AUTORIZAR
+    function autorizarAcessoV12(email) {
+        const user = v12_users.find(u => u.email === email);
+        if (user) {
+            user.status = "AUTHORIZED";
+            salvarEAtualizarV12();
+            alert("SISTEMA: Acesso autorizado para " + email);
+        }
     }
-}
 
-// 7. FUNÇÃO DE SALVAMENTO AUTOMÁTICO
-function salvarEAtualizarV12() {
-       localStorage.setItem('v12_database', JSON.stringify(v12_users));
-       atualizarPainelAdmin(); // Atualiza a tabela visualmente
-   }
+    // 6. REMOVER
+    function removerUsuarioV12(email) {
+        if (confirm("Deseja remover este usuário permanentemente?")) {
+            v12_users = v12_users.filter(u => u.email !== email);
+            salvarEAtualizarV12();
+        }
+    }
+
+    // 7. SALVAR
+    function salvarEAtualizarV12() {
+        localStorage.setItem('v12_database', JSON.stringify(v12_users));
+        atualizarPainelAdmin();
+    }
 }
     function liberarUsuario(email) {
         let user = v12_users.find(u => u.email === email);
