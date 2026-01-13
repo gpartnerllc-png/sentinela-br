@@ -95,6 +95,18 @@
             .no-print { display: none !important; } 
             #print-area { display: block !important; } 
         }
+
+        /* NOVOS ESTILOS ADICIONADOS */
+        .ai-status-pulse { animation: pulse-ai 2s infinite; }
+        @keyframes pulse-ai {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .prophetic-alert {
+            background: linear-gradient(90deg, #0f172a 0%, #334155 100%);
+            border-left: 4px solid #f97316;
+        }
     </style>
 </head>
 <body>
@@ -135,6 +147,23 @@
 
         <main class="max-w-[1600px] mx-auto p-8 grid grid-cols-12 gap-8">
             <div class="col-span-12 lg:col-span-8 space-y-8">
+                
+                <div class="prophetic-alert p-4 rounded-xl flex items-center justify-between shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-orange-500 p-2 rounded-lg ai-status-pulse">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Alinhamento Estratégico</p>
+                            <p id="ai-insight" class="text-white text-xs font-medium italic">Aguardando fluxo de dados para análise de autoridade...</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[9px] text-slate-400 block uppercase font-bold">Status Profético</span>
+                        <span class="text-emerald-400 text-[10px] font-black uppercase">Apocalipse 17: Mapeado</span>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-3 gap-4">
                     <div class="dre-card shadow-sm border-l-emerald-500">
                         <span class="text-[9px] font-black text-slate-400 uppercase">Receita Bruta</span>
@@ -201,10 +230,15 @@
                         </div>
                     </div>
                 </div>
-
+            <div class="terminal-log shadow-xl">
+                    <div class="flex justify-between border-b border-white/5 pb-2 mb-3">
+                        <span class="font-black text-[10px] uppercase tracking-[0.3em] text-orange-400">Security Stream & Gemini AI Advisor</span>
+                        <span class="text-[10px] text-slate-500 font-mono">NODE_ISR_V12</span>
+                    </div>
+                
                 <div class="terminal-log shadow-xl">
                     <div id="logContent" class="h-32 overflow-y-auto leading-relaxed">
-                        > Sistema Sentinela V12 Inicializado...<br>
+                        > Sistema S V12 Inicializado...<br>
                     </div>
                 </div>
             </div>
@@ -233,6 +267,20 @@
                         <button onclick="emitir('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Imp. Térmica / PDV Móvel</button>
                     </div>
                 </div>
+                
+                <div class="panel-3d p-6 bg-slate-900 border-none">
+                    <h3 class="text-[10px] font-black text-orange-500 uppercase mb-4 tracking-widest">Monitoramento</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-slate-400">GEO-POLITICA:</span>
+                            <span class="text-orange-400 font-bold">HIGH</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
+                            <div class="bg-orange-500 h-full w-[85%]"></div>
+                        </div>
+                        <p class="text-[9px] text-slate-500 italic"></p>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -250,6 +298,7 @@
             if(email.length > 5 && pass === "ihvh2026") {
                 document.getElementById('auth-gate').style.display = 'none';
                 addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
+                generateAIInsight("Sincronização completa. Hardware Sentinela pronto para operação.");
             } else { 
                 alert("ACESSO NEGADO: Verifique sua chave V12."); 
             }
@@ -262,6 +311,7 @@
                 v12_finance.despesa += val;
                 updateDRE();
                 addLog(`DESPESA DETECTADA: R$ ${val},00`);
+                generateAIInsight("Fluxo de saída detectado. IA correlacionando com movimentações de mercado.");
             }, 1000);
         }
 
@@ -293,6 +343,7 @@
             v12_finance.receita += parseFloat(valor);
             updateDRE();
             addLog(`Invocando Hardware... R$ ${valor}`);
+            generateAIInsight("Transação em curso via Antena P2. Registrando autoridade fiscal.");
             const intentUrl = `intent://pay?amount=${Math.round(valor*100)}&currency=BRL#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
             window.location.href = intentUrl;
         }
@@ -312,6 +363,7 @@
                     document.getElementById('valorInput').value = somaScanner.toFixed(2);
                     document.getElementById('descInput').value += `Item [${txt}] - R$ ${p},00\n`;
                     calcFiscal();
+                    generateAIInsight(`Item identificado: ${txt}. Integridade do ativo confirmada.`);
                 });
             } else {
                 await html5QrCode.stop();
@@ -398,6 +450,13 @@
                 alert("NOME COMPLETO REQUERIDO.");
                 el.focus();
             }
+        }
+
+        // NOVO: Função para gerar Insights dinâmicos da IA
+        function generateAIInsight(text) {
+            const aiDisplay = document.getElementById('ai-insight');
+            aiDisplay.innerText = text;
+            addLog(`SENTINELA ANALÍTICO: ${text}`);
         }
     </script>
 </body>
