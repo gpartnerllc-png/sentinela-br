@@ -288,39 +288,214 @@
     <div id="print-area" class="hidden"></div>
 
     <script>
-    function addLog(msg) { 
-        const logContent = document.getElementById('logContent');
-        if(logContent) logContent.innerHTML += `> ${msg}<br>`;
-    }
-        
-    function generateAIInsight(msg) { 
-        const aiInsight = document.getElementById('ai-insight');
-        if(aiInsight) aiInsight.innerText = msg;
-    }
-        
-    function updateDRE() { console.log("DRE Atualizado");
-    }        
+    // [A] TOPO DO SCRIPT: Definições e Variáveis Globais
+        // É aqui que ficam os dados de hardware e financeiro que você perguntou.
+        let v12_finance = { receita: 0, despesa: 0, invest: 0 };
+        const SERIAL_P2 = "PB1F252F75254";
+        const ACCESS_KEY = "20260112PB1F252F75254";
+        let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
+            { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
+        ];
 
-        function solicitarCadastro() {
-        const email = prompt("Digite o E-mail para o novo comando:");
-        const pass = prompt("Defina a Chave Criptográfica (Senha):");
-        
-    }
-    
+        // [B] MEIO DO SCRIPT: Funções de Comando (As que melhoramos)
+        function calcFiscal() { /* ... código que te passei ... */ }
+        function emitir(tipo) { /* ... código da DANFE ... */ }
+        function checkV12Auth() { /* ... código de login ... */ }
+        function salvarEAtualizarV12() { /* ... código de save ... */ }
 
-        if (email && pass) {
-            if (v12_users.find(u => u.email === email)) {
-                alert("Este e-mail já está na fila de espera.");
-                return;
+        // [C] FINAL DO SCRIPT: Comando de Inicialização (Boot)
+        // Este comando roda assim que a página termina de carregar.
+        window.onload = function() {
+            console.log("SENTINELA V12: Hardware " + SERIAL_P2 + " Conectado.");
+            addLog("Sistema em Standby. Aguardando Autoridade.");
+            
+            // Verifica se já existe um admin e prepara a interface
+            if(localStorage.getItem('v12_database')) {
+                console.log("Base de dados local sincronizada.");
             }
-            v12_users.push({ email: email, pass: pass, status: "PENDING", role: "OPERATOR" };
-            localStorage.setItem({'v12_database', JSON.stringify(v12_users);
-            alert("Solicitação enviada! Peça ao Administrador para autorizar.");
-            addLog(`NOVA SOLICITAÇÃO: ${email}`);
+        };
+
+
+let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
+            { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
+        ];
+
+        function addLog(msg) {
+            const log = document.getElementById('logContent');
+            log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // --- 1. LOGIN ---
+        function checkV12Auth() {
+            const email = document.getElementById('v12_email').value;
+            const pass = document.getElementById('v12_pass').value;
+            const user = v12_users.find(u => u.email === email && u.pass === pass);
+
+            if (user) {
+                if (user.status === "AUTHORIZED") {
+                    document.getElementById('auth-gate').style.display = 'none';
+                    addLog(`BEM-VINDO: ${user.email.toUpperCase()}`);
+                    
+                    if (user.role === "ADMIN") {
+                        document.getElementById('admin-panel').style.display = 'block';
+                        atualizarPainelAdmin();
+                    }
+                } else {
+                    alert("Acesso pendente de autorização.");
+                }
+            } else {
+                alert("Credenciais Inválidas.");
+            }
+        }
+
+        // --- 2. CADASTRO ---
+        function solicitarCadastro() {
+            const email = prompt("E-mail do novo comando:");
+            const pass = prompt("Chave Criptográfica:");
+            if (email && pass) {
+                if (v12_users.find(u => u.email === email)) return alert("Já existe!");
+                v12_users.push({ email, pass, status: "PENDING", role: "OPERATOR" });
+                localStorage.setItem('v12_database', JSON.stringify(v12_users));
+                alert("Solicitado! Peça ao Admin para liberar.");
+            }
+        }
+
+        // --- 3. PAINEL ADMIN ---
+        function atualizarPainelAdmin() {
+            const tabela = document.getElementById('user-list-table');
+            if (!tabela) return;
+            tabela.innerHTML = ''; 
+
+            v12_users.forEach((user, index) => {
+                if (user.role === "ADMIN") return;
+                const corStatus = user.status === "AUTHORIZED" ? "text-green-400" : "text-yellow-500";
+                
+                tabela.innerHTML += `
+                    <tr class="border-b border-slate-700">
+                        <td class="py-3">${user.email}</td>
+                        <td class="py-3 ${corStatus} font-bold">${user.status}</td>
+                        <td class="py-3">
+                            <button onclick="autorizarUser(${index})" class="bg-emerald-600 px-2 py-1 rounded text-white text-[10px] mr-1">LIBERAR</button>
+                            <button onclick="removerUsuarioV12('${user.email}')" class="bg-red-600 px-2 py-1 rounded text-white text-[10px]">REMOVER</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        function autorizarUser(index) {
+            v12_users[index].status = "AUTHORIZED";
+            localStorage.setItem('v12_database', JSON.stringify(v12_users));
+            atualizarPainelAdmin();
+            addLog(`OPERADOR ${v12_users[index].email} AUTORIZADO.`);
+        }
+
+        function removerUsuarioV12(email) {
+            if (confirm("Remover permanentemente?")) {
+                v12_users = v12_users.filter(u => u.email !== email);
+                localStorage.setItem('v12_database', JSON.stringify(v12_users));
+                atualizarPainelAdmin();
+                addLog(`USUÁRIO REMOVIDO.`);
+            }
+        }
+
+        // --- 4. FISCAL ---
+        function calcFiscal() {
+            const v = parseFloat(document.getElementById('valorInput').value) || 0;
+            document.getElementById('cbsVal').innerText = `R$ ${(v * 0.009).toFixed(2)}`;
+            document.getElementById('ibsVal').innerText = `R$ ${(v * 0.001).toFixed(2)}`;
+            document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
+        }
+
+        // --- 5. EMITIR (DANFE PREMIUM) ---
+        function emitir(tipo) {
+            const nome = document.getElementById('nomeInput').value;
+            const valor = parseFloat(document.getElementById('valorInput').value) || 0;
+            const desc = document.getElementById('descInput').value;
+            const printArea = document.getElementById('print-area');
+            const dataHora = new Date().toLocaleString('pt-BR');
+       }
+
+       // 6. REMOVER USUÁRIO COM LOG DE AUDITORIA
+function removerUsuarioV12(email) {
+    // Evita que o admin se exclua por acidente
+    const userAtual = v12_users.find(u => u.email === email);
+    if (userAtual && userAtual.role === "ADMIN") {
+        alert("ERRO CRÍTICO: Não é possível remover uma conta de ADMINISTRADOR.");
+        return;
+    }
+
+    if (confirm(`CONFIRMAR EXCLUSÃO: ${email}?\nEsta ação é irreversível no banco local.`)) {
+        v12_users = v12_users.filter(u => u.email !== email);
+        salvarEAtualizarV12();
+        addLog(`USUÁRIO REMOVIDO: ${email}`);
+    }
+}
+
+// 7. SALVAR E SINCRONIZAR DATABASE
+function salvarEAtualizarV12() {
+    try {
+        localStorage.setItem('v12_database', JSON.stringify(v12_users));
+        
+        // Atualiza a interface se o painel existir
+        if (typeof atualizarPainelAdmin === "function") {
+            atualizarPainelAdmin();
+        }
+        
+        // Feedback técnico no terminal
+        console.log("Database V12 Sincronizada.");
+    } catch (e) {
+        addLog("ERRO AO SALVAR: Memória local cheia ou inacessível.");
+    }
+}
+
+// 8. CÁLCULO FISCAL AVANÇADO (Refletindo na DANFE e Painel)
+function calcFiscal() {
+    const valorRaw = document.getElementById('valorInput').value;
+    const valor = parseFloat(valorRaw) || 0;
+    
+    // Regras tributárias Sentinela V12
+    const cbs = valor * 0.009; // Contribuição sobre Bens e Serviços
+    const ibs = valor * 0.001; // Imposto sobre Bens e Serviços
+    const impostoTotal = cbs + ibs;
+
+    // Atualização dinâmica dos elementos da interface
+    const elementos = {
+        'cbsVal': cbs,
+        'ibsVal': ibs,
+        'liqVal': valor
+    };
+
+    for (let [id, val] of Object.entries(elementos)) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerText = `R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            // Efeito visual de atualização
+            el.style.color = val > 0 ? "var(--active-orange)" : "inherit";
         }
     }
-                     
-        let v12_finance = { receita: 0, despesa: 0, invest: 0 };
+}
+
+// 9. LIBERAÇÃO RÁPIDA DE OPERADOR
+function liberarUsuario(email) {
+    let userIndex = v12_users.findIndex(u => u.email === email);
+    
+    if (userIndex !== -1) {
+        v12_users[userIndex].status = "AUTHORIZED";
+        salvarEAtualizarV12();
+        
+        addLog(`AUTORIDADE CONCEDIDA: ${email.toUpperCase()}`);
+        
+        // Se estiver logado como admin, atualiza a tabela imediatamente
+        if (document.getElementById('admin-panel')?.style.display === 'block') {
+            atualizarPainelAdmin();
+        }
+    } else {
+        addLog(`ERRO: Usuário ${email} não encontrado.`);
+    }
+}  
+                             
+    let v12_finance = { receita: 0, despesa: 0, invest: 0 };
         
         // CORREÇÃO: Função de Login validando campos adicionados
         function checkV12Auth() {
@@ -436,46 +611,155 @@
             const printArea = document.getElementById('print-area');
             const dataHora = new Date().toLocaleString('pt-BR');
 
-            if(tipo === 'TERMICO') {
-                printArea.innerHTML = `
-                    <div class="thermal-print-container">
-                        <div class="ml-style-header">SENTINELA V12</div>
-                        <p>SERIAL P2: ${SERIAL_P2}</p>
-                        <p>DATA: ${dataHora}</p>
-                        <p>CLI: ${nome.toUpperCase()}</p>
-                        <p>-------------------------------</p>
-                        <p>${desc.replace(/\n/g, '<br>')}</p>
-                        <h1 style="text-align:right;">TOTAL: R$ ${valor.toFixed(2)}</h1>
-                        <p style="font-size:8px; text-align:center;">KEY: ${ACCESS_KEY}</p>
-                    </div>`;
-            } else {
-                printArea.innerHTML = `
-                    <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; background: #fff;">
-                        <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #000;">
-                            <div><h1 style="font-size: 38px; margin:0;">SENTINELA V12</h1></div>
-                            <div style="border: 2px solid #000; padding: 5px;">Nº ${Math.floor(Math.random() * 999999)}</div>
-                        </div>
-                        <div style="margin-top:20px; border: 1px solid #000; padding: 10px;">
-                            <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
-                            <p><b>DATA:</b> ${dataHora}</p>
-                        </div>
-                        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
-                            <tr style="background: #000; color: #fff;"><th>DESCRIÇÃO</th><th align="right">TOTAL</th></tr>
-                            ${desc.split('\n').filter(l => l.trim() !== "").map(line => `
-                                <tr style="border-bottom: 1px solid #000;"><td>${line}</td><td align="right">--</td></tr>
-                            `).join('')}
-                        </table>
-                        <div style="text-align: right; margin-top: 20px;">
-                            <h1 style="font-size: 32px;">TOTAL: R$ ${valor.toFixed(2)}</h1>
-                        </div>
-                        <div style="margin-top: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; text-align: center;">
-                            <div><div style="border-top: 1px solid #000;"></div>ASSINATURA CLIENTE</div>
-                            <div><div style="border-top: 1px solid #000;"></div>CHAVE: ${ACCESS_KEY}</div>
-                        </div>
-                    </div>`;
-            }
-            window.print();
-        }
+            function emitir(tipo) {
+    // 1. CAPTURA DOS DADOS DO DOM
+    const nome = document.getElementById('nomeInput').value;
+    const doc = document.getElementById('docInput').value || "000.000.000-00";
+    const valorInput = document.getElementById('valorInput').value;
+    const desc = document.getElementById('descInput').value || "PRODUTO V12 - R$ 0,00";
+    const printArea = document.getElementById('print-area');
+    
+    // 2. VALIDAÇÃO BÁSICA
+    if (!nome || !valorInput) {
+        alert("Erro: Preencha o Nome e o Valor Operacional.");
+        return;
+    }
+
+    // 3. PROCESSAMENTO FINANCEIRO E TRIBUTÁRIO
+    const vTotal = parseFloat(valorInput) || 0;
+    const fed = vTotal * 0.1345; // Exemplo de carga federal (13.45%)
+    const est = vTotal * 0.07;   // Exemplo de carga estadual (7%)
+    const totalImpostos = fed + est;
+    const authCode = Math.floor(100000 + Math.random() * 900000); // Código de documento único
+    const dataHora = new Date().toLocaleString('pt-BR');
+
+    // 4. LÓGICA DE GERAÇÃO DO DOCUMENTO
+    if (tipo === 'TERMICO') {
+        printArea.innerHTML = `
+            <div class="thermal-print-container" style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace;">
+                <div class="ml-style-header" style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">SENTINELA V12</div>
+                <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO E AUTORIDADE</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <p><b>DATA/HORA:</b> ${dataHora}</p>
+                <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
+                <p><b>DOC/CPF:</b> ${doc}</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <table style="width: 100%; font-size: 10px;">
+                    <tr style="border-bottom: 1px solid #000;">
+                        <td align="left"><b>ITEM</b></td>
+                        <td align="center"><b>QTD</b></td>
+                        <td align="right"><b>TOTAL</b></td>
+                    </tr>
+                    ${desc.split('\n').filter(line => line.trim() !== "").map(line => {
+                        const partes = line.split('-');
+                        const itemNome = partes[0] || "ITEM";
+                        const itemPreco = partes[1] || `R$ ${vTotal.toFixed(2)}`;
+                        return `
+                        <tr>
+                            <td align="left">${itemNome.trim()}</td>
+                            <td align="center">1</td>
+                            <td align="right">${itemPreco.trim()}</td>
+                        </tr>`;
+                    }).join('')}
+                </table>
+                <p style="text-align:center;">------------------------------------------</p>
+                <div style="text-align: right;">
+                    <p>Subtotal: R$ ${vTotal.toFixed(2)}</p>
+                    <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
+                </div>
+                <p style="font-size: 9px; margin-top: 10px;">
+                    Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)<br>
+                    Fonte: IBPT/Sentinela V12
+                </p>
+                <p style="text-align:center; margin-top: 10px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
+                <div style="text-align: center; margin-top: 5px; border: 1px dashed #000; padding: 5px; font-size: 10px;">[ QR CODE AUTORIDADE ]</div>
+            </div>
+        `;
+    } else {
+        // VERSÃO A4 PREMIUM
+        printArea.innerHTML = `
+            <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; border: 1px solid #ddd; background: #fff; position: relative; width: 210mm; min-height: 297mm; margin: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 4px solid #000; padding-bottom: 20px;">
+                    <div>
+                        <h1 style="font-size: 40px; margin: 0; font-weight: 900;">SENTINELA V12</h1>
+                        <p style="margin: 0;">SISTEMAS DE AUTORIDADE</p>
+                        <p style="margin: 0; font-size: 12px;">SERIAL POS: ${SERIAL_P2}</p>
+                    </div>
+                    <div style="text-align: right; border: 2px solid #000; padding: 10px;">
+                        <p style="margin: 0; font-size: 10px;">NÚMERO DO DOCUMENTO</p>
+                        <h2 style="margin: 0;">#${authCode}</h2>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; background: #f4f4f4; padding: 15px; border-radius: 5px; display: grid; grid-template-columns: 1fr 1fr;">
+                    <div>
+                        <p style="margin: 0; font-size: 10px; color: #666;">TOMADOR DO SERVIÇO / CLIENTE</p>
+                        <p style="margin: 0; font-weight: bold; font-size: 16px;">${nome.toUpperCase()}</p>
+                        <p style="margin: 0;">CPF/CNPJ: ${doc}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 10px; color: #666;">EMISSÃO</p>
+                        <p style="margin: 0;">${dataHora}</p>
+                    </div>
+                </div>
+
+                <table style="width: 100%; margin-top: 30px; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #000; color: #fff;">
+                            <th align="left" style="padding: 10px;">CÓDIGO</th>
+                            <th align="left" style="padding: 10px;">DESCRIÇÃO DO PRODUTO/SERVIÇO</th>
+                            <th align="center" style="padding: 10px;">QTD</th>
+                            <th align="right" style="padding: 10px;">VALOR UN.</th>
+                            <th align="right" style="padding: 10px;">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${desc.split('\n').filter(line => line.trim() !== "").map((line, idx) => {
+                            const partes = line.split('-');
+                            return `
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px;">00${idx + 1}</td>
+                                <td style="padding: 10px;">${partes[0] || 'PRODUTO V12'}</td>
+                                <td align="center" style="padding: 10px;">1</td>
+                                <td align="right" style="padding: 10px;">${partes[1] || 'R$ ' + vTotal.toFixed(2)}</td>
+                                <td align="right" style="padding: 10px;">${partes[1] || 'R$ ' + vTotal.toFixed(2)}</td>
+                            </tr>`;
+                        }).join('')}
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 40px; display: flex; justify-content: flex-end;">
+                    <div style="width: 300px; background: #000; color: #fff; padding: 20px; text-align: right;">
+                        <p style="margin: 0; font-size: 12px;">SUBTOTAL: R$ ${vTotal.toFixed(2)}</p>
+                        <p style="margin: 0; font-size: 12px;">IMPOSTOS (TRIB): R$ ${totalImpostos.toFixed(2)}</p>
+                        <h2 style="margin: 0; font-size: 24px; border-top: 1px solid #fff; margin-top: 10px; padding-top: 10px;">R$ ${vTotal.toFixed(2)}</h2>
+                    </div>
+                </div>
+
+                <div style="margin-top: 80px; display: flex; justify-content: space-between;">
+                    <div style="width: 45%; text-align: center;">
+                        <div style="border-top: 2px solid #000; margin-bottom: 5px;"></div>
+                        <p style="font-size: 10px; margin: 0;"><b>ASSINATURA DO CLIENTE</b></p>
+                        <p style="font-size: 9px; color: #666;">CONFIRMO O RECEBIMENTO DOS ITENS</p>
+                    </div>
+                    <div style="width: 45%; text-align: center;">
+                        <div style="border-top: 2px solid #000; margin-bottom: 5px;"></div>
+                        <p style="font-size: 10px; margin: 0;"><b>SENTINELA DATA SYSTEMS</b></p>
+                        <p style="font-size: 9px; color: #666;">AUTENTICADO VIA HARDWARE PB1F25...</p>
+                    </div>
+                </div>
+
+                <div style="position: absolute; bottom: 20px; left: 40px; font-size: 8px; color: #999;">
+                    AUTENTICIDADE: ${ACCESS_KEY}-${authCode} | GERADO VIA TERMINAL INTELIGENTE P2
+                </div>
+            </div>
+        `;
+    }
+
+    // 5. COMANDO DE IMPRESSÃO
+    addLog(`Documento #${authCode} enviado para fila de impressão.`);
+    window.print();
+}
 
         function validarNomeSeguro(el) {
             if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
