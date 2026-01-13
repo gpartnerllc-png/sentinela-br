@@ -115,7 +115,7 @@
         <div class="bg-white p-12 rounded-[40px] shadow-2xl w-[450px] text-center border-b-8 border-orange-600">
             <div class="v12-logo-3d inline-block mb-8">V12</div>
             <h2 class="text-3xl font-black text-slate-800 uppercase italic mb-2 tracking-tighter">Acesso de Autoridade</h2>
-            <p class="text-slate-400 text-xs font-bold mb-10 tracking-widest uppercase">P2 Hardware Authentication Required</p>
+            <p class="text-slate-400 text-xs font-bold mb-10 tracking-widest uppercase">P2 H Aion</p>
             
             <div class="space-y-4">
                 <input type="email" id="v12_email" placeholder="E-mail de Comando" class="input-tactical w-full">
@@ -242,7 +242,7 @@
 
             <div class="col-span-12 lg:col-span-4 space-y-6">
                 <div class="panel-3d p-8 border-t-8 border-orange-500">
-                    <h3 class="text-[12px] font-black text-center text-slate-400 uppercase mb-8 tracking-[0.2em]">Detalhamento Tributário</h3>
+                    <h3 class="text-[12px] font-black text-center text-slate-400 uppercase mb-8 tracking-[0.2em]">Detalhe Tributário</h3>
                     <div class="space-y-6 bg-orange-50/50 p-6 rounded-2xl border border-orange-100 shadow-inner">
                         <div class="flex justify-between items-center">
                             <span class="font-black text-slate-500 uppercase text-[11px]">CBS (FEDERAL) 0.9%:</span>
@@ -284,11 +284,11 @@
                     </div>
                         <div class="grid grid-cols-12 gap-6 mb-8 no-print">
     <div class="col-span-6 panel-3d p-6 border-l-8 border-blue-500">
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Receita Bruta Acumulada</p>
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">RBA</p>
         <h2 id="receita-display" class="text-3xl font-black text-slate-800">R$ 0,00</h2>
     </div>
     <div class="col-span-6 panel-3d p-6 border-l-8 border-emerald-500">
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Lucro Líquido (V12 Core)</p>
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Lucro Líquido</p>
         <h2 id="lucro-display" class="text-3xl font-black text-emerald-600">R$ 0,00</h2>
     </div>
 </div>
@@ -850,10 +850,50 @@ function liberarUsuario(email) {
     updateDRE();
         
  </script>
-        
- <script>
 
-    // GERAÇÃO DO DOCUMENTO
+    <script>
+        function emitir(tipo) {
+    // 1. CAPTURA DOS INPUTS
+    const nome = document.getElementById('nomeInput')?.value || "CLIENTE V12";
+    const valorRaw = document.getElementById('valorInput')?.value || "0";
+    const doc = document.getElementById('docInput')?.value || "000.000.000-00";
+    const desc = document.getElementById('descInput')?.value || "PRODUTO V12";
+    const printArea = document.getElementById('print-area');
+
+    </script>
+    
+    <script>
+
+    // 2. CÁLCULOS NECESSÁRIOS (O que estava faltando)
+    const vTotal = parseFloat(valorRaw) || 0;
+    if (vTotal <= 0) {
+        alert("ALERTA: Insira um valor válido para emitir.");
+        return;
+    }
+    </script>
+
+        <script>
+
+    const dataHora = new Date().toLocaleString('pt-BR');
+    const fed = vTotal * 0.1345; // Imposto Federal
+    const est = vTotal * 0.07;   // Imposto Estadual
+    const totalImpostosVenda = fed + est;
+    const authCode = Math.floor(100000 + Math.random() * 900000);
+
+    </script>
+
+      <script>
+
+    // 3. ATUALIZAÇÃO DO FINANCEIRO (DRE)
+    v12_finance.receita += vTotal;
+    const receitaAcumulada = v12_finance.receita;
+    const lucroAcumulado = receitaAcumulada * 0.99;
+
+    </script>
+
+        <script>
+
+    // 4. GERAÇÃO DO DOCUMENTO (O seu código com as variáveis corrigidas)
     if (tipo === 'TERMICO') {
         printArea.innerHTML = `
             <div class="thermal-print-container" style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace;">
@@ -870,33 +910,27 @@ function liberarUsuario(email) {
                         <td align="center"><b>QTD</b></td>
                         <td align="right"><b>TOTAL</b></td>
                     </tr>
-                    ${desc.split('\n').filter(line => line.trim() !== "").map(line => {
-                        const partes = line.split('-');
-                        return `<tr>
-                            <td align="left">${(partes[0] || 'ITEM').trim()}</td>
-                            <td align="center">1</td>
-                            <td align="right">${(partes[1] || 'R$ ' + vTotal.toFixed(2)).trim()}</td>
-                        </tr>`;
-                    }).join('')}
+                    <tr>
+                        <td align="left">${desc.substring(0, 15)}...</td>
+                        <td align="center">1</td>
+                        <td align="right">R$ ${vTotal.toFixed(2)}</td>
+                    </tr>
                 </table>
                 <p style="text-align:center;">------------------------------------------</p>
                 <div style="text-align: right;">
                     <p style="margin:0;">Subtotal: R$ ${vTotal.toFixed(2)}</p>
                     <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
                 </div>
-
                 <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background: #f9f9f9; font-size: 10px;">
                     <p style="margin:0; font-weight:bold; text-align:center;">RESUMO FINANCEIRO DO TERMINAL</p>
                     <p style="margin:0;">RECEITA ACUMULADA: R$ ${receitaAcumulada.toFixed(2)}</p>
                     <p style="margin:0;">LUCRO LÍQUIDO DIA: R$ ${lucroAcumulado.toFixed(2)}</p>
                 </div>
-
                 <p style="font-size: 9px; margin-top: 5px;">Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)</p>
                 <p style="text-align:center; margin-top: 5px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
-                <div style="text-align: center; margin-top: 5px; border: 1px dashed #000; padding: 5px; font-size: 10px;">[ QR CODE AUTORIDADE ]</div>
             </div>`;
     } else {
-        // VERSÃO A4 PREMIUM COM DRE INTEGRADO
+        // VERSÃO A4 PREMIUM
         printArea.innerHTML = `
             <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; border: 1px solid #ddd; background: #fff; position: relative; width: 210mm; min-height: 297mm; margin: auto;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 4px solid #000; padding-bottom: 20px;">
@@ -910,7 +944,6 @@ function liberarUsuario(email) {
                         <h2 style="margin: 0;">#${authCode}</h2>
                     </div>
                 </div>
-
                 <div style="margin-top: 30px; background: #f4f4f4; padding: 15px; border-radius: 5px; display: grid; grid-template-columns: 1fr 1fr;">
                     <div>
                         <p style="margin: 0; font-size: 10px; color: #666;">CLIENTE</p>
@@ -922,63 +955,32 @@ function liberarUsuario(email) {
                         <p style="margin: 0;">${dataHora}</p>
                     </div>
                 </div>
-
-                <table style="width: 100%; margin-top: 30px; border-collapse: collapse;">
-                    <thead>
-                        <tr style="background: #000; color: #fff;">
-                            <th align="left" style="padding: 10px;">CÓDIGO</th>
-                            <th align="left" style="padding: 10px;">DESCRIÇÃO</th>
-                            <th align="center" style="padding: 10px;">QTD</th>
-                            <th align="right" style="padding: 10px;">VALOR UN.</th>
-                            <th align="right" style="padding: 10px;">TOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${desc.split('\n').filter(line => line.trim() !== "").map((line, idx) => {
-                            const partes = line.split('-');
-                            return `
-                            <tr style="border-bottom: 1px solid #eee;">
-                                <td style="padding: 10px;">00${idx + 1}</td>
-                                <td style="padding: 10px;">${partes[0] || 'PRODUTO V12'}</td>
-                                <td align="center" style="padding: 10px;">1</td>
-                                <td align="right" style="padding: 10px;">${partes[1] || 'R$ ' + vTotal.toFixed(2)}</td>
-                                <td align="right" style="padding: 10px;">${partes[1] || 'R$ ' + vTotal.toFixed(2)}</td>
-                            </tr>`;
-                        }).join('')}
-                    </tbody>
-                </table>
-
                 <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div style="width: 50%; border: 1px solid #000; padding: 15px; background: #f9f9f9;">
                         <h3 style="margin: 0 0 10px 0; font-size: 12px; border-bottom: 1px solid #000;">CONSOLIDAÇÃO DRE TERMINAL</h3>
                         <p style="margin: 2px 0; font-size: 11px;">RECEITA BRUTA DIA: R$ ${receitaAcumulada.toFixed(2)}</p>
-                        <p style="margin: 2px 0; font-size: 11px;">IMPOSTOS ACUMULADOS: R$ ${(receitaAcumulada * 0.2045).toFixed(2)}</p>
                         <p style="margin: 5px 0 0 0; font-size: 12px; font-weight: bold;">LUCRO LÍQUIDO: R$ ${lucroAcumulado.toFixed(2)}</p>
                     </div>
                     <div style="width: 300px; background: #000; color: #fff; padding: 20px; text-align: right;">
-                        <p style="margin: 0; font-size: 12px;">SUBTOTAL: R$ ${vTotal.toFixed(2)}</p>
-                        <p style="margin: 0; font-size: 12px;">TRIBUTOS DA VENDA: R$ ${totalImpostosVenda.toFixed(2)}</p>
-                        <h2 style="margin: 0; font-size: 24px; border-top: 1px solid #fff; margin-top: 10px; padding-top: 10px;">R$ ${vTotal.toFixed(2)}</h2>
+                        <h2 style="margin: 0; font-size: 24px;">TOTAL R$ ${vTotal.toFixed(2)}</h2>
                     </div>
-                </div>
-
-                <div style="margin-top: 80px; display: flex; justify-content: space-between;">
-                    <div style="width: 45%; text-align: center;">
-                        <div style="border-top: 2px solid #000; margin-bottom: 5px;"></div>
-                        <p style="font-size: 10px;"><b>ASSINATURA DO CLIENTE</b></p>
-                    </div>
-                    <div style="width: 45%; text-align: center;">
-                        <div style="border-top: 2px solid #000; margin-bottom: 5px;"></div>
-                        <p style="font-size: 10px;"><b>SENTINELA DATA SYSTEMS</b></p>
-                    </div>
-                </div>
-
-                <div style="position: absolute; bottom: 20px; left: 40px; font-size: 8px; color: #999;">
-                    AUTENTICIDADE: ${ACCESS_KEY}-${authCode} | ACUMULADO DRE ATUALIZADO NO ATO
                 </div>
             </div>`;
     }
+        <script>
 
+    // 5. COMANDOS DE FINALIZAÇÃO
+    salvarEAtualizarV12(); // Salva no banco
+    updateDRE();           // Atualiza o painel na tela
+    addLog(`EMISSÃO REALIZADA: R$ ${vTotal.toFixed(2)} - ${nome}`);
+    
+    // Dispara a impressão
+    window.print();
+}
+
+      </script>  
+    
+<script>
     addLog(`DRE INTEGRADO: Documento #${authCode} | Receita Dia: R$ ${receitaAcumulada.toFixed(2)}`);
     window.print();
 }
@@ -993,7 +995,9 @@ function liberarUsuario(email) {
                 el.focus();
             }
         }
+</script>
 
+    <script>
         // NOVO: Função para gerar Insights dinâmicos da IA
         function generateAIInsight(text) {
             const aiDisplay = document.getElementById('ai-insight');
