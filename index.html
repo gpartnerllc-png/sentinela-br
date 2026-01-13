@@ -307,8 +307,8 @@
 
     <div id="print-area" class="hidden"></div>
 
- <script>
-     // 1. BANCO DE DADOS LOCAL
+<script>
+    // 1. BANCO DE DADOS LOCAL
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
         { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
     ];
@@ -320,25 +320,27 @@
     let somaScanner = 0;
     let itensLidos = new Set();
 
-    // Funções de Suporte (Essenciais para não dar erro)
-    function addLog(msg) { console.log(`[LOG]: ${msg}`); }
-    function generateAIInsight(msg) { console.log(`[AI]: ${msg}`); }
+    // Funções de Suporte Corrigidas
+    function addLog(msg) { 
+        const logContent = document.getElementById('logContent');
+        if(logContent) logContent.innerHTML += `> ${msg}<br>`;
+    }
+    function generateAIInsight(msg) { 
+        const aiInsight = document.getElementById('ai-insight');
+        if(aiInsight) aiInsight.innerText = msg;
+    }
     function updateDRE() { console.log("DRE Atualizado"); }
-
+    
     // 2. AUTENTICAÇÃO
     function checkV12Auth() {
         const email = document.getElementById('v12_email').value;
         const pass = document.getElementById('v12_pass').value;
-
         const user = v12_users.find(u => u.email === email && u.pass === pass);
 
         if (user) {
             if (user.status === "AUTHORIZED") {
                 document.getElementById('auth-gate').style.display = 'none';
                 addLog(`ACESSO AUTORIZADO: ${user.email.toUpperCase()}`);
-                generateAIInsight(`Sincronização via ${user.role} completa.`);
-
-                // Ativa painel se for ADMIN
                 if (user.role === "ADMIN") {
                     const painel = document.getElementById('admin-panel');
                     if (painel) {
@@ -347,10 +349,10 @@
                     }
                 }
             } else {
-                alert("ACESSO BLOQUEADO: Aguarde autorização do Administrador.");
+                alert("ACESSO BLOQUEADO: Aguarde autorização.");
             }
         } else {
-            alert("ACESSO NEGADO: Credenciais não encontradas.");
+            alert("ACESSO NEGADO.");
         }
     }
 
@@ -371,42 +373,49 @@
         }
     }
 
-    // 4. DESENHAR TABELA
+    // 4. PAINEL ADMIN (CORREÇÃO DA PARTE QUE TRAVOU)
     function atualizarPainelAdmin() {
         const tabela = document.getElementById('user-list-table');
         if (!tabela) return;
 
         tabela.innerHTML = ''; 
 
-        v12_users.forEach((user) => {
+        v12_users.forEach((user, index) => {
             if (user.role === "ADMIN") return;
 
             const corStatus = user.status === "AUTHORIZED" ? "text-green-400" : "text-yellow-500";
-
+            
+            // Aqui montamos a linha da tabela
             tabela.innerHTML += `
-                <tr class="border-b border-slate-800">
-                    <td class="py-2 px-1 text-[10px] text-white">${user.email}</td>
-                    <td class="py-2 px-1 text-[10px] ${corStatus} font-bold">${user.status}</td>
-                    <td class="py-2 px-1 flex gap-2">
-                        <button onclick="autorizarAcessoV12('${user.email}')" class="bg-green-600 px-2 py-1 rounded text-white text-[9px] font-bold">AUTORIZAR</button>
-                        <button onclick="removerUsuarioV12('${user.email}')" class="bg-red-600 px-2 py-1 rounded text-white text-[9px] font-bold">REMOVER</button>
+                <tr class="border-b border-slate-700">
+                    <td class="py-2">${user.email}</td>
+                    <td class="py-2 ${corStatus}">${user.status}</td>
+                    <td class="py-2">
+                        <button onclick="autorizarUser(${index})" class="text-orange-500 font-bold">AUTORIZAR</button>
                     </td>
                 </tr>
             `;
-        });
+        }); // Fim do forEach
+    } // Fim da função atualizarPainelAdmin
+
+    function autorizarUser(index) {
+        v12_users[index].status = "AUTHORIZED";
+        localStorage.setItem('v12_database', JSON.stringify(v12_users));
+        atualizarPainelAdmin();
+        alert("Usuário Autorizado!");
+    }// 5. FUNÇÃO EMITIR
+    function emitir(tipo) {
+        const nome = document.getElementById('nomeInput').value;
+        const valor = document.getElementById('valorInput').value;
+        const printArea = document.getElementById('print-area');
+        
+        printArea.innerHTML = `<h1>SENTINELA V12</h1><p>CLIENTE: ${nome}</p><p>VALOR: ${valor}</p>`;
+        printArea.classList.remove('hidden');
+        window.print();
+        printArea.classList.add('hidden');
     }
 
-    // 5. AUTORIZAR
-    function autorizarAcessoV12(email) {
-        const user = v12_users.find(u => u.email === email);
-        if (user) {
-            user.status = "AUTHORIZED";
-            salvarEAtualizarV12();
-            alert("SISTEMA: Acesso autorizado para " + email);
-        }
-    }
-
-    // 6. REMOVER
+   // 6. REMOVER
     function removerUsuarioV12(email) {
         if (confirm("Deseja remover este usuário permanentemente?")) {
             v12_users = v12_users.filter(u => u.email !== email);
@@ -417,9 +426,21 @@
     // 7. SALVAR
     function salvarEAtualizarV12() {
         localStorage.setItem('v12_database', JSON.stringify(v12_users));
-        atualizarPainelAdmin();
+        if (typeof atualizarPainelAdmin === "function") {
+            atualizarPainelAdmin();
+        }
     }
-}
+
+    // 8. CÁLCULO FISCAL (Para o valorInput funcionar)
+    function calcFiscal() {
+        const valor = parseFloat(document.getElementById('valorInput').value) || 0;
+        const cbs = valor * 0.009;
+        const ibs = valor * 0.001;
+        
+        if(document.getElementById('cbsVal')) document.getElementById('cbsVal').innerText = `R$ ${cbs.toFixed(2)}`;
+        if(document.getElementById('ibsVal')) document.getElementById('ibsVal').innerText = `R$ ${ibs.toFixed(2)}`;
+        if(document.getElementById('liqVal')) document.getElementById('liqVal').innerText = `R$ ${valor.toFixed(2)}`;
+    }
     function liberarUsuario(email) {
         let user = v12_users.find(u => u.email === email);
         if(user) {
