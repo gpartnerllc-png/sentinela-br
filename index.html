@@ -300,58 +300,44 @@
     <div id="print-area" class="hidden"></div>
 
     
-    <script>
-// ==================================================
-// 1. NÚCLEO DE DADOS V12 (PROTEGIDO)
-// ==================================================
+    <script><script>
+// ==========================================
+// NÚCLEO DE DADOS V12 (UNIFICADO)
+// ==========================================
 let v12_finance, v12_users;
 const SERIAL_P2 = "PB1F252F75254";
 const ACCESS_KEY = "20260112PB1F252F75254";
 
 try {
-    // Tenta carregar os dados. Se estiverem corrompidos, usa o padrão.
+    // Tenta carregar os dados com segurança
     v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0 };
     v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
         { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
     ];
+    console.log("Database V12 carregada com sucesso.");
 } catch (error) {
     console.error("Erro na Database V12: Resetando para o padrão.");
     v12_finance = { receita: 0, despesa: 0, invest: 0 };
     v12_users = [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
 }
-        <script>
 
-            </script>
-
-       <script>
-    function salvarTudoV12() {
-    try {
-        localStorage.setItem('v12_database', JSON.stringify(v12_users));
-        localStorage.setItem('v12_finance', JSON.stringify(v12_finance));
-    } catch (e) {
-        console.error("Espaço cheio no navegador.");
-    }
+// Função para salvar que evita o erro de 'não salvou'
+function salvarTudoV12() {
+    localStorage.setItem('v12_database', JSON.stringify(v12_users));
+    localStorage.setItem('v12_finance', JSON.stringify(v12_finance));
 }
+
+// Inicialização única para não travar o logo
+window.onload = function() {
+    if (typeof capturarDadosRede === "function") capturarDadosRede();
+    
+    // Esconde o logo/tela de carregamento
+    const loader = document.getElementById('loading-screen') || document.getElementById('logo');
+    if (loader) loader.style.display = 'none';
+    
+    console.log("SENTINELA V12: Sistema Desbloqueado.");
+};
 </script>
-
-    <script>
-        
-
-        // [B] MEIO DO SCRIPT: Funções de Comando (As que melhoramos)
-        function calcFiscal() { /* ... código que te passei ... */ }
-        function emitir(tipo) { /* ... código da DANFE ... */ }
-        function checkV12Auth() { /* ... código de login ... */ }
-        function salvarEAtualizarV12() { /* ... código de save ... */ }
-    </script>
-
-    <script>
-       window.onload = function() {
-    // 1. Executa a captura de rede
-    capturarDadosRede(); 
-
-    // 2. Inicia o sistema Sentinela
-    console.log("SENTINELA V12: Hardware " + SERIAL_P2 + " Conectado.");
-    addLog("Sistema em Standby. Aguardando Autoridade.");
     
     // 3. Atualiza o painel financeiro (DRE) logo na entrada
     if (typeof updateDRE === "function") {
