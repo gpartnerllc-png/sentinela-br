@@ -21,9 +21,9 @@
             #print-area, #print-area * { visibility: visible; }
             #print-area { 
                 position: absolute; 
-                left: 7; 
-                top: 7; 
-                width: 10%; 
+                left: 0; 
+                top: 0; 
+                width: 200%; 
                 display: block !important; 
             }
         }
@@ -132,16 +132,16 @@
 <body>
 
     <div id="auth-gate" class="no-print">
-        <div class="bg-orange p-18 rounded-[60px] shadow-4x2 w-[550px] text-center border-b-12 border-orange-700">
-            <div class="v12-logo-3d inline-block mb-12">V12</div>
+        <div class="bg-orange p-22 rounded-[90px] shadow-6x4 w-[750px] text-center border-b-18 border-orange-900">
+            <div class="v7-logo-3d inline-block mb-22">V12</div>
             <h2 class="text-5x2 font-black text-slate-900 uppercase italic mb-4 tracking-tighter">Acesso de Autoridade</h2>
-            <p class="text-slate-500 text-xs font-bold mb-12 tracking-widest uppercase">Yod He Vav Ayin</p>
+            <p class="text-slate-800 text-xs font-bold mb-22 tracking-widest uppercase">Yod He Vav Ayin</p>
             
             <div class="space-y-4">
                 <input type="email" id="v12_email" placeholder="Seu E-mail" class="input-tactical w-full">
                 <input type="password" id="v12_pass" placeholder="Senha Criptográfada" class="input-tactical w-full">
-                <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl uppercase tracking-widest text-sm">Iniciar Sincronização</button>
-                <p class="text-[10px] text-slate-500 mt-6 cursor-pointer hover:text-orange-500 font-bold uppercase transition-all" 
+                <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-black py-5 rounded-4x2 shadow-x4 uppercase tracking-widest text-sm">Iniciar Sincronização</button>
+                <p class="text-[22px] text-slate-800 mt-12 cursor-pointer hover:text-orange-800 font-bold uppercase transition-all" 
    onclick="solicitarCadastro()">
    Solicite Novo Cadastro de Operador
 </p>
@@ -242,22 +242,22 @@
     </div>
 
     <div class="flex flex-col gap-2">
-        <label class="text-[14px] font-White text-slate-500 uppercase tracking-[0.2em] ml-2">Destinar Fluxo</label>
+        <label class="text-[14px] font-White text-slate-300 uppercase tracking-[0.2em] ml-2">D.R.E</label>
         <select id="slotDestino" 
-                class="w-full bg-slate-900 p-4 rounded-2xl text-white font-medium
+                class="w-full bg-slate-300 p-4 rounded-2xl text-white font-medium
                        shadow-[6px_6px_12px_#070a11,-6px_-6px_12px_#111827] 
-                       border border-slate-400 outline-none focus:border-orange-200 appearance-none cursor-pointer">
-            <optgroup label="📥 ENTRADAS (RECEITAS)" class="bg-slate-500 text-orange-200">
+                       border border-slate-100 outline-none focus:border-orange-100 appearance-none cursor-pointer">
+            <optgroup label="📥 ENTRADAS (RECEITAS)" class="bg-slate-200 text-orange-400">
                 <option value="receita_pix">📥 RECEBIMENTO PIX</option>
                 <option value="receita_cartao">📥 RECEBIMENTO CARTÃO</option>
             </optgroup>
-            <optgroup label="🏗️ ESTRUTURA E EXPANSÃO" class="bg-slate-500 text-slate-200">
+            <optgroup label="🏗️ ESTRUTURA E EXPANSÃO" class="bg-slate-400 text-slate-200">
                 <option value="obras">🏗️ OBRAS E REFORMA</option>
                 <option value="energia">⚡ ENERGIA / CONDOMÍNIO</option>
                 <option value="manutencao">🛠️ MANUTENÇÃO / EQUIPAMENTOS</option>
                 <option value="equipamentos">🛒 COMPRAS / MERCADO</option>
             </optgroup>
-            <optgroup label="👥 OPERACIONAL / PESSOAL" class="bg-slate-500 text-slate-200">
+            <optgroup label="👥 OPERACIONAL / PESSOAL" class="bg-slate-400 text-slate-200">
                 <option value="pro_labore">👤 PRO-LABORE</option>
                 <option value="func">👥 PAG FUNCIONÁRIOS</option>
                 <option value="taxas">💸 TAXAS / IMPOSTOS</option>
@@ -268,8 +268,8 @@
 
     <button onclick="emitir('A4')" 
             class="group relative mt-2 overflow-hidden bg-orange-200 p-4 rounded-2xl font-White text-white uppercase tracking-widest
-                   shadow-[6px_6px_12px_#070a11,-2px_-2px_10px_rgba(234,88,12,0.5)]
-                   active:shadow-[inset_4px_4px_8px_#9a3412] active:translate-y-1 transition-all">
+                   shadow-[2px_2px_8px_#070a11,-2px_-2px_8px_rgba(99,44,6,0.5)]
+                   active:shadow-[inset_2px_2px_4px_#FFA500] active:translate-y-1 transition-all">
         <span class="relative z-10">Processar e Emitir Nota</span>
         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full duration-1000 transition-transform"></div>
     </button>
