@@ -299,44 +299,101 @@
 
     <div id="print-area" class="hidden"></div>
 
+    
     <script>
-    // [A] TOPO DO SCRIPT: Definições e Variáveis Globais
-        // É aqui que ficam os dados de hardware e financeiro que você perguntou.
-        let v12_finance = { receita: 0, despesa: 0, invest: 0 };
-        const SERIAL_P2 = "PB1F252F75254";
-        const ACCESS_KEY = "20260112PB1F252F75254";
-        let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
-            { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
-        ];
+// ==================================================
+// 1. NÚCLEO DE DADOS V12 (PROTEGIDO)
+// ==================================================
+let v12_finance, v12_users;
+const SERIAL_P2 = "PB1F252F75254";
+const ACCESS_KEY = "20260112PB1F252F75254";
+
+try {
+    // Tenta carregar os dados. Se estiverem corrompidos, usa o padrão.
+    v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0 };
+    v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
+        { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
+    ];
+} catch (error) {
+    console.error("Erro na Database V12: Resetando para o padrão.");
+    v12_finance = { receita: 0, despesa: 0, invest: 0 };
+    v12_users = [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
+}
+        <script>
+
+            </script>
+
+       <script>
+    function salvarTudoV12() {
+    try {
+        localStorage.setItem('v12_database', JSON.stringify(v12_users));
+        localStorage.setItem('v12_finance', JSON.stringify(v12_finance));
+    } catch (e) {
+        console.error("Espaço cheio no navegador.");
+    }
+}
+</script>
+
+    <script>
+        
 
         // [B] MEIO DO SCRIPT: Funções de Comando (As que melhoramos)
         function calcFiscal() { /* ... código que te passei ... */ }
         function emitir(tipo) { /* ... código da DANFE ... */ }
         function checkV12Auth() { /* ... código de login ... */ }
         function salvarEAtualizarV12() { /* ... código de save ... */ }
+    </script>
 
-        // [C] FINAL DO SCRIPT: Comando de Inicialização (Boot)
-        // Este comando roda assim que a página termina de carregar.
-        window.onload = function() {
-            console.log("SENTINELA V12: Hardware " + SERIAL_P2 + " Conectado.");
-            addLog("Sistema em Standby. Aguardando Autoridade.");
-            
+    <script>
+       window.onload = function() {
+    // 1. Executa a captura de rede
+    capturarDadosRede(); 
+
+    // 2. Inicia o sistema Sentinela
+    console.log("SENTINELA V12: Hardware " + SERIAL_P2 + " Conectado.");
+    addLog("Sistema em Standby. Aguardando Autoridade.");
+    
+    // 3. Atualiza o painel financeiro (DRE) logo na entrada
+    if (typeof updateDRE === "function") {
+        updateDRE();
+    }
+
+    // 4. Se existir um logo/tela de carregamento, esconde aqui
+    const loader = document.getElementById('loading-screen') || document.getElementById('logo');
+    if (loader) {
+        loader.style.display = 'none';
+    }
+};
+            </script>
+
+    <script>            
             // Verifica se já existe um admin e prepara a interface
             if(localStorage.getItem('v12_database')) {
                 console.log("Base de dados local sincronizada.");
             }
         };
+        
+    </script>
 
-
+<script>
+        
 let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
             { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
         ];
+
+</script>
+
+    <script>
 
         function addLog(msg) {
             const log = document.getElementById('logContent');
             log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
             log.scrollTop = log.scrollHeight;
         }
+
+    </script>
+
+    <script>
 
         // --- 1. LOGIN ---
         function checkV12Auth() {
@@ -360,7 +417,9 @@ let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
                 alert("Credenciais Inválidas.");
             }
         }
+</script>
 
+    <script>
         // --- 2. CADASTRO ---
         function solicitarCadastro() {
             const email = prompt("E-mail do novo comando:");
@@ -372,7 +431,9 @@ let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
                 alert("Solicitado! Peça ao Admin para liberar.");
             }
         }
+    </script>
 
+    <script>
         // --- 3. PAINEL ADMIN ---
         function atualizarPainelAdmin() {
             const tabela = document.getElementById('user-list-table');
@@ -410,7 +471,9 @@ let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
                 addLog(`USUÁRIO REMOVIDO.`);
             }
         }
+    </script>
 
+    <script>
         // --- 4. FISCAL ---
         function calcFiscal() {
             const v = parseFloat(document.getElementById('valorInput').value) || 0;
@@ -418,7 +481,9 @@ let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
             document.getElementById('ibsVal').innerText = `R$ ${(v * 0.001).toFixed(2)}`;
             document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
         }
+    </script>
 
+    <script>
         // --- 5. EMITIR (DANFE PREMIUM) ---
         function emitir(tipo) {
             const nome = document.getElementById('nomeInput').value;
@@ -427,7 +492,9 @@ let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
             const printArea = document.getElementById('print-area');
             const dataHora = new Date().toLocaleString('pt-BR');
        }
+    </script>
 
+    <script>
        // 6. REMOVER USUÁRIO COM LOG DE AUDITORIA
 function removerUsuarioV12(email) {
     // Evita que o admin se exclua por acidente
@@ -444,6 +511,9 @@ function removerUsuarioV12(email) {
     }
 }
 
+    </script>
+
+    <script>
 // 7. SALVAR E SINCRONIZAR DATABASE
 function salvarEAtualizarV12() {
     try {
@@ -460,7 +530,9 @@ function salvarEAtualizarV12() {
         addLog("ERRO AO SALVAR: Memória local cheia ou inacessível.");
     }
 }
+    </script>
 
+    <script>
 // 8. CÁLCULO FISCAL AVANÇADO (Refletindo na DANFE e Painel)
 function calcFiscal() {
     const valorRaw = document.getElementById('valorInput').value;
@@ -488,6 +560,9 @@ function calcFiscal() {
     }
 }
 
+    </script>
+
+    <script>
 // 9. LIBERAÇÃO RÁPIDA DE OPERADOR
 function liberarUsuario(email) {
     let userIndex = v12_users.findIndex(u => u.email === email);
@@ -506,7 +581,12 @@ function liberarUsuario(email) {
         addLog(`ERRO: Usuário ${email} não encontrado.`);
     }
 }  
-                             
+
+
+    </script>
+
+    <script>
+        
     let v12_finance = { receita: 0, despesa: 0, invest: 0 };
         
         // CORREÇÃO: Função de Login validando campos adicionados
@@ -522,7 +602,10 @@ function liberarUsuario(email) {
                 alert("ACESSO NEGADO: Verifique sua chave V12."); 
             }
         }
+    </script>
 
+    <script>
+        
         function v12NeuralOCR(input) {
             addLog("IA: Processando documento...");
             setTimeout(() => {
@@ -533,13 +616,19 @@ function liberarUsuario(email) {
                 generateAIInsight("Fluxo de saída detectado. IA correlacionando com movimentações de mercado.");
             }, 1000);
         }
+    </script>
 
+    <script>
+        
         function updateDRE() {
             document.getElementById('dre_receita').innerText = `R$ ${v12_finance.receita.toFixed(2)}`;
             document.getElementById('dre_despesa').innerText = `R$ ${v12_finance.despesa.toFixed(2)}`;
             document.getElementById('dre_invest').innerText = `R$ ${v12_finance.invest.toFixed(2)}`;
         }
+    </script>
 
+    <script>
+        
         let somaScanner = 0;
         let itensLidos = new Set();
         let html5QrCode = null;
@@ -554,8 +643,25 @@ function liberarUsuario(email) {
                 addLog(`HARDWARE VALIDADO: Smart POS P2 [${SERIAL_P2}]`);
             }, 1000);
         }
-        window.onload = capturarDadosRede;
+    </script>
 
+     <script>    
+    // Tenta encontrar o ecrã de carregamento (logo) e escondê-lo
+    // Verifica se o teu HTML tem id="loading-screen" ou id="logo-overlay"
+    const logo = document.getElementById('loading-screen') || document.getElementById('logo');
+    
+    if (logo) {
+        logo.style.opacity = '0';
+        setTimeout(() => { logo.style.display = 'none'; }, 500);
+        console.log("Sistema Visível.");
+    } else {
+        console.error("Erro: Não encontrei o ID do logo para apagar da tela.");
+    }
+};
+    </script>
+
+    <script>
+        
         function executarPagamentoPOS() {
             const valor = document.getElementById('valorInput').value;
             if(!valor || valor == 0) return alert("Insira um valor.");
@@ -566,6 +672,10 @@ function liberarUsuario(email) {
             const intentUrl = `intent://pay?amount=${Math.round(valor*100)}&currency=BRL#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
             window.location.href = intentUrl;
         }
+
+    </script>
+
+    <script>
 
         async function toggleScanner() {
             const readerDiv = document.getElementById('reader');
@@ -590,7 +700,10 @@ function liberarUsuario(email) {
                 btn.innerText = "Bipar Produtos";
             }
         }
-
+    </script>
+        
+    <script>
+        
         function motorBusca(val) {
             const doc = val.replace(/\D/g, '');
             if (doc.length === 11 || doc.length === 14) {
@@ -600,20 +713,29 @@ function liberarUsuario(email) {
                 addLog("Identidade Liberada.");
             }
         }
+    </script>
 
+    <script>
+        
         function calcFiscal() {
             const v = parseFloat(document.getElementById('valorInput').value) || 0;
             document.getElementById('cbsVal').innerText = `R$ ${(v * 0.009).toFixed(2)}`;
             document.getElementById('ibsVal').innerText = `R$ ${(v * 0.001).toFixed(2)}`;
             document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
         }
+    </script>
 
+    <script>
+        
         function addLog(msg) {
             const log = document.getElementById('logContent');
             log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
             log.scrollTop = log.scrollHeight;
         }
+    </script>
 
+    <script>
+        
         function emitir(tipo) {
             const nome = document.getElementById('nomeInput').value;
             const valor = parseFloat(document.getElementById('valorInput').value) || 0;
@@ -622,7 +744,10 @@ function liberarUsuario(email) {
             
             const printArea = document.getElementById('print-area');
             const dataHora = new Date().toLocaleString('pt-BR');
+    </script>
 
+    <script>
+        
             function emitir(tipo) {
     // 1. CAPTURA DOS DADOS DO DOM
     const nome = document.getElementById('nomeInput').value;
@@ -630,33 +755,56 @@ function liberarUsuario(email) {
     const valorInput = document.getElementById('valorInput').value;
     const desc = document.getElementById('descInput').value || "PRODUTO V12 - R$ 0,00";
     const printArea = document.getElementById('print-area');
-    
+
+                </script>
+
+    <script>
+        
     // 2. VALIDAÇÃO BÁSICA
     if (!nome || !valorInput) {
         alert("Erro: Preencha o Nome e o Valor Operacional.");
         return;
     }
+
+    </script>
+
+    <script>
+        
                 function updateDRE() {
     // 1. Cálculos de base
     const receitaTotal = v12_finance.receita;
     const totalImpostos = receitaTotal * 0.01; // CBS (0.9%) + IBS (0.1%)
     const lucroLiquido = receitaTotal - totalImpostos;
+    </script>
 
+    <script>
     // 2. Atualização dos Elementos Visuais (Cards de Destaque)
     // Procure ou crie elementos com esses IDs no seu HTML
     if (document.getElementById('receita-display')) {
         document.getElementById('receita-display').innerText = `R$ ${receitaTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
     }
-    
+
+    </script>
+
+    <script>
+        
     if (document.getElementById('lucro-display')) {
         document.getElementById('lucro-display').innerText = `R$ ${lucroLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
         // Se o lucro for positivo, brilha em verde. Se negativo, vermelho.
         document.getElementById('lucro-display').style.color = lucroLiquido >= 0 ? "#10b981" : "#ef4444";
     }
 
+    </script>
+
+    <script>
+        
     // 3. Log de Auditoria Financeira
     console.log(`[DRE V12] Sincronizado: Receita R$ ${receitaTotal.toFixed(2)} | Lucro R$ ${lucroLiquido.toFixed(2)}`);
 }
+
+    </script>
+
+    <script>
                 function updateDRE() {
     // 1. Cálculos de base
     const receitaTotal = v12_finance.receita;
@@ -700,6 +848,10 @@ function liberarUsuario(email) {
 
     // ATUALIZA INTERFACE VISUAL
     updateDRE();
+        
+ </script>
+        
+ <script>
 
     // GERAÇÃO DO DOCUMENTO
     if (tipo === 'TERMICO') {
@@ -831,6 +983,10 @@ function liberarUsuario(email) {
     window.print();
 }
 
+ </script>
+
+    <script>
+        
         function validarNomeSeguro(el) {
             if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
                 alert("NOME COMPLETO REQUERIDO.");
