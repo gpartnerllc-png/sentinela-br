@@ -132,31 +132,31 @@
 <body>
 
     <div id="auth-gate" class="no-print">
-        <div class="bg-orange p-22 rounded-[90px] shadow-6x4 w-[750px] text-center border-b-18 border-orange-900">
+        <div class="bg-orange p-12 rounded-[80px] shadow-5x3 w-[650px] text-center border-b-38 border-orange-1000">
             <div class="v41-logo-3d inline-block mb-42">V12</div>
             <h2 class="text-5x2 font-gold text-slate-900 uppercase italic mb-4 tracking-tighter">Acesso de Autoridade</h2>
-            <p class="text-slate-800 text-xs font-bold mb-22 tracking-widest uppercase">Yod He Vav Ayin</p>
+            <p class="text-slate-1200 text-xs font-bold mb-42 tracking-widest uppercase">Yod He Vav Ayin</p>
             
-            <div class="space-y-4">
+            <div class="space-y-12">
                 <input type="email" id="v12_email" placeholder="Seu E-mail" class="input-tactical w-full">
                 <input type="password" id="v12_pass" placeholder="Senha Criptográfada" class="input-tactical w-full">
-                <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-gold py-7 rounded-6x3 shadow-x7 uppercase tracking-widest text-sm">Iniciar Sincronização</button>
-                <p class="text-[22px] text-slate-700 mt-22 cursor-pointer hover:text-orange-700 font-bold uppercase transition-all" 
+                <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-gold py-2 rounded-2x1 shadow-x4 uppercase tracking-widest text-sm">Iniciar Sincronização</button>
+                <p class="text-[22px] text-slate-800 mt-32 cursor-pointer hover:text-orange-700 font-bold uppercase transition-all" 
    onclick="solicitarCadastro()">
-   Solicite Novo Cadastro de Operador
+   Cadastre-se
 </p>
             </div>
         </div>
     </div>
 
     <div class="no-print">
-        <header class="auth-header p-5 flex justify-between items-center px-10">
-            <div class="flex items-center gap-8">
+        <header class="auth-header p-10 flex justify-between items-center px-20">
+            <div class="flex items-center gap-38">
                 <div class="v12-logo-3d">V12</div>
                 <div>
-                    <h1 class="text-2xl font-black tracking-tighter uppercase text-slate-800">S - <span class="text-orange-600">IHVH</span></h1>
+                    <h1 class="text-2xl font-black tracking-tighter uppercase text-slate-800"><span class="text-orange600">IHVH</span></h1>
                     <div class="flex items-center gap-2">
-                        <span class="text-[9px] font-black bg-slate-800 text-white px-2 py-0.5 rounded">.</span>
+                        <span class="text-[9px] font-white bg-slate-800 text-white px-2 py-0.5 rounded"></span>
                         <span id="network-badge" class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">BUSCANDO REDE...</span>
                     </div>
                 </div>
