@@ -183,14 +183,14 @@
                     <div class="flex items-center justify-between mb-10 border-b border-slate-100 pb-6">
                         <div class="flex items-center gap-4">
                             <div class="w-3 h-10 bg-orange-500 rounded-full shadow-lg shadow-orange-200"></div>
-                            <h2 class="text-xl font-black text-slate-700 uppercase italic">Central</h2>
+                            <h2 class="text-xl font-black text-slate-700 uppercase italic"></h2>
                         </div>
                         <div class="flex gap-2">
-                             <label class="bg-blue-600 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-colors cursor-pointer">
-                                OCR IA
+                             <label class="bg-blue-900 text-white px-6 py-4 rounded-lg text-[12px] font-black uppercase tracking-widest hover:bg-blue-800 transition-colors cursor-pointer">
+                                Leitor Nota Fiscal
                                 <input type="file" class="hidden" onchange="v12NeuralOCR(this)">
                             </label>
-                            <button id="btnScanner" onclick="toggleScanner()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-colors">
+                            <button id="btnScanner" onclick="toggleScanner()" class="bg-slate-800 text-white px-7 py-5 rounded-lg text-[12px] font-black uppercase tracking-widest hover:bg-orange-800 transition-colors">
                                 Bipar Produtos
                             </button>
                         </div>
@@ -200,27 +200,27 @@
 
                     <div class="grid grid-cols-6 gap-8">
                         <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Identificador (CPF/CNPJ)</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">ID - (CPF/CNPJ)</label>
                             <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
                         </div>
 
                         <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Valor Operacional (R$)</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Valor (R$)</label>
                             <input type="number" id="valorInput" oninput="calcFiscal()" class="input-tactical w-full text-2xl text-orange-600" placeholder="0,00">
                         </div>
 
                         <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail do Cliente</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail</label>
                             <input type="email" id="emailInput" class="input-tactical w-full text-slate-800" placeholder="contato@exemplo.com">
                         </div>
 
                         <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp / Telefone</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp</label>
                             <input type="text" id="telInput" class="input-tactical w-full text-slate-800" placeholder="(00) 00000-0000">
                         </div>
 
                         <div class="col-span-6">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome de Registro (Segurança V12)</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome</label>
                             <input type="text" id="nomeInput" onblur="validarNomeSeguro(this)" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação...">
                         </div>
 
@@ -271,8 +271,8 @@
                         </div>
                         <div class="terminal-log shadow-xl">
                     <div class="flex justify-between border-b border-white/5 pb-2 mb-3">
-                        <span class="font-black text-[10px] uppercase tracking-[0.3em] text-orange-400">Gemini AI Advisor</span>
-                        <span class="text-[10px] text-slate-500 font-mono">NODE_ISR_V12</span>
+                        <span class="font-black text-[10px] uppercase tracking-[0.3em] text-orange-400">Gemini AI</span>
+                        <span class="text-[10px] text-slate-500 font-mono">ihvh</span>
                     </div>
                         <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
                             <div class="bg-orange-500 h-full w-[85%]"></div>
@@ -287,6 +287,25 @@
     <div id="print-area" class="hidden"></div>
 
     <script>
+        // 1. BANCO DE DADOS LOCAL
+    
+    let v12_finance = { receita: 0, despesa: 0, invest: 0 };
+    const SERIAL_P2 = "PB1F252F75254";
+    const ACCESS_KEY = "20260112PB1F252F75254";
+    let html5QrCode = null;
+    let somaScanner = 0;
+    let itensLidos = new Set();
+
+    // Funções de Suporte Corrigidas
+    function addLog(msg) { 
+        const logContent = document.getElementById('logContent');
+        if(logContent) logContent.innerHTML += `> ${msg}<br>`;
+    }
+    function generateAIInsight(msg) { 
+        const aiInsight = document.getElementById('ai-insight');
+        if(aiInsight) aiInsight.innerText = msg;
+    }
+    function updateDRE() { console.log("DRE Atualizado"); }
         let v12_finance = { receita: 0, despesa: 0, invest: 0 };
         
         // CORREÇÃO: Função de Login validando campos adicionados
