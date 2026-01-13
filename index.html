@@ -186,11 +186,11 @@
                             <h2 class="text-xl font-black text-slate-700 uppercase italic"></h2>
                         </div>
                         <div class="flex gap-2">
-                           <label class="bg-blue-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-colors cursor-pointer">
+                           <label class="bg-blue-880 text-white px-5 py-2 rounded-lg text-[12px] font-black uppercase tracking-widest hover:bg-blue-700 transition-colors cursor-pointer">
                              OCR IA
                                 <input type="file" class="hidden" onchange="v12NeuralOCR(this)">
                          </label>
-                          <button id="btnScanner" onclick="toggleScanner()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-colors">
+                          <button id="btnScanner" onclick="toggleScanner()" class="bg-slate-880 text-white px-5 py-2 rounded-lg text-[12px] font-black uppercase tracking-widest hover:bg-orange-600 transition-colors">
                              Bipar Produtos
                             </button>
                         </div>
@@ -200,17 +200,17 @@
 
                     <div class="grid grid-cols-6 gap-8">
                         <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Identificador (CPF/CNPJ)</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">ID - (CPF/CNPJ)</label>
                             <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
                         </div>
 
                         <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Valor Operacional (R$)</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Valor-(R$)</label>
                             <input type="number" id="valorInput" oninput="calcFiscal()" class="input-tactical w-full text-2xl text-orange-600" placeholder="0,00">
                         </div>
 
                         <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail do Cliente</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail</label>
                             <input type="email" id="emailInput" class="input-tactical w-full text-slate-800" placeholder="contato@exemplo.com">
                         </div>
 
