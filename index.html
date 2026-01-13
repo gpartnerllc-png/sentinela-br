@@ -300,10 +300,12 @@
         const logContent = document.getElementById('logContent');
         if(logContent) logContent.innerHTML += `> ${msg}<br>`;
     }
+        
     function generateAIInsight(msg) { 
         const aiInsight = document.getElementById('ai-insight');
         if(aiInsight) aiInsight.innerText = msg;
     }
+        
     function updateDRE() { console.log("DRE Atualizado");
     }        
     
