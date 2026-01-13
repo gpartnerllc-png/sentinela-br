@@ -121,7 +121,10 @@
                 <input type="email" id="v12_email" placeholder="E-mail de Comando" class="input-tactical w-full">
                 <input type="password" id="v12_pass" placeholder="Chave Criptográfica" class="input-tactical w-full">
                 <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl uppercase tracking-widest text-sm">Iniciar Sincronização</button>
-               <p class="text-[10px] text-slate-400 mt-4 cursor-pointer hover:text-orange-500 font-bold uppercase" onclick="solicitarCadastro()">Solicitar novo cadastro</p>
+                <p class="text-[10px] text-slate-400 mt-4 cursor-pointer hover:text-orange-500 font-bold uppercase" onclick="alert('Solicite autorização ao Administrador V12.')">Solicitar novo cadastro</p>
+                <p class="text-[10px] text-slate-400 mt-4 cursor-pointer hover:text-orange-500 font-bold uppercase" onclick="solicitarCadastro()">Solicitar novo cadastro</p>
+              <button onclick="checkV12Auth()" class="...">ENTRAR NO SISTEMA</button>
+                <p onclick="solicitarCadastro()" class="...">Solicitar novo cadastro</p>
             </div>
             <div id="admin-panel" style="display:none;" class="mt-8 p-4 bg-slate-900 border border-orange-500 rounded-xl shadow-2xl">
     <h3 class="text-orange-500 font-bold mb-4 uppercase tracking-widest text-sm">Controle de Autoridade V12</h3>
@@ -366,8 +369,8 @@
                 alert("Este e-mail já está na fila de espera.");
                 return;
             }
-            v12_users.push({ email: email, pass: pass, status: "PENDING", role: "OPERATOR" });
-            localStorage.setItem('v12_database', JSON.stringify(v12_users));
+            v12_users.push({ email: email, pass: pass, status: "PENDING", role: "OPERATOR" };
+            localStorage.setItem('v12_database', JSON.stringify(v12_users);
             alert("Solicitação enviada! Peça ao Administrador para autorizar.");
             addLog(`NOVA SOLICITAÇÃO: ${email}`);
         }
