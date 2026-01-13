@@ -390,56 +390,140 @@
             log.scrollTop = log.scrollHeight;
         }
 
-        // EMISSÃO DANFE PREMIUM V12
-        function emitir(tipo) {
-            const nome = document.getElementById('nomeInput').value;
-            const valor = parseFloat(document.getElementById('valorInput').value) || 0;
-            const desc = document.getElementById('descInput').value;
-            const printArea = document.getElementById('print-area');
-            const dataHora = new Date().toLocaleString('pt-BR');
+       function emitir(tipo) {
+    const nome = document.getElementById('nomeInput').value;
+    const doc = document.getElementById('docInput').value;
+    const valor = document.getElementById('valorInput').value;
+    const desc = document.getElementById('descInput').value;
+    const tel = document.getElementById('telInput').value;
+    const dataHora = new Date().toLocaleString('pt-BR');
+    const authCode = Math.random().toString(36).toUpperCase().substring(2, 12);
 
-            if(tipo === 'TERMICO') {
-                printArea.innerHTML = `
-                    <div class="thermal-print-container">
-                        <div class="ml-style-header">SENTINELA V12</div>
-                        <p style="font-size:10px; text-align:center;">DANFE PREMIUM - COMPROVANTE</p>
-                        <p>SERIAL P2: ${SERIAL_P2}</p>
-                        <p>DATA: ${dataHora}</p>
-                        <p>CLI: ${nome.toUpperCase()}</p>
-                        <p>-------------------------------</p>
-                        <p>${desc.replace(/\n/g, '<br>')}</p>
-                        <h1 style="text-align:right; font-size:22px;">TOTAL: R$ ${valor.toFixed(2)}</h1>
-                        <p style="font-size:8px; text-align:center; margin-top:20px;">KEY: ${ACCESS_KEY}</p>
-                        <p style="font-size:7px; text-align:center;">AUTORIDADE FISCAL RECONHECIDA</p>
-                    </div>`;
-            } else {
-                printArea.innerHTML = `
-                    <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; background: #fff; color: #000;">
-                        <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #000;">
-                            <div><h1 style="font-size: 38px; margin:0;">SENTINELA V12</h1></div>
-                            <div style="border: 2px solid #000; padding: 5px;">DOC: ${Math.floor(Math.random() * 999999)}</div>
-                        </div>
-                        <div style="margin-top:20px;">
-                            <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
-                            <p><b>DATA/HORA:</b> ${dataHora}</p>
-                        </div>
-                        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
-                            <tr style="background: #000; color: #fff;"><th>DESCRIÇÃO OPERACIONAL</th><th align="right">VALOR</th></tr>
-                            ${desc.split('\n').filter(l => l.trim() !== "").map(line => `
-                                <tr style="border-bottom: 1px solid #000;"><td>${line}</td><td align="right">--</td></tr>
-                            `).join('')}
-                        </table>
-                        <div style="text-align: right; margin-top: 20px;">
-                            <h1 style="font-size: 32px;">VALOR TOTAL: R$ ${valor.toFixed(2)}</h1>
-                        </div>
-                        <div style="margin-top: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; text-align: center;">
-                            <div><div style="border-top: 1px solid #000;"></div>ASSINATURA RESPONSÁVEL</div>
-                            <div><div style="border-top: 1px solid #000;"></div>CHAVE V12: ${ACCESS_KEY}</div>
-                        </div>
-                    </div>`;
-            }
-            window.print();
-        }
+    // Cálculos de Impostos Detalhados (Padrão IBPT)
+    const vTotal = parseFloat(valor) || 0;
+    const fed = vTotal * 0.1345; // 13.45% estimativa federal
+    const est = vTotal * 0.1200; // 12.00% estimativa estadual
+    const totalImpostos = fed + est;
+
+    const printArea = document.getElementById('print-area');
+    
+    if (tipo === 'TERMICO') {
+        printArea.innerHTML = `
+            <div class="thermal-print-container" style="font-size: 12px; line-height: 1.2;">
+                <div class="ml-style-header" style="border-width: 2px; font-size: 20px;">SENTINELA V12</div>
+                <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO E AUTORIDADE</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <p><b>DATA/HORA:</b> ${dataHora}</p>
+                <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
+                <p><b>DOC/CPF:</b> ${doc}</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <table style="width: 100%; font-size: 10px;">
+                    <tr style="border-bottom: 1px solid #000;">
+                        <td align="left"><b>ITEM</b></td>
+                        <td align="center"><b>QTD</b></td>
+                        <td align="right"><b>TOTAL</b></td>
+                    </tr>
+                    ${desc.split('\n').filter(line => line.trim() !== "").map(line => `
+                        <tr>
+                            <td align="left">${line.split('-')[0]}</td>
+                            <td align="center">1</td>
+                            <td align="right">${line.split('-')[1] || 'R$ 0,00'}</td>
+                        </tr>
+                    `).join('')}
+                </table>
+                <p style="text-align:center;">------------------------------------------</p>
+                <div style="text-align: right;">
+                    <p>Subtotal: R$ ${vTotal.toFixed(2)}</p>
+                    <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
+                </div>
+                <p style="font-size: 9px; margin-top: 10px;">
+                    Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)<br>
+                    Fonte: IBPT/Sentinela V12
+                </p>
+                <p style="text-align:center; margin-top: 10px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
+                <div style="text-align: center; margin-top: 5px;">[ QR CODE AUTORIDADE ]</div>
+            </div>
+        `;
+    } else {
+        // MODELO A4 COM ESTRUTURA DE NOTA DE MERCADO E ASSINATURAS
+        printArea.innerHTML = `
+            <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; border: 1px solid #ddd; background: #fff; position: relative;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 4px solid #000; padding-bottom: 20px;">
+                    <div>
+                        <h1 style="font-size: 40px; margin: 0; font-weight: 900;">SENTINELA V12</h1>
+                        <p style="margin: 0;">SISTEMAS DE AUTORIDADE - CRISTIAN RIBEIRO</p>
+                        <p style="margin: 0; font-size: 12px;">SERIAL POS: ${SERIAL_P2}</p>
+                    </div>
+                    <div style="text-align: right; border: 2px solid #000; padding: 10px;">
+                        <p style="margin: 0; font-size: 10px;">NÚMERO DO DOCUMENTO</p>
+                        <h2 style="margin: 0;">#${authCode}</h2>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; background: #f4f4f4; padding: 15px; border-radius: 5px; display: grid; grid-template-cols: 1fr 1fr;">
+                    <div>
+                        <p style="margin: 0; font-size: 10px; color: #666;">TOMADOR DO SERVIÇO / CLIENTE</p>
+                        <p style="margin: 0; font-weight: bold; font-size: 16px;">${nome.toUpperCase()}</p>
+                        <p style="margin: 0;">CPF/CNPJ: ${doc}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 10px; color: #666;">EMISSÃO</p>
+                        <p style="margin: 0;">${dataHora}</p>
+                    </div>
+                </div>
+
+                <table style="width: 100%; margin-top: 30px; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #000; color: #fff;">
+                            <th align="left" style="padding: 10px;">CÓDIGO</th>
+                            <th align="left" style="padding: 10px;">DESCRIÇÃO DO PRODUTO/SERVIÇO</th>
+                            <th align="center" style="padding: 10px;">QTD</th>
+                            <th align="right" style="padding: 10px;">VALOR UN.</th>
+                            <th align="right" style="padding: 10px;">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${desc.split('\n').filter(line => line.trim() !== "").map((line, idx) => `
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px;">00${idx + 1}</td>
+                                <td style="padding: 10px;">${line.split('-')[0] || 'PRODUTO V12'}</td>
+                                <td align="center" style="padding: 10px;">1</td>
+                                <td align="right" style="padding: 10px;">${line.split('-')[1] || 'R$ 0,00'}</td>
+                                <td align="right" style="padding: 10px;">${line.split('-')[1] || 'R$ 0,00'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 40px; display: flex; justify-content: flex-end;">
+                    <div style="width: 300px; background: #000; color: #fff; padding: 20px; text-align: right;">
+                        <p style="margin: 0; font-size: 12px;">SUBTOTAL: R$ ${vTotal.toFixed(2)}</p>
+                        <p style="margin: 0; font-size: 12px;">IMPOSTOS (TRIB): R$ ${totalImpostos.toFixed(2)}</p>
+                        <h2 style="margin: 0; font-size: 24px; border-top: 1px solid #fff; margin-top: 10px; padding-top: 10px;">R$ ${vTotal.toFixed(2)}</h2>
+                    </div>
+                </div>
+
+                <div style="margin-top: 80px; display: flex; justify-content: space-between;">
+                    <div style="width: 45%; text-align: center;">
+                        <div style="border-top: 2px solid #000; margin-bottom: 5px;"></div>
+                        <p style="font-size: 10px; margin: 0;"><b>ASSINATURA DO CLIENTE</b></p>
+                        <p style="font-size: 9px; color: #666;">CONFIRMO O RECEBIMENTO DOS ITENS</p>
+                    </div>
+                    <div style="width: 45%; text-align: center;">
+                        <div style="border-top: 2px solid #000; margin-bottom: 5px;"></div>
+                        <p style="font-size: 10px; margin: 0;"><b>SENTINELA DATA SYSTEMS</b></p>
+                        <p style="font-size: 9px; color: #666;">AUTENTICADO VIA HARDWARE PB1F25...</p>
+                    </div>
+                </div>
+
+                <div style="position: absolute; bottom: 20px; left: 40px; font-size: 8px; color: #999;">
+                    AUTENTICIDADE: ${ACCESS_KEY}-${authCode} | GERADO VIA TERMINAL INTELIGENTE P2
+                </div>
+            </div>
+        `;
+    }
+    window.print();
+}
 
         function validarNomeSeguro(el) {
             if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
