@@ -71,6 +71,7 @@
 
         #reader { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px; display: none; }
 
+        /* DANFE PREMIUM - ESTILIZAÇÃO TÉRMICA */
         .thermal-print-container {
             width: 80mm;
             background: white;
@@ -96,7 +97,6 @@
             #print-area { display: block !important; } 
         }
 
-        /* NOVOS ESTILOS ADICIONADOS */
         .ai-status-pulse { animation: pulse-ai 2s infinite; }
         @keyframes pulse-ai {
             0% { opacity: 1; }
@@ -121,7 +121,7 @@
                 <input type="email" id="v12_email" placeholder="E-mail de Comando" class="input-tactical w-full">
                 <input type="password" id="v12_pass" placeholder="Chave Criptográfica" class="input-tactical w-full">
                 <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl uppercase tracking-widest text-sm">Iniciar Sincronização</button>
-                <p class="text-[10px] text-slate-400 mt-4 cursor-pointer hover:text-orange-500 font-bold uppercase" onclick="alert('Solicite autorização ao Administrador V12 para novo cadastro.')">Solicitar novo cadastro</p>
+                <p class="text-[10px] text-slate-400 mt-4 cursor-pointer hover:text-orange-500 font-bold uppercase" onclick="alert('Solicite autorização ao Administrador V12.')">Solicitar novo cadastro</p>
             </div>
         </div>
     </div>
@@ -155,11 +155,11 @@
                         </div>
                         <div>
                             <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest">Alinhamento Estratégico</p>
-                            <p id="ai-insight" class="text-white text-xs font-medium italic">Análise de autoridade</p>
+                            <p id="ai-insight" class="text-white text-xs font-medium italic">Análise de autoridade V12 iniciada.</p>
                         </div>
                     </div>
                     <div class="text-right">
-                        <span class="text-[9px] text-slate-400 block uppercase font-bold">Status</span>
+                        <span class="text-[9px] text-slate-400 block uppercase font-bold">Status IA</span>
                         <span class="text-emerald-400 text-[10px] font-black uppercase">Mapeado</span>
                     </div>
                 </div>
@@ -183,7 +183,7 @@
                     <div class="flex items-center justify-between mb-10 border-b border-slate-100 pb-6">
                         <div class="flex items-center gap-4">
                             <div class="w-3 h-10 bg-orange-500 rounded-full shadow-lg shadow-orange-200"></div>
-                            <h2 class="text-xl font-black text-slate-700 uppercase italic">Central</h2>
+                            <h2 class="text-xl font-black text-slate-700 uppercase italic">Central Operacional</h2>
                         </div>
                         <div class="flex gap-2">
                              <label class="bg-blue-600 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-colors cursor-pointer">
@@ -215,42 +215,43 @@
                         </div>
 
                         <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp / Telefone</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp</label>
                             <input type="text" id="telInput" class="input-tactical w-full text-slate-800" placeholder="(00) 00000-0000">
                         </div>
 
                         <div class="col-span-6">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome de Registro (Segurança V12)</label>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome</label>
                             <input type="text" id="nomeInput" onblur="validarNomeSeguro(this)" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação...">
                         </div>
 
                         <div class="col-span-6">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens Escaneados</label>
-                            <textarea id="descInput" class="input-tactical w-full h-32 font-normal text-slate-600" placeholder="Os itens bipados aparecerão aqui automaticamente..."></textarea>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição / Itens</label>
+                            <textarea id="descInput" class="input-tactical w-full h-32 font-normal text-slate-600" placeholder="Itens bipados ou descrição manual..."></textarea>
                         </div>
                     </div>                    
                 </div>                         
+                
                 <div class="terminal-log shadow-xl">
                     <div id="logContent" class="h-32 overflow-y-auto leading-relaxed">
-                        > Sistema Inicializado...<br>
+                        > Sistema V12 Online...<br>
                     </div>
                 </div>
             </div>
 
             <div class="col-span-12 lg:col-span-4 space-y-6">
                 <div class="panel-3d p-8 border-t-8 border-orange-500">
-                    <h3 class="text-[12px] font-black text-center text-slate-400 uppercase mb-8 tracking-[0.2em]">Detalhamento Tributário</h3>
+                    <h3 class="text-[12px] font-black text-center text-slate-400 uppercase mb-8 tracking-[0.2em]">Resumo Fiscal</h3>
                     <div class="space-y-6 bg-orange-50/50 p-6 rounded-2xl border border-orange-100 shadow-inner">
                         <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">CBS (FEDERAL) 0.9%:</span>
+                            <span class="font-black text-slate-500 uppercase text-[11px]">CBS (0.9%):</span>
                             <span id="cbsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">IBS (EST/MUN) 0.1%:</span>
+                            <span class="font-black text-slate-500 uppercase text-[11px]">IBS (0.1%):</span>
                             <span id="ibsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
                         </div>
                         <div class="border-t-2 border-orange-200/50 pt-6 flex justify-between items-center">
-                            <span class="text-sm font-black text-slate-700 uppercase">Valor Total:</span>
+                            <span class="text-sm font-black text-slate-700 uppercase">Total Bruto:</span>
                             <span id="liqVal" class="text-3xl font-black text-orange-600">R$ 0,00</span>
                         </div>
                     </div>
@@ -258,11 +259,21 @@
                     <div class="mt-10 space-y-4">
                         <button onclick="emitir('A4')" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl uppercase text-sm">Emitir DANFE (A4)</button>
                         <button onclick="executarPagamentoPOS()" class="w-full bg-emerald-600 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Pagar via Antena Hardware</button>
-                        <button onclick="emitir('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Imp. Térmica / PDV Móvel</button>
+                        <button onclick="emitir('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Imp. Térmica (DANFE Premium)</button>
                     </div>
                 </div>
                 
                 <div class="panel-3d p-6 bg-slate-900 border-none">
+                    <h3 class="text-[10px] font-black text-orange-500 uppercase mb-4 tracking-widest">Hardware Intelligence</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-[10px] font-mono">
+                            <span class="text-slate-400">ENERGIA:</span>
+                            <span class="text-emerald-400 font-bold">STABLE</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
+                            <div class="bg-orange-500 h-full w-[92%]"></div>
+                        </div>
+                        <div class="panel-3d p-6 bg-slate-900 border-none">
                     <h3 class="text-[10px] font-black text-orange-500 uppercase mb-4 tracking-widest">Monitoramento</h3>
                     <div class="space-y-3">
                         <div class="flex justify-between text-[10px] font-mono">
@@ -274,10 +285,6 @@
                         <span class="font-black text-[10px] uppercase tracking-[0.3em] text-orange-400">Gemini AI Advisor</span>
                         <span class="text-[10px] text-slate-500 font-mono">NODE_ISR_V12</span>
                     </div>
-                        <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                            <div class="bg-orange-500 h-full w-[85%]"></div>
-                        </div>
-                        <p class="text-[9px] text-slate-500 italic"></p>
                     </div>
                 </div>
             </div>
@@ -288,29 +295,31 @@
 
     <script>
         let v12_finance = { receita: 0, despesa: 0, invest: 0 };
-        
-        // CORREÇÃO: Função de Login validando campos adicionados
+        const SERIAL_P2 = "PB1F252F75254";
+        const ACCESS_KEY = "20260112PB1F252F75254";
+        let html5QrCode = null;
+        let somaScanner = 0;
+        let itensLidos = new Set();
+
         function checkV12Auth() {
             const email = document.getElementById('v12_email').value;
             const pass = document.getElementById('v12_pass').value;
-            
             if(email.length > 5 && pass === "ihvh2026") {
                 document.getElementById('auth-gate').style.display = 'none';
                 addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
-                generateAIInsight("Sincronização completa.");
+                generateAIInsight("Sincronização com Hardware P2 completa.");
             } else { 
-                alert("ACESSO NEGADO: Verifique sua chave V12."); 
+                alert("ACESSO NEGADO."); 
             }
         }
 
         function v12NeuralOCR(input) {
-            addLog("IA: Processando documento...");
+            addLog("IA: Mapeando caracteres do documento...");
             setTimeout(() => {
                 let val = Math.floor(Math.random() * 200) + 50;
                 v12_finance.despesa += val;
                 updateDRE();
-                addLog(`DESPESA DETECTADA: R$ ${val},00`);
-                generateAIInsight("Fluxo de saída detectado. IA correlacionando com movimentações de mercado.");
+                addLog(`DOCUMENTO PROCESSADO: R$ ${val},00`);
             }, 1000);
         }
 
@@ -320,40 +329,29 @@
             document.getElementById('dre_invest').innerText = `R$ ${v12_finance.invest.toFixed(2)}`;
         }
 
-        let somaScanner = 0;
-        let itensLidos = new Set();
-        let html5QrCode = null;
-        const SERIAL_P2 = "PB1F252F75254";
-        const ACCESS_KEY = "20260112PB1F252F75254";
-
-        async function capturarDadosRede() {
+        window.onload = () => {
             addLog("Mapeando autoridade de Hardware...");
             setTimeout(() => {
                 document.getElementById('network-badge').innerText = `P2: ${SERIAL_P2}`;
                 document.getElementById('network-badge').className = "text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded italic";
-                addLog(`HARDWARE VALIDADO: Smart POS P2 [${SERIAL_P2}]`);
             }, 1000);
-        }
-        window.onload = capturarDadosRede;
+        };
 
         function executarPagamentoPOS() {
             const valor = document.getElementById('valorInput').value;
             if(!valor || valor == 0) return alert("Insira um valor.");
             v12_finance.receita += parseFloat(valor);
             updateDRE();
-            addLog(`Invocando Hardware... R$ ${valor}`);
-            generateAIInsight("Transação em curso via Antena P2. Registrando autoridade fiscal.");
+            addLog(`Invocando Hardware Antena... R$ ${valor}`);
             const intentUrl = `intent://pay?amount=${Math.round(valor*100)}&currency=BRL#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
             window.location.href = intentUrl;
         }
 
         async function toggleScanner() {
             const readerDiv = document.getElementById('reader');
-            const btn = document.getElementById('btnScanner');
             if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
             if (readerDiv.style.display === 'none' || readerDiv.style.display === '') {
                 readerDiv.style.display = 'block';
-                btn.innerText = "FECHAR CÂMERA (X)";
                 await html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => {
                     if (itensLidos.has(txt)) return;
                     itensLidos.add(txt);
@@ -362,12 +360,10 @@
                     document.getElementById('valorInput').value = somaScanner.toFixed(2);
                     document.getElementById('descInput').value += `Item [${txt}] - R$ ${p},00\n`;
                     calcFiscal();
-                    generateAIInsight(`Item identificado: ${txt}. Integridade do ativo confirmada.`);
                 });
             } else {
                 await html5QrCode.stop();
                 readerDiv.style.display = 'none';
-                btn.innerText = "Bipar Produtos";
             }
         }
 
@@ -377,7 +373,7 @@
                 const nomeInput = document.getElementById('nomeInput');
                 nomeInput.readOnly = false;
                 nomeInput.focus();
-                addLog("Identidade Liberada.");
+                addLog("Identidade Liberada para preenchimento.");
             }
         }
 
@@ -385,7 +381,7 @@
             const v = parseFloat(document.getElementById('valorInput').value) || 0;
             document.getElementById('cbsVal').innerText = `R$ ${(v * 0.009).toFixed(2)}`;
             document.getElementById('ibsVal').innerText = `R$ ${(v * 0.001).toFixed(2)}`;
-            document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
+            document.getElementById('liqVal').innerText = `R$ v.toFixed(2)`;
         }
 
         function addLog(msg) {
@@ -394,12 +390,11 @@
             log.scrollTop = log.scrollHeight;
         }
 
+        // EMISSÃO DANFE PREMIUM V12
         function emitir(tipo) {
             const nome = document.getElementById('nomeInput').value;
             const valor = parseFloat(document.getElementById('valorInput').value) || 0;
             const desc = document.getElementById('descInput').value;
-            if(!nome || valor <= 0) return alert("Erro: Preencha Nome e Valor.");
-            
             const printArea = document.getElementById('print-area');
             const dataHora = new Date().toLocaleString('pt-BR');
 
@@ -407,37 +402,39 @@
                 printArea.innerHTML = `
                     <div class="thermal-print-container">
                         <div class="ml-style-header">SENTINELA V12</div>
+                        <p style="font-size:10px; text-align:center;">DANFE PREMIUM - COMPROVANTE</p>
                         <p>SERIAL P2: ${SERIAL_P2}</p>
                         <p>DATA: ${dataHora}</p>
                         <p>CLI: ${nome.toUpperCase()}</p>
                         <p>-------------------------------</p>
                         <p>${desc.replace(/\n/g, '<br>')}</p>
-                        <h1 style="text-align:right;">TOTAL: R$ ${valor.toFixed(2)}</h1>
-                        <p style="font-size:8px; text-align:center;">KEY: ${ACCESS_KEY}</p>
+                        <h1 style="text-align:right; font-size:22px;">TOTAL: R$ ${valor.toFixed(2)}</h1>
+                        <p style="font-size:8px; text-align:center; margin-top:20px;">KEY: ${ACCESS_KEY}</p>
+                        <p style="font-size:7px; text-align:center;">AUTORIDADE FISCAL RECONHECIDA</p>
                     </div>`;
             } else {
                 printArea.innerHTML = `
-                    <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; background: #fff;">
+                    <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; background: #fff; color: #000;">
                         <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #000;">
                             <div><h1 style="font-size: 38px; margin:0;">SENTINELA V12</h1></div>
-                            <div style="border: 2px solid #000; padding: 5px;">Nº ${Math.floor(Math.random() * 999999)}</div>
+                            <div style="border: 2px solid #000; padding: 5px;">DOC: ${Math.floor(Math.random() * 999999)}</div>
                         </div>
-                        <div style="margin-top:20px; border: 1px solid #000; padding: 10px;">
+                        <div style="margin-top:20px;">
                             <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
-                            <p><b>DATA:</b> ${dataHora}</p>
+                            <p><b>DATA/HORA:</b> ${dataHora}</p>
                         </div>
                         <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
-                            <tr style="background: #000; color: #fff;"><th>DESCRIÇÃO</th><th align="right">TOTAL</th></tr>
+                            <tr style="background: #000; color: #fff;"><th>DESCRIÇÃO OPERACIONAL</th><th align="right">VALOR</th></tr>
                             ${desc.split('\n').filter(l => l.trim() !== "").map(line => `
                                 <tr style="border-bottom: 1px solid #000;"><td>${line}</td><td align="right">--</td></tr>
                             `).join('')}
                         </table>
                         <div style="text-align: right; margin-top: 20px;">
-                            <h1 style="font-size: 32px;">TOTAL: R$ ${valor.toFixed(2)}</h1>
+                            <h1 style="font-size: 32px;">VALOR TOTAL: R$ ${valor.toFixed(2)}</h1>
                         </div>
                         <div style="margin-top: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; text-align: center;">
-                            <div><div style="border-top: 1px solid #000;"></div>ASSINATURA CLIENTE</div>
-                            <div><div style="border-top: 1px solid #000;"></div>CHAVE: ${ACCESS_KEY}</div>
+                            <div><div style="border-top: 1px solid #000;"></div>ASSINATURA RESPONSÁVEL</div>
+                            <div><div style="border-top: 1px solid #000;"></div>CHAVE V12: ${ACCESS_KEY}</div>
                         </div>
                     </div>`;
             }
@@ -451,10 +448,8 @@
             }
         }
 
-        // NOVO: Função para gerar Insights dinâmicos da IA
         function generateAIInsight(text) {
-            const aiDisplay = document.getElementById('ai-insight');
-            aiDisplay.innerText = text;
+            document.getElementById('ai-insight').innerText = text;
             addLog(`SENTINELA ANALÍTICO: ${text}`);
         }
     </script>
