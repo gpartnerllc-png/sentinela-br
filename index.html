@@ -127,7 +127,7 @@
     </div>
 
     <div class="no-print">
-        <header class="auth-header p-5 flex justify-between items-center px-10">
+        <header class="auth-header p-5 flex justify-between items-center px-12">
             <div class="flex items-center gap-8">
                 <div class="v12-logo-3d">V12</div>
                 <div>
@@ -187,7 +187,7 @@
                         </div>
                         <div class="flex gap-2">
                            <label class="bg-blue-900 text-white px-7 py-5 rounded-lg text-[12px] font-black uppercase tracking-widest hover:bg-blue-800 transition-colors cursor-pointer">
-                             Leitor de Nota Fiscal
+                             Leitor Nota Fiscal
                                 <input type="file" class="hidden" onchange="v12NeuralOCR(this)">
                          </label>
                           <button id="btnScanner" onclick="toggleScanner()" class="bg-slate-900 text-white px-7 py-5 rounded-lg text-[12px] font-black uppercase tracking-widest hover:bg-orange-800 transition-colors">
@@ -292,25 +292,61 @@
     <div id="print-area" class="hidden"></div>
 
     <script>
-        let v12_finance = { receita: 0, despesa: 0, invest: 0 };
-        const SERIAL_P2 = "PB1F252F75254";
-        const ACCESS_KEY = "20260112PB1F252F75254";
-        let html5QrCode = null;
-        let somaScanner = 0;
-        let itensLidos = new Set();
+    // 1. COMANDO DE BANCO DE DADOS (Inicia o sistema com o seu acesso mestre)
+    let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
+        { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
+    ];
 
-        function checkV12Auth() {
-            const email = document.getElementById('v12_email').value;
-            const pass = document.getElementById('v12_pass').value;
-            if(email.length > 5 && pass === "ihvh2026") {
+    let v12_finance = { receita: 0, despesa: 0, invest: 0 };
+    const SERIAL_P2 = "PB1F252F75254";
+    const ACCESS_KEY = "20260112PB1F252F75254";
+    let html5QrCode = null;
+    let somaScanner = 0;
+    let itensLidos = new Set();
+
+    // 2. COMANDO DE AUTENTICAÇÃO MULTI-USUÁRIO
+    function checkV12Auth() {
+        const email = document.getElementById('v12_email').value;
+        const pass = document.getElementById('v12_pass').value;
+
+        // Busca o usuário na base de dados
+        const user = v12_users.find(u => u.email === email && u.pass === pass);
+
+        if(user) {
+            if(user.status === "AUTHORIZED") {
                 document.getElementById('auth-gate').style.display = 'none';
-                addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
-                generateAIInsight("Sincronização com Hardware P2 completa.");
-            } else { 
-                alert("ACESSO NEGADO."); 
+                addLog(`ACESSO AUTORIZADO: ${user.email.toUpperCase()}`);
+                generateAIInsight(`Sincronização via ${user.role} completa.`);
+            } else {
+                alert("ACESSO BLOQUEADO: Aguarde autorização do Administrador.");
             }
+        } else { 
+            alert("ACESSO NEGADO: Credenciais não encontradas."); 
         }
+    }
 
+    // 3. COMANDO PARA SOLICITAR NOVO CADASTRO
+    function solicitarCadastro() {
+        const email = prompt("Digite o E-mail para o novo comando:");
+        const pass = prompt("Defina a Chave Criptográfica (Senha):");
+        
+        if(email && pass) {
+            v12_users.push({ email: email, pass: pass, status: "PENDING", role: "OPERATOR" });
+            localStorage.setItem('v12_database', JSON.stringify(v12_users));
+            alert("Solicitação enviada! Peça ao Administrador para autorizar seu Hardware.");
+            addLog(`NOVA SOLICITAÇÃO: ${email}`);
+        }
+    }
+
+    function liberarUsuario(email) {
+        let user = v12_users.find(u => u.email === email);
+        if(user) {
+            user.status = "AUTHORIZED";
+            localStorage.setItem('v12_database', JSON.stringify(v12_users));
+            console.log(`USUÁRIO ${email} LIBERADO!`);
+        }
+    }
+        
         function v12NeuralOCR(input) {
             addLog("IA: Mapeando caracteres do documento...");
             setTimeout(() => {
