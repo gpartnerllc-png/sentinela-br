@@ -121,8 +121,10 @@
                 <input type="email" id="v12_email" placeholder="E-mail de Comando" class="input-tactical w-full">
                 <input type="password" id="v12_pass" placeholder="Chave Criptográfica" class="input-tactical w-full">
                 <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl uppercase tracking-widest text-sm">Iniciar Sincronização</button>
-                <p class="text-[10px] text-slate-400 mt-4 cursor-pointer hover:text-orange-500 font-bold uppercase" onclick="solicitarCadastro()">Solicitar novo cadastro</p>
-
+                <p class="text-[10px] text-slate-400 mt-4 cursor-pointer hover:text-orange-500 font-bold uppercase transition-all" 
+   onclick="solicitarCadastro()">
+   Solicitar novo cadastro de operador
+</p>
             </div>
         </div>
     </div>
@@ -280,6 +282,16 @@
                         </div>
                         <p class="text-[9px] text-slate-500 italic"></p>
                     </div>
+                        <div class="grid grid-cols-12 gap-6 mb-8 no-print">
+    <div class="col-span-6 panel-3d p-6 border-l-8 border-blue-500">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Receita Bruta Acumulada</p>
+        <h2 id="receita-display" class="text-3xl font-black text-slate-800">R$ 0,00</h2>
+    </div>
+    <div class="col-span-6 panel-3d p-6 border-l-8 border-emerald-500">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Lucro Líquido (V12 Core)</p>
+        <h2 id="lucro-display" class="text-3xl font-black text-emerald-600">R$ 0,00</h2>
+    </div>
+</div>
                 </div>
             </div>
         </main>
@@ -624,7 +636,33 @@ function liberarUsuario(email) {
         alert("Erro: Preencha o Nome e o Valor Operacional.");
         return;
     }
+                function updateDRE() {
+    // 1. Cálculos de base
+    const receitaTotal = v12_finance.receita;
+    const totalImpostos = receitaTotal * 0.01; // CBS (0.9%) + IBS (0.1%)
+    const lucroLiquido = receitaTotal - totalImpostos;
 
+    // 2. Atualização dos Elementos Visuais (Cards de Destaque)
+    // Procure ou crie elementos com esses IDs no seu HTML
+    if (document.getElementById('receita-display')) {
+        document.getElementById('receita-display').innerText = `R$ ${receitaTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+    }
+    
+    if (document.getElementById('lucro-display')) {
+        document.getElementById('lucro-display').innerText = `R$ ${lucroLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+        // Se o lucro for positivo, brilha em verde. Se negativo, vermelho.
+        document.getElementById('lucro-display').style.color = lucroLiquido >= 0 ? "#10b981" : "#ef4444";
+    }
+
+    // 3. Log de Auditoria Financeira
+    console.log(`[DRE V12] Sincronizado: Receita R$ ${receitaTotal.toFixed(2)} | Lucro R$ ${lucroLiquido.toFixed(2)}`);
+}
+                function updateDRE() {
+    // 1. Cálculos de base
+    const receitaTotal = v12_finance.receita;
+    const totalImpostos = receitaTotal * 0.01; // CBS (0.9%) + IBS (0.1%)
+    const lucroLiquido = receitaTotal - totalImpostos;
+                    
     // 3. PROCESSAMENTO FINANCEIRO E TRIBUTÁRIO
     const vTotal = parseFloat(valorInput) || 0;
     const fed = vTotal * 0.1345; // Exemplo de carga federal (13.45%)
@@ -634,15 +672,45 @@ function liberarUsuario(email) {
     const dataHora = new Date().toLocaleString('pt-BR');
 
     // 4. LÓGICA DE GERAÇÃO DO DOCUMENTO
+    function emitir(tipo) {
+    // CAPTURA E VALIDAÇÃO
+    const nome = document.getElementById('nomeInput').value;
+    const valorInput = document.getElementById('valorInput').value;
+    const doc = document.getElementById('docInput').value || "000.000.000-00";
+    const desc = document.getElementById('descInput').value || "PRODUTO V12 - R$ 0,00";
+    const printArea = document.getElementById('print-area');
+    
+    if (!nome || !valorInput) {
+        alert("Erro: Preencha o Nome e o Valor Operacional.");
+        return;
+    }
+
+    // PROCESSAMENTO FINANCEIRO V12
+    const vTotal = parseFloat(valorInput) || 0;
+    const fed = vTotal * 0.1345; 
+    const est = vTotal * 0.07;   
+    const totalImpostosVenda = fed + est;
+    const authCode = Math.floor(100000 + Math.random() * 900000);
+    const dataHora = new Date().toLocaleString('pt-BR');
+
+    // ATUALIZAÇÃO DO CAIXA (SISTEMA DE AUTORIDADE)
+    v12_finance.receita += vTotal;
+    const receitaAcumulada = v12_finance.receita;
+    const lucroAcumulado = receitaAcumulada * 0.99; // Considerando taxa operacional V12
+
+    // ATUALIZA INTERFACE VISUAL
+    updateDRE();
+
+    // GERAÇÃO DO DOCUMENTO
     if (tipo === 'TERMICO') {
         printArea.innerHTML = `
             <div class="thermal-print-container" style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace;">
-                <div class="ml-style-header" style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">SENTINELA V12</div>
+                <div style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">SENTINELA V12</div>
                 <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO E AUTORIDADE</p>
                 <p style="text-align:center;">------------------------------------------</p>
-                <p><b>DATA/HORA:</b> ${dataHora}</p>
+                <p><b>DATA:</b> ${dataHora}</p>
                 <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
-                <p><b>DOC/CPF:</b> ${doc}</p>
+                <p><b>DOC:</b> ${doc}</p>
                 <p style="text-align:center;">------------------------------------------</p>
                 <table style="width: 100%; font-size: 10px;">
                     <tr style="border-bottom: 1px solid #000;">
@@ -652,31 +720,31 @@ function liberarUsuario(email) {
                     </tr>
                     ${desc.split('\n').filter(line => line.trim() !== "").map(line => {
                         const partes = line.split('-');
-                        const itemNome = partes[0] || "ITEM";
-                        const itemPreco = partes[1] || `R$ ${vTotal.toFixed(2)}`;
-                        return `
-                        <tr>
-                            <td align="left">${itemNome.trim()}</td>
+                        return `<tr>
+                            <td align="left">${(partes[0] || 'ITEM').trim()}</td>
                             <td align="center">1</td>
-                            <td align="right">${itemPreco.trim()}</td>
+                            <td align="right">${(partes[1] || 'R$ ' + vTotal.toFixed(2)).trim()}</td>
                         </tr>`;
                     }).join('')}
                 </table>
                 <p style="text-align:center;">------------------------------------------</p>
                 <div style="text-align: right;">
-                    <p>Subtotal: R$ ${vTotal.toFixed(2)}</p>
+                    <p style="margin:0;">Subtotal: R$ ${vTotal.toFixed(2)}</p>
                     <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
                 </div>
-                <p style="font-size: 9px; margin-top: 10px;">
-                    Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)<br>
-                    Fonte: IBPT/Sentinela V12
-                </p>
-                <p style="text-align:center; margin-top: 10px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
+
+                <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background: #f9f9f9; font-size: 10px;">
+                    <p style="margin:0; font-weight:bold; text-align:center;">RESUMO FINANCEIRO DO TERMINAL</p>
+                    <p style="margin:0;">RECEITA ACUMULADA: R$ ${receitaAcumulada.toFixed(2)}</p>
+                    <p style="margin:0;">LUCRO LÍQUIDO DIA: R$ ${lucroAcumulado.toFixed(2)}</p>
+                </div>
+
+                <p style="font-size: 9px; margin-top: 5px;">Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)</p>
+                <p style="text-align:center; margin-top: 5px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
                 <div style="text-align: center; margin-top: 5px; border: 1px dashed #000; padding: 5px; font-size: 10px;">[ QR CODE AUTORIDADE ]</div>
-            </div>
-        `;
+            </div>`;
     } else {
-        // VERSÃO A4 PREMIUM
+        // VERSÃO A4 PREMIUM COM DRE INTEGRADO
         printArea.innerHTML = `
             <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; border: 1px solid #ddd; background: #fff; position: relative; width: 210mm; min-height: 297mm; margin: auto;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 4px solid #000; padding-bottom: 20px;">
@@ -693,7 +761,7 @@ function liberarUsuario(email) {
 
                 <div style="margin-top: 30px; background: #f4f4f4; padding: 15px; border-radius: 5px; display: grid; grid-template-columns: 1fr 1fr;">
                     <div>
-                        <p style="margin: 0; font-size: 10px; color: #666;">TOMADOR DO SERVIÇO / CLIENTE</p>
+                        <p style="margin: 0; font-size: 10px; color: #666;">CLIENTE</p>
                         <p style="margin: 0; font-weight: bold; font-size: 16px;">${nome.toUpperCase()}</p>
                         <p style="margin: 0;">CPF/CNPJ: ${doc}</p>
                     </div>
@@ -707,7 +775,7 @@ function liberarUsuario(email) {
                     <thead>
                         <tr style="background: #000; color: #fff;">
                             <th align="left" style="padding: 10px;">CÓDIGO</th>
-                            <th align="left" style="padding: 10px;">DESCRIÇÃO DO PRODUTO/SERVIÇO</th>
+                            <th align="left" style="padding: 10px;">DESCRIÇÃO</th>
                             <th align="center" style="padding: 10px;">QTD</th>
                             <th align="right" style="padding: 10px;">VALOR UN.</th>
                             <th align="right" style="padding: 10px;">TOTAL</th>
@@ -728,10 +796,16 @@ function liberarUsuario(email) {
                     </tbody>
                 </table>
 
-                <div style="margin-top: 40px; display: flex; justify-content: flex-end;">
+                <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="width: 50%; border: 1px solid #000; padding: 15px; background: #f9f9f9;">
+                        <h3 style="margin: 0 0 10px 0; font-size: 12px; border-bottom: 1px solid #000;">CONSOLIDAÇÃO DRE TERMINAL</h3>
+                        <p style="margin: 2px 0; font-size: 11px;">RECEITA BRUTA DIA: R$ ${receitaAcumulada.toFixed(2)}</p>
+                        <p style="margin: 2px 0; font-size: 11px;">IMPOSTOS ACUMULADOS: R$ ${(receitaAcumulada * 0.2045).toFixed(2)}</p>
+                        <p style="margin: 5px 0 0 0; font-size: 12px; font-weight: bold;">LUCRO LÍQUIDO: R$ ${lucroAcumulado.toFixed(2)}</p>
+                    </div>
                     <div style="width: 300px; background: #000; color: #fff; padding: 20px; text-align: right;">
                         <p style="margin: 0; font-size: 12px;">SUBTOTAL: R$ ${vTotal.toFixed(2)}</p>
-                        <p style="margin: 0; font-size: 12px;">IMPOSTOS (TRIB): R$ ${totalImpostos.toFixed(2)}</p>
+                        <p style="margin: 0; font-size: 12px;">TRIBUTOS DA VENDA: R$ ${totalImpostosVenda.toFixed(2)}</p>
                         <h2 style="margin: 0; font-size: 24px; border-top: 1px solid #fff; margin-top: 10px; padding-top: 10px;">R$ ${vTotal.toFixed(2)}</h2>
                     </div>
                 </div>
@@ -739,25 +813,21 @@ function liberarUsuario(email) {
                 <div style="margin-top: 80px; display: flex; justify-content: space-between;">
                     <div style="width: 45%; text-align: center;">
                         <div style="border-top: 2px solid #000; margin-bottom: 5px;"></div>
-                        <p style="font-size: 10px; margin: 0;"><b>ASSINATURA DO CLIENTE</b></p>
-                        <p style="font-size: 9px; color: #666;">CONFIRMO O RECEBIMENTO DOS ITENS</p>
+                        <p style="font-size: 10px;"><b>ASSINATURA DO CLIENTE</b></p>
                     </div>
                     <div style="width: 45%; text-align: center;">
                         <div style="border-top: 2px solid #000; margin-bottom: 5px;"></div>
-                        <p style="font-size: 10px; margin: 0;"><b>SENTINELA DATA SYSTEMS</b></p>
-                        <p style="font-size: 9px; color: #666;">AUTENTICADO VIA HARDWARE PB1F25...</p>
+                        <p style="font-size: 10px;"><b>SENTINELA DATA SYSTEMS</b></p>
                     </div>
                 </div>
 
                 <div style="position: absolute; bottom: 20px; left: 40px; font-size: 8px; color: #999;">
-                    AUTENTICIDADE: ${ACCESS_KEY}-${authCode} | GERADO VIA TERMINAL INTELIGENTE P2
+                    AUTENTICIDADE: ${ACCESS_KEY}-${authCode} | ACUMULADO DRE ATUALIZADO NO ATO
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 
-    // 5. COMANDO DE IMPRESSÃO
-    addLog(`Documento #${authCode} enviado para fila de impressão.`);
+    addLog(`DRE INTEGRADO: Documento #${authCode} | Receita Dia: R$ ${receitaAcumulada.toFixed(2)}`);
     window.print();
 }
 
