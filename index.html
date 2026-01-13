@@ -132,16 +132,16 @@
 <body>
 
     <div id="auth-gate" class="no-print">
-        <div class="bg-orange p-12 rounded-[80px] shadow-5x3 w-[650px] text-center border-b-38 border-orange-1000">
-            <div class="v41-logo-3d inline-block mb-42">V12</div>
-            <h2 class="text-5x2 font-gold text-slate-900 uppercase italic mb-4 tracking-tighter">Acesso de Autoridade</h2>
-            <p class="text-slate-1200 text-xs font-bold mb-42 tracking-widest uppercase">Yod He Vav Ayin</p>
+        <div class="bg-orange p-2 rounded-[40px] shadow-2x1 w-[450px] text-center border-b-2 border-orange-800">
+            <div class="v12-logo-3d inline-block mb-51">V12</div>
+            <h2 class="text-0x2 font-gold text-slate-900 uppercase italic mb-2 tracking-tighter">Acesso de Autoridade</h2>
+            <p class="text-slate-10 text-xs font-bold mb-1 tracking-widest uppercase">Yod He Vav Ayin</p>
             
-            <div class="space-y-12">
+            <div class="space-y-2">
                 <input type="email" id="v12_email" placeholder="Seu E-mail" class="input-tactical w-full">
                 <input type="password" id="v12_pass" placeholder="Senha Criptográfada" class="input-tactical w-full">
-                <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-gold py-2 rounded-2x1 shadow-x4 uppercase tracking-widest text-sm">Iniciar Sincronização</button>
-                <p class="text-[22px] text-slate-800 mt-32 cursor-pointer hover:text-orange-700 font-bold uppercase transition-all" 
+                <button onclick="checkV12Auth()" class="btn-orange w-full text-white font-gold py-2 rounded-5x1 shadow-x5 uppercase tracking-widest text-sm">Iniciar Sincronização</button>
+                <p class="text-[8px] text-slate-800 mt-12 cursor-pointer hover:text-orange-700 font-bold uppercase transition-all" 
    onclick="solicitarCadastro()">
    Cadastre-se
 </p>
@@ -150,30 +150,30 @@
     </div>
 
     <div class="no-print">
-        <header class="auth-header p-10 flex justify-between items-center px-20">
-            <div class="flex items-center gap-38">
+        <header class="auth-header p-4 flex justify-between items-center px-4">
+            <div class="flex items-center gap-3">
                 <div class="v12-logo-3d">V12</div>
                 <div>
                     <h1 class="text-2xl font-black tracking-tighter uppercase text-slate-800"><span class="text-orange600">IHVH</span></h1>
                     <div class="flex items-center gap-2">
-                        <span class="text-[9px] font-white bg-slate-800 text-white px-2 py-0.5 rounded"></span>
-                        <span id="network-badge" class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">BUSCANDO REDE...</span>
+                        <span class="text-[14px] font-white bg-slate-800 text-white px-2 py-0.5 rounded"></span>
+                        <span id="network-badge" class="text-[14px] font-white bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">BUSCANDO REDE...</span>
                     </div>
                 </div>
             </div>
             
-            <div id="statusHw" class="bg-orange-50 px-4 py-2 rounded-lg border border-orange-200 flex items-center gap-3">
-                <span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
+            <div id="statusHw" class="bg-orange-50 px-2 py-2 rounded-lg border border-orange-200 flex items-center gap-3">
+                <span class="w-3 h-3 bg-emerald-50 rounded-full animate-ping"></span>
                 <span class="text-[11px] font-black uppercase text-emerald-600">Sistema Ativo</span>
             </div>
         </header>
 
-        <main class="max-w-[1600px] mx-auto p-8 grid grid-cols-12 gap-8">
-            <div class="col-span-12 lg:col-span-8 space-y-8">
+        <main class="max-w-[60px] mx-auto p-8 grid grid-cols-8 gap-8">
+            <div class="col-span-8 lg:col-span-8 space-y-8">
                 
                 <div class="prophetic-alert p-4 rounded-xl flex items-center justify-between shadow-lg">
                     <div class="flex items-center gap-4">
-                        <div class="bg-orange-500 p-2 rounded-lg ai-status-pulse">
+                        <div class="bg-orange-50 p-2 rounded-lg ai-status-pulse">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
                         <div>
@@ -182,8 +182,8 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <span class="text-[9px] text-slate-400 block uppercase font-bold">Status</span>
-                        <span class="text-emerald-400 text-[10px] font-black uppercase">Mapeado</span>
+                        <span class="text-[14px] text-slate-400 block uppercase font-bold">Status</span>
+                        <span class="text-emerald-400 text-[15px] font-black uppercase">Mapeado</span>
                     </div>
                 </div>
 
@@ -219,37 +219,31 @@
                         </div>
                     </div>
 
-                    <div id="reader"></div>
+             <div id="reader"></div>
 
-                    <div class="grid grid-cols-6 gap-8">
-                        <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">ID - (CPF/CNPJ)</label>
-                            <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
-                        </div>
-
-                       <div class="col-span-3 grid grid-cols-1 gap-6 p-6 bg-slate-90 rounded-3xl border border-slate-80 shadow-[2px_2px_6px_#FFFFFF,-2px_-2px_6px_#D4AF37]">
+        <div class="col-span-3 grid grid-cols-1 gap-6 p-6 bg-slate-90 rounded-3xl border border-slate-80 shadow-[2px_2px_6px_#FFFFFF,-2px_-2px_6px_#D4AF37]">
     
     <div class="flex flex-col gap-2">
-        <label class="text-[11px] font-black text-orange-100/30 uppercase tracking-[0.2em] ml-2">Financeiro (R$)</label>
+        <label class="text-[22px] font-black text-orange-100/30 uppercase tracking-[0.2em] ml-2">Financeiro (R$)</label>
         <div class="relative group">
             <input type="number" id="valorInput" oninput="calcFiscal()" 
                    class="w-full bg-slate-90 p-5 rounded-2xl text-3xl font-bold text-orange-80 
                           shadow-[inset_2px_62px_8px_#D4AF37,inset_-2px_-2px_8px_#D4AF37] 
-                          border-none outline-none focus:ring-2 focus:ring-orange-50/10 transition-all placeholder-slate-70" 
+                          border-none outline-none focus:ring-5 focus:ring-orange-80/20 transition-all placeholder-slate-80" 
                    placeholder="0,00">
-            <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-50 font-black">BRL</div>
+            <div class="absolute right-7 top-3/2 -translate-y-3/2 text-slate-150 font-black"></div>
         </div>
     </div>
 
     <div class="flex flex-col gap-2">
-        <label class="text-[14px] font-White text-slate-300 uppercase tracking-[0.2em] ml-2">D.R.E</label>
+        <label class="text-[44px] font-black text-slate-500 uppercase tracking-[2.2em] ml-6">D.R.E</label>
         <select id="slotDestino" 
-                class="w-full bg-slate-30 p-1 rounded-1x0 text-white font-medium
+                class="w-full bg-slate-30 p-1 rounded-1x0 text-orange-font-medium
                        shadow-[1px_1px_1px_#070a11,-2px_-2px_2px_#111827] 
                        border border-slate-20 outline-none focus:border-orange-20 appearance-none cursor-pointer">
             <optgroup label="📥 ENTRADAS (RECEITAS)" class="bg-slate-100 text-orange-100">
-                <option value="receita_pix">📥 RECEBIMENTO PIX</option>
-                <option value="receita_cartao">📥 RECEBIMENTO CARTÃO</option>
+                <option value="receita_pix">📥 pix</option>
+                <option value="receita_cartao">📥 Cartão</option>
             </optgroup>
             <optgroup label="🏗️ ESTRUTURA E EXPANSÃO" class="bg-slate-100 text-slate-100">
                 <option value="obras">🏗️ OBRAS E REFORMA</option>
@@ -275,22 +269,35 @@
     </button>
 </div>
 
-                        <div class="col-span-3">
-                            <label class="text-[2px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail</label>
+      
+                        
+        <div> 
+            <div class="grid grid-cols-6 gap-8">
+            <div class="col-span-7">
+            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">ID - (CPF/CNPJ)</label>
+            <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
+    </div>
+
+                       
+               
+                <div class="col-span-7">
+                            <label class="text-[5px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail</label>
                             <input type="email" id="emailInput" class="input-tactical w-full text-slate-800" placeholder="contato@exemplo.com">
                         </div>
 
-                        <div class="col-span-3">
+                        
+                
+                <div class="col-span-7">
                             <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp</label>
                             <input type="text" id="telInput" class="input-tactical w-full text-slate-800" placeholder="(00) 00000-0000">
                         </div>
 
-                        <div class="col-span-6">
+                        <div class="col-span-7">
                             <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome</label>
                             <input type="text" id="nomeInput" onblur="validarNomeSeguro(this)" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação...">
                         </div>
 
-                        <div class="col-span-6">
+                        <div class="col-span-7">
                             <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens Escaneados</label>
                             <textarea id="descInput" class="input-tactical w-full h-32 font-normal text-slate-600" placeholder="Os itens bipados aparecerão aqui automaticamente..."></textarea>
                         </div>
@@ -363,7 +370,7 @@
     <div id="print-area" class="hidden"></div>
 
     
-    <script><script>
+    <script>
 // ==========================================
 // NÚCLEO DE DADOS V12 (UNIFICADO)
 // ==========================================
@@ -804,30 +811,6 @@ function liberarUsuario(email) {
 
     <script>
         
-        function emitir(tipo) {
-            const nome = document.getElementById('nomeInput').value;
-            const valor = parseFloat(document.getElementById('valorInput').value) || 0;
-            const desc = document.getElementById('descInput').value;
-            if(!nome || valor <= 0) return alert("Erro: Preencha Nome e Valor.");
-            
-            const printArea = document.getElementById('print-area');
-            const dataHora = new Date().toLocaleString('pt-BR');
-    </script>
-
-    <script>
-        
-            function emitir(tipo) {
-    // 1. CAPTURA DOS DADOS DO DOM
-    const nome = document.getElementById('nomeInput').value;
-    const doc = document.getElementById('docInput').value || "000.000.000-00";
-    const valorInput = document.getElementById('valorInput').value;
-    const desc = document.getElementById('descInput').value || "PRODUTO V12 - R$ 0,00";
-    const printArea = document.getElementById('print-area');
-
-                </script>
-
-    <script>
-        
     // 2. VALIDAÇÃO BÁSICA
     if (!nome || !valorInput) {
         alert("Erro: Preencha o Nome e o Valor Operacional.");
@@ -887,14 +870,6 @@ function liberarUsuario(email) {
     const authCode = Math.floor(100000 + Math.random() * 900000); // Código de documento único
     const dataHora = new Date().toLocaleString('pt-BR');
 
-    // 4. LÓGICA DE GERAÇÃO DO DOCUMENTO
-    function emitir(tipo) {
-    // CAPTURA E VALIDAÇÃO
-    const nome = document.getElementById('nomeInput').value;
-    const valorInput = document.getElementById('valorInput').value;
-    const doc = document.getElementById('docInput').value || "000.000.000-00";
-    const desc = document.getElementById('descInput').value || "PRODUTO V12 - R$ 0,00";
-    const printArea = document.getElementById('print-area');
     
     if (!nome || !valorInput) {
         alert("Erro: Preencha o Nome e o Valor Operacional.");
@@ -918,86 +893,41 @@ function liberarUsuario(email) {
     updateDRE();
         
  </script>
-
-    <script>
-        function emitir(tipo) {
-    // 1. CAPTURA DOS INPUTS
-    const nome = document.getElementById('nomeInput')?.value || "CLIENTE V12";
-    const valorRaw = document.getElementById('valorInput')?.value || "0";
-    const doc = document.getElementById('docInput')?.value || "000.000.000-00";
-    const desc = document.getElementById('descInput')?.value || "PRODUTO V12";
-    const printArea = document.getElementById('print-area');
-
-    </script>
-    
+                
     <script>
 
-    // 2. CÁLCULOS NECESSÁRIOS (O que estava faltando)
-    const vTotal = parseFloat(valorRaw) || 0;
-    if (vTotal <= 0) {
-        alert("ALERTA: Insira um valor válido para emitir.");
-        return;
-    }
-    </script>
+            if (vTotal <= 0) return alert("ERRO: Defina um valor de autoridade.");
 
-        <script>
-
+    // 1. ATUALIZA O DRE INTERNO (Slots)
+    if (!v12_finance.detalhado) v12_finance.detalhado = {};
+    const authCode = Math.floor(Math.random() * 900000) + 100000;
     const dataHora = new Date().toLocaleString('pt-BR');
-    const fed = vTotal * 0.1345; // Imposto Federal
-    const est = vTotal * 0.07;   // Imposto Estadual
-    const totalImpostosVenda = fed + est;
-    const authCode = Math.floor(100000 + Math.random() * 900000);
 
-    </script>
-
-      <script>
-
-    // 3. ATUALIZAÇÃO DO FINANCEIRO (DRE)
-    v12_finance.receita += vTotal;
-    const receitaAcumulada = v12_finance.receita;
-    const lucroAcumulado = receitaAcumulada * 0.99;
-
-    </script>
-
-        <script>
-
-    // 4. GERAÇÃO DO DOCUMENTO (O seu código com as variáveis corrigidas)
-    if (tipo === 'TERMICO') {
-        printArea.innerHTML = `
-            <div class="thermal-print-container" style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace;">
-                <div style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">SENTINELA V12</div>
-                <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO E AUTORIDADE</p>
-                <p style="text-align:center;">------------------------------------------</p>
-                <p><b>DATA:</b> ${dataHora}</p>
-                <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
-                <p><b>DOC:</b> ${doc}</p>
-                <p style="text-align:center;">------------------------------------------</p>
-                <table style="width: 100%; font-size: 10px;">
-                    <tr style="border-bottom: 1px solid #000;">
-                        <td align="left"><b>ITEM</b></td>
-                        <td align="center"><b>QTD</b></td>
-                        <td align="right"><b>TOTAL</b></td>
-                    </tr>
-                    <tr>
-                        <td align="left">${desc.substring(0, 15)}...</td>
-                        <td align="center">1</td>
-                        <td align="right">R$ ${vTotal.toFixed(2)}</td>
-                    </tr>
-                </table>
-                <p style="text-align:center;">------------------------------------------</p>
-                <div style="text-align: right;">
-                    <p style="margin:0;">Subtotal: R$ ${vTotal.toFixed(2)}</p>
-                    <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
-                </div>
-                <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background: #f9f9f9; font-size: 10px;">
-                    <p style="margin:0; font-weight:bold; text-align:center;">RESUMO FINANCEIRO DO TERMINAL</p>
-                    <p style="margin:0;">RECEITA ACUMULADA: R$ ${receitaAcumulada.toFixed(2)}</p>
-                    <p style="margin:0;">LUCRO LÍQUIDO DIA: R$ ${lucroAcumulado.toFixed(2)}</p>
-                </div>
-                <p style="font-size: 9px; margin-top: 5px;">Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)</p>
-                <p style="text-align:center; margin-top: 5px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
-            </div>`;
+    if (slot.startsWith('receita')) {
+        v12_finance.receita += vTotal;
     } else {
+        v12_finance.despesa += vTotal;
+        v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal;
+    }
+
+        </script>
+
+                
+             <script>
+        
+        function emitir(tipo) {
+            const nome = document.getElementById('nomeInput').value;
+            const valor = parseFloat(document.getElementById('valorInput').value) || 0;
+            const desc = document.getElementById('descInput').value;
+            if(!nome || valor <= 0) return alert("Erro: Preencha Nome e Valor.");
+            
+            const printArea = document.getElementById('print-area');
+            const dataHora = new Date().toLocaleString('pt-BR'); 
+
+    <script>
+
+    // 2. DESENHA A NOTA DETALHADA (Seu código A4)
+
         // VERSÃO A4 PREMIUM
         printArea.innerHTML = `
             <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; border: 1px solid #ddd; background: #fff; position: relative; width: 210mm; min-height: 297mm; margin: auto;">
@@ -1035,6 +965,108 @@ function liberarUsuario(email) {
                 </div>
             </div>`;
     }
+
+    </script>
+
+    <script>
+
+        
+    // 3. COMANDO DE DISPARO (O que faltava)
+    salvarTudoV12();
+    if (typeof updateDRE === "function") updateDRE();
+    
+    // Pequeno delay para garantir que o HTML foi desenhado antes de imprimir
+    setTimeout(() => {
+        window.print();
+    }, 500);
+}
+
+    </script>
+    
+    <script>
+
+    // 2. CÁLCULOS NECESSÁRIOS (O que estava faltando)
+    const vTotal = parseFloat(valorRaw) || 0;
+    if (vTotal <= 0) {
+        alert("ALERTA: Insira um valor válido para emitir.");
+        return;
+    }
+    </script>
+
+        <script>
+
+    const dataHora = new Date().toLocaleString('pt-BR');
+    const fed = vTotal * 0.1345; // Imposto Federal
+    const est = vTotal * 0.07;   // Imposto Estadual
+    const totalImpostosVenda = fed + est;
+    const authCode = Math.floor(100000 + Math.random() * 900000);
+
+    </script>
+
+      <script>
+
+    // 3. ATUALIZAÇÃO DO FINANCEIRO (DRE)
+    v12_finance.receita += vTotal;
+    const receitaAcumulada = v12_finance.receita;
+    const lucroAcumulado = receitaAcumulada * 0.99;
+
+    </script>
+
+
+             <script>
+        
+        function emitir(tipo) {
+            const nome = document.getElementById('nomeInput').value;
+            const valor = parseFloat(document.getElementById('valorInput').value) || 0;
+            const desc = document.getElementById('descInput').value;
+            if(!nome || valor <= 0) return alert("Erro: Preencha Nome e Valor.");
+            
+            const printArea = document.getElementById('print-area');
+            const dataHora = new Date().toLocaleString('pt-BR'); 
+
+    // 4. GERAÇÃO DO DOCUMENTO (O seu código com as variáveis corrigidas)
+    if (tipo === 'TERMICO') {
+        printArea.innerHTML = `
+            <div class="thermal-print-container" style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace;">
+                <div style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">Gestão Acertiva</div>
+                <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <p><b>DATA:</b> ${dataHora}</p>
+                <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
+                <p><b>DOC:</b> ${doc}</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <table style="width: 100%; font-size: 10px;">
+                    <tr style="border-bottom: 1px solid #000;">
+                        <td align="left"><b>ITEM</b></td>
+                        <td align="center"><b>QTD</b></td>
+                        <td align="right"><b>TOTAL</b></td>
+                    </tr>
+                    <tr>
+                        <td align="left">${desc.substring(0, 15)}...</td>
+                        <td align="center">1</td>
+                        <td align="right">R$ ${vTotal.toFixed(2)}</td>
+                    </tr>
+                </table>
+                <p style="text-align:center;">------------------------------------------</p>
+                <div style="text-align: right;">
+                    <p style="margin:0;">Subtotal: R$ ${vTotal.toFixed(2)}</p>
+                    <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
+                </div>
+                <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background: #f9f9f9; font-size: 10px;">
+                    <p style="margin:0; font-weight:bold; text-align:center;">RESUMO FINANCEIRO DO TERMINAL</p>
+                    <p style="margin:0;">RECEITA ACUMULADA: R$ ${receitaAcumulada.toFixed(2)}</p>
+                    <p style="margin:0;">LUCRO LÍQUIDO DIA: R$ ${lucroAcumulado.toFixed(2)}</p>
+                </div>
+                <p style="font-size: 9px; margin-top: 5px;">Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)</p>
+                <p style="text-align:center; margin-top: 5px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
+            </div>`;
+
+        </script>
+
+        <script>
+         
+    } else {
+       
         <script>
 
     // 5. COMANDOS DE FINALIZAÇÃO
@@ -1073,5 +1105,12 @@ function liberarUsuario(email) {
             addLog(`SENTINELA ANALÍTICO: ${text}`);
         }
     </script>
+                
+<script>
+             
 </body>
 </html>
+    
+    
+
+    </script>
