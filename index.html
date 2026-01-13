@@ -300,7 +300,32 @@
         
     function updateDRE() { console.log("DRE Atualizado");
     }        
-    
+
+        function checkV12Auth() {
+        const email = document.getElementById('v12_email').value;
+        const pass = document.getElementById('v12_pass').value;
+        const user = v12_users.find(u => u.email === email && u.pass === pass);
+        }
+
+        if (user)
+            if (user.status === "AUTHORIZED") {
+                document.getElementById('auth-gate').style.display = 'none';
+                addLog(`ACESSO AUTORIZADO: ${user.email.toUpperCase()}`);
+                if (user.role === "ADMIN") {
+                    const painel = document.getElementById('admin-panel');
+                    if (painel) {
+                        painel.style.display = 'block';
+                        atualizarPainelAdmin();
+                    }
+                }
+            } else {
+                alert("ACESSO BLOQUEADO: Aguarde autorização.");
+            }
+        } else {
+            alert("ACESSO NEGADO.");
+        }
+    }
+       
         let v12_finance = { receita: 0, despesa: 0, invest: 0 };
         
         // CORREÇÃO: Função de Login validando campos adicionados
