@@ -522,8 +522,8 @@
        const totalImpostos = fed + est;
 
     const printArea = document.getElementById('print-area');
-
-    ({})
+    
+     }
      
     if (tipo === 'TERMICO') {
         printArea.innerHTML = `
@@ -641,7 +641,6 @@
     }
     window.print();
 }
-({)
         function validarNomeSeguro(el) {
             if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
                 alert("NOME COMPLETO REQUERIDO.");
@@ -652,7 +651,8 @@
         function generateAIInsight(text) {
             document.getElementById('ai-insight').innerText = text;
             addLog(`SENTINELA ANALÍTICO: ${text}`);
-        }
+          } 
+       }
     </script>
 </body>
 </html>
