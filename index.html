@@ -489,6 +489,8 @@
                 nomeInput.readOnly = false;
                 nomeInput.focus();
                 addLog("Identidade Liberada para preenchimento.");
+                 nomeInput.focus();
+                }, 400);
             }
         }
 
@@ -506,18 +508,18 @@
         }
 
         function emitir(tipo) {
-    const nome = document.getElementById('nomeInput').value;
-    const doc = document.getElementById('docInput').value;
-    const valor = document.getElementById('valorInput').value;
-    const desc = document.getElementById('descInput').value;
-    const tel = document.getElementById('telInput').value;
-    const dataHora = new Date().toLocaleString('pt-BR');
-    const authCode = Math.random().toString(36).toUpperCase().substring(2, 12);
+            const nome = document.getElementById('nomeInput').value;
+            const doc = document.getElementById('docInput').value;
+            const valor = document.getElementById('valorInput').value;
+            const desc = document.getElementById('descInput').value;
+            const tel = document.getElementById('telInput').value;
+           const dataHora = new Date().toLocaleString('pt-BR');
+           const authCode = Math.random().toString(36).toUpperCase().substring(2, 12);
 
-    const vTotal = parseFloat(valor) || 0;
-    const fed = vTotal * 0.1345;
-    const est = vTotal * 0.1200;
-    const totalImpostos = fed + est;
+          const vTotal = parseFloat(valor) || 0;
+         const fed = vTotal * 0.1345;
+        const est = vTotal * 0.1200;
+       const totalImpostos = fed + est;
 
     const printArea = document.getElementById('print-area');
      
@@ -637,7 +639,7 @@
     }
     window.print();
 }
-
+({)
         function validarNomeSeguro(el) {
             if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
                 alert("NOME COMPLETO REQUERIDO.");
