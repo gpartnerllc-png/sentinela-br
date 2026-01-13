@@ -171,6 +171,7 @@
                     </div>
                     <div id="logContent" class="h-32 overflow-y-auto leading-relaxed">
                         > Sistema Sentinela V12 Inicializado...<br>
+                        > Monitoramento de Sinais Ativo: Apocalipse 17 em Análise...<br>
                         > IA Vision pronta para leitura de QR Code e Barras...<br>
                     </div>
                 </div>
@@ -231,6 +232,7 @@
                 document.getElementById('network-badge').classList.replace('bg-orange-100', 'bg-emerald-100');
                 document.getElementById('network-badge').classList.replace('text-orange-700', 'text-emerald-700');
                 addLog(`HARDWARE VALIDADO: Smart POS P2 [${SERIAL_P2}]`);
+                addLog("Vigilância Profética: Analisando equilíbrios entre Edom e Ishmael...");
                 addLog("Canais de Impressão Térmica Síncrona: LIBERADOS.");
                 if ('wakeLock' in navigator) { navigator.wakeLock.request('screen'); }
             }, 1000);
@@ -334,7 +336,6 @@
             const vTotal = parseFloat(valor) || 0;
             const dataHora = new Date().toLocaleString('pt-BR');
 
-            // Cálculos Tributários Proporcionais
             const cbs = vTotal * 0.009;
             const ibs = vTotal * 0.001;
 
@@ -356,10 +357,10 @@
                         <p>-------------------------------</p>
                         <h1 style="text-align:right; font-size:22px;">TOTAL: R$ ${vTotal.toFixed(2)}</h1>
                         <p style="font-size:8px; text-align:center; margin-top:20px;">KEY: ${ACCESS_KEY}</p>
+                        <p style="font-size:7px; text-align:center;">Vigilância Apocalipse 17 Ativa</p>
                     </div>
                 `;
             } else {
-                // NOVO LAYOUT A4 PREMIUM - SEM MEXER NA INFRA DO SISTEMA
                 printArea.innerHTML = `
                     <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; color: #000; background: #fff;">
                         <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #000; padding-bottom: 10px;">
@@ -448,7 +449,7 @@
 
                         <div style="margin-top: 50px; font-size: 8px; color: #666; text-align: center; border-top: 1px dashed #ccc; padding-top: 10px;">
                             DOCUMENTO GERADO VIA HARDWARE SMART POS P2 [SERIAL: ${SERIAL_P2}]<br>
-                            SENTINELA V12 - SISTEMA SÍNCRONO DE ALTA AUTORIDADE
+                            SENTINELA V12 - SISTEMA SÍNCRONO DE ALTA AUTORIDADE - OBSERVAÇÃO PROFÉTICA ATIVA
                         </div>
                     </div>
                 `;
