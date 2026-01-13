@@ -308,6 +308,7 @@
     <div id="print-area" class="hidden"></div>
 
  <script>
+     
     // 1. BANCO DE DADOS LOCAL
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
         { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
@@ -428,7 +429,6 @@
             console.log(`USUÁRIO ${email} LIBERADO!`);
         }
     }
-        
         function v12NeuralOCR(input) {
             addLog("IA: Mapeando caracteres do documento...");
             setTimeout(() => {
@@ -506,7 +506,7 @@
             log.scrollTop = log.scrollHeight;
         }
 
-       function emitir(tipo) {
+    function emitir(tipo) {
     const nome = document.getElementById('nomeInput').value;
     const doc = document.getElementById('docInput').value;
     const valor = document.getElementById('valorInput').value;
