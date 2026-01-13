@@ -11,361 +11,163 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
     <style>
-        :root { 
-            --active-orange: #ff6b00; 
-            --deep-orange: #e65f00;
-            --gov-bg: #f8fafc;
-        }
+        :root { --active-orange: #ff6b00; --deep-orange: #e65f00; --gov-bg: #f8fafc; }
+        body { background: var(--gov-bg); font-family: 'Inter', sans-serif; color: #334155; overflow-x: hidden; }
         
-        body { background: var(--gov-bg); font-family: 'Inter', sans-serif; color: #334155; }
-        
-        .auth-header {
-            background: #ffffff;
-            border-bottom: 4px solid var(--active-orange);
-            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.15);
-        }
-
+        .auth-header { background: #ffffff; border-bottom: 4px solid var(--active-orange); box-shadow: 0 4px 20px rgba(255, 107, 0, 0.15); }
         .v12-logo-3d {
             background: linear-gradient(145deg, var(--active-orange), var(--deep-orange));
-            color: white; font-weight: 900; padding: 10px 25px;
-            border-radius: 4px;
-            transform: perspective(500px) rotateY(-10deg);
-            box-shadow: 5px 5px 15px rgba(230, 95, 0, 0.4);
-            font-size: 26px; border: 1px solid rgba(255,255,255,0.2);
+            color: white; font-weight: 900; padding: 10px 25px; border-radius: 4px;
+            transform: perspective(500px) rotateY(-10deg); font-size: 26px;
         }
 
-        .panel-3d { 
-            background: #ffffff; 
-            border: 1px solid #e2e8f0; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-        }
+        .panel-3d { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+        .input-tactical { border: 2px solid #e2e8f0; padding: 14px; border-radius: 10px; font-weight: 700; background: #fdfdfd; transition: 0.3s; }
+        .input-tactical:focus { border-color: var(--active-orange); outline: none; background: #fff; }
+
+        /* STATUS LED DISCRETO */
+        .system-led { position: fixed; bottom: 20px; left: 20px; display: flex; align-items: center; gap: 8px; z-index: 1000; }
+        .led-pulse { width: 10px; height: 10px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .status-text { font-family: 'JetBrains Mono'; font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+
+        .btn-orange { background: linear-gradient(180deg, #ff8a33 0%, #ff6b00 100%); border-bottom: 4px solid #b34b00; color: white; font-weight: 900; }
         
-        .input-tactical {
-            border: 2px solid #e2e8f0; padding: 14px; border-radius: 10px;
-            font-weight: 700; transition: all 0.3s;
-            background: #fdfdfd;
-        }
-        .input-tactical:focus { 
-            border-color: var(--active-orange); 
-            background: #fff; 
-            box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
-            outline: none; 
-        }
+        #reader { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px; display: none; border: 3px solid var(--active-orange); }
 
-        .terminal-log {
-            background: #1e293b; color: #fb923c;
-            font-family: 'JetBrains Mono', monospace; font-size: 11px;
-            padding: 15px; border-radius: 12px; border: 2px solid #334155;
-        }
+        .internal-engine { display: none; }
 
-        .btn-orange {
-            background: linear-gradient(180deg, #ff8a33 0%, #ff6b00 100%);
-            border-bottom: 4px solid #b34b00;
-            transition: all 0.1s;
-        }
-        .btn-orange:active {
-            transform: translateY(2px);
-            border-bottom-width: 0px;
-        }
-
-        #reader { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px; display: none; }
-
-        .thermal-print-container {
-            width: 80mm;
-            background: white;
-            padding: 10px;
-            color: black;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .ml-style-header {
-            border: 4px solid black;
-            text-align: center;
-            font-weight: 900;
-            font-size: 24px;
-            padding: 5px;
-            transform: skewX(-5deg);
-            margin-bottom: 15px;
-        }
-
-        /* AJUSTE RESPONSIVO MOBILE - P2 BRIDGE LAYOUT */
         @media (max-width: 768px) {
-            main { 
-                display: flex; 
-                flex-direction: column; 
-                padding: 15px !important;
-                padding-bottom: 340px !important; /* Espaço para o rodapé fixo */
-            }
-
-            .col-span-12.lg\:col-span-8 { order: 1; }
-            
-            /* Fixa o Painel de Cálculo e Botões no Rodapé */
-            .col-span-12.lg\:col-span-4 {
-                order: 3;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                z-index: 999;
-                background: white;
-                padding: 10px !important;
-                border-top: 5px solid var(--active-orange);
-                border-radius: 25px 25px 0 0;
-                box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
-            }
-
-            .terminal-log { order: 2; margin-top: 20px; margin-bottom: 20px; }
-
-            .panel-3d { padding: 15px !important; }
-            
-            /* Ajusta botões para Grid no POS */
-            .mt-10.space-y-4 {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-                margin-top: 15px !important;
-            }
-            .btn-orange { grid-column: span 2; padding: 12px !important; }
-            .mt-10.space-y-4 button { margin-top: 0 !important; }
+            .mobile-fix { padding-bottom: 120px !important; }
+            .action-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 15px; border-top: 1px solid #e2e8f0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 99; }
         }
 
+        /* REGRAS DE IMPRESSÃO A4 DETALHADA */
         @media print { 
             .no-print { display: none !important; } 
-            #print-area { display: block !important; } 
+            #print-area { display: block !important; }
+            body { background: white; }
         }
     </style>
 </head>
-<body>
+<body class="mobile-fix">
 
     <div class="no-print">
-        <header class="auth-header p-5 flex justify-between items-center px-10">
-            <div class="flex items-center gap-8">
+        <header class="auth-header p-5 flex justify-between items-center px-6 lg:px-10">
+            <div class="flex items-center gap-6">
                 <div class="v12-logo-3d">V12</div>
                 <div>
-                    <h1 class="text-2xl font-black tracking-tighter uppercase text-slate-800">Sentinela <span class="text-orange-600">IHVH</span></h1>
-                    <div class="flex items-center gap-2">
-                        <span class="text-[9px] font-black bg-slate-800 text-white px-2 py-0.5 rounded">M.I.T</span>
-                        <span id="network-badge" class="text-[9px] font-black bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic">BUSCANDO REDE...</span>
-                    </div>
+                    <h1 class="text-xl font-black uppercase text-slate-800 tracking-tighter">Sentinela <span class="text-orange-600">IHVH</span></h1>
+                    <span id="network-badge" class="text-[9px] font-black bg-slate-100 text-slate-500 px-2 py-0.5 rounded italic">HARDWARE: PB1F252F75254</span>
                 </div>
             </div>
-            
-            <div id="statusHw" class="bg-orange-50 px-4 py-2 rounded-lg border border-orange-200 flex items-center gap-3">
-                <span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
-                <span class="text-[11px] font-black uppercase text-emerald-600">Sistema Ativo</span>
-            </div>
+            <button id="btnScanner" onclick="toggleScanner()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase hover:bg-orange-600 transition-all">Bipar Itens</button>
         </header>
 
-        <main class="max-w-[1600px] mx-auto p-8 grid grid-cols-12 gap-8">
-            
-            <div class="col-span-12 lg:col-span-8 space-y-8">
-                <div class="panel-3d p-10">
-                    <div class="flex items-center justify-between mb-10 border-b border-slate-100 pb-6">
-                        <div class="flex items-center gap-4">
-                            <div class="w-3 h-10 bg-orange-500 rounded-full shadow-lg shadow-orange-200"></div>
-                            <h2 class="text-xl font-black text-slate-700 uppercase italic">Central de Emissão Síncrona</h2>
-                        </div>
-                        <button id="btnScanner" onclick="toggleScanner()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-colors">
-                            Bipar Produto (Câmera)
-                        </button>
+        <main class="max-w-[1000px] mx-auto p-6 space-y-6">
+            <div id="reader"></div>
+
+            <div class="panel-3d p-6 lg:p-8">
+                <div class="grid grid-cols-6 gap-6">
+                    <div class="col-span-6 lg:col-span-3">
+                        <label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Identificador Cliente</label>
+                        <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-lg" placeholder="CPF/CNPJ">
                     </div>
 
-                    <div id="reader"></div>
-
-                    <div class="grid grid-cols-6 gap-8">
-                        <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Identificador (CPF/CNPJ)</label>
-                            <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800 text-lg shadow-inner" placeholder="000.000.000-00">
-                        </div>
-
-                        <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Valor Operacional (R$)</label>
-                            <input type="number" id="valorInput" oninput="calcFiscal()" class="input-tactical w-full text-2xl text-orange-600" placeholder="0,00">
-                        </div>
-
-                        <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail do Cliente</label>
-                            <input type="email" id="emailInput" class="input-tactical w-full text-slate-800" placeholder="contato@exemplo.com">
-                        </div>
-
-                        <div class="col-span-3">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp / Telefone</label>
-                            <input type="text" id="telInput" class="input-tactical w-full text-slate-800" placeholder="(00) 00000-0000">
-                        </div>
-
-                        <div class="col-span-6">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome de Registro (Segurança V12)</label>
-                            <input type="text" id="nomeInput" onblur="validarNomeSeguro(this)" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação...">
-                        </div>
-
-                        <div class="col-span-6">
-                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens Escaneados</label>
-                            <textarea id="descInput" class="input-tactical w-full h-32 font-normal text-slate-600" placeholder="Os itens bipados aparecerão aqui automaticamente..."></textarea>
-                        </div>
+                    <div class="col-span-6 lg:col-span-3">
+                        <label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Valor de Operação</label>
+                        <input type="number" id="valorInput" oninput="calcFiscal()" class="input-tactical w-full text-2xl text-orange-600 font-black" placeholder="0,00">
                     </div>
-                </div>
 
-                <div class="terminal-log shadow-xl">
-                    <div class="flex justify-between border-b border-white/5 pb-2 mb-3">
-                        <span class="font-black text-[10px] uppercase tracking-[0.3em] text-orange-400">Security Stream & Gemini AI Advisor</span>
-                        <span class="text-[10px] text-slate-500 font-mono">NODE_ISR_V12</span>
+                    <div class="col-span-6">
+                        <label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Razão Social / Nome Completo</label>
+                        <input type="text" id="nomeInput" class="input-tactical w-full bg-slate-50" readonly placeholder="Aguardando Identificador...">
                     </div>
-                    <div id="logContent" class="h-32 overflow-y-auto leading-relaxed">
-                        > Sistema Sentinela V12 Inicializado...<br>
-                        > IA Vision pronta para leitura de QR Code e Barras...<br>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-span-12 lg:col-span-4 space-y-6">
-                <div class="panel-3d p-8 border-t-8 border-orange-500">
-                    <h3 class="text-[12px] font-black text-center text-slate-400 uppercase mb-8 tracking-[0.2em]">Detalhamento Tributário</h3>
+                    <div class="col-span-6">
+                        <label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Descrição dos Ativos</label>
+                        <textarea id="descInput" class="input-tactical w-full h-24 font-normal text-slate-500 text-sm" placeholder="Itens escaneados aparecerão aqui..."></textarea>
+                    </div>
                     
-                    <div class="space-y-6 bg-orange-50/50 p-6 rounded-2xl border border-orange-100 shadow-inner">
-                        <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">CBS (FEDERAL) 0.9%:</span>
-                            <span id="cbsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="font-black text-slate-500 uppercase text-[11px]">IBS (EST/MUN) 0.1%:</span>
-                            <span id="ibsVal" class="font-mono font-black text-slate-800">R$ 0,00</span>
-                        </div>
-                        <div class="border-t-2 border-orange-200/50 pt-6 flex justify-between items-center">
-                            <span class="text-sm font-black text-slate-700 uppercase">Valor Total:</span>
-                            <span id="liqVal" class="text-3xl font-black text-orange-600">R$ 0,00</span>
-                        </div>
+                    <div class="col-span-6 lg:col-span-3">
+                        <label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">E-mail</label>
+                        <input type="email" id="emailInput" class="input-tactical w-full text-sm" placeholder="contato@droppfy.com">
                     </div>
-
-                    <div class="mt-10 space-y-4">
-                        <button onclick="emitir('A4')" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl hover:brightness-110 transition-all uppercase text-sm tracking-widest">
-                            Emitir DANFE (A4)
-                        </button>
-                        
-                        <button onclick="executarPagamentoPOS()" class="w-full bg-emerald-600 text-white font-black py-4 rounded-2xl shadow-lg hover:bg-emerald-700 transition-all uppercase text-[10px] tracking-widest flex items-center justify-center gap-2">
-                             <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                             Pagar via Antena Hardware
-                        </button>
-
-                        <button onclick="emitir('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-2xl shadow-lg hover:bg-black transition-all uppercase text-[10px] tracking-widest">
-                            Imp. Térmica / PDV Móvel
-                        </button>
+                    <div class="col-span-6 lg:col-span-3">
+                        <label class="text-[10px] font-black text-slate-400 uppercase mb-2 block">Contato</label>
+                        <input type="text" id="telInput" class="input-tactical w-full text-sm" placeholder="(00) 00000-0000">
                     </div>
+                </div>
+
+                <div class="mt-8 action-bar grid grid-cols-2 gap-4">
+                    <button onclick="executarPagamentoPOS()" class="btn-orange py-4 rounded-xl shadow-lg uppercase text-xs tracking-widest active:scale-95 transition-all">Receber (P2)</button>
+                    <button onclick="emitir('A4')" class="bg-slate-800 text-white font-black py-4 rounded-xl shadow-lg uppercase text-xs tracking-widest">Imprimir A4</button>
                 </div>
             </div>
         </main>
+
+        <div class="system-led">
+            <div class="led-pulse"></div>
+            <span class="status-text">Sentinela Engine Active | Bridge P2 Ready</span>
+        </div>
+    </div>
+
+    <div class="internal-engine">
+        <span id="cbsVal">0</span>
+        <span id="ibsVal">0</span>
+        <span id="liqVal">0</span>
     </div>
 
     <div id="print-area" class="hidden"></div>
 
     <script>
+        const SERIAL_P2 = "PB1F252F75254";
         let somaScanner = 0;
         let itensLidos = new Set();
         let html5QrCode = null;
 
-        const SERIAL_P2 = "PB1F252F75254";
-        const ACCESS_KEY = "20260112PB1F252F75254";
-
-        async function capturarDadosRede() {
-            addLog("Mapeando autoridade de Hardware...");
-            setTimeout(() => {
-                document.getElementById('network-badge').innerText = `P2: ${SERIAL_P2}`;
-                document.getElementById('network-badge').classList.replace('bg-orange-100', 'bg-emerald-100');
-                document.getElementById('network-badge').classList.replace('text-orange-700', 'text-emerald-700');
-                addLog(`HARDWARE VALIDADO: Smart POS P2 [${SERIAL_P2}]`);
-                addLog("Canais de Impressão Térmica Síncrona: LIBERADOS.");
-                if ('wakeLock' in navigator) { navigator.wakeLock.request('screen'); }
-            }, 1000);
+        function calcFiscal() {
+            const v = parseFloat(document.getElementById('valorInput').value) || 0;
+            document.getElementById('cbsVal').innerText = (v * 0.009).toFixed(2);
+            document.getElementById('ibsVal').innerText = (v * 0.001).toFixed(2);
+            document.getElementById('liqVal').innerText = v.toFixed(2);
         }
-        window.onload = capturarDadosRede;
 
-        // BRIDGE INTEGRATION - P2 SYSTEM LEVEL
         function executarPagamentoPOS() {
             const valor = document.getElementById('valorInput').value;
-            if(!valor || valor == 0) return alert("Insira um valor para cobrar.");
+            if(!valor || valor == 0) return;
             const valorEmCentavos = Math.round(parseFloat(valor) * 100);
-            addLog(`BRIDGE P2: Invocando Hardware... R$ ${valor}`);
-            
-            // Intent Direta para o SO Android da P2 (InfinitePay Bridge)
-            const intentUrl = `intent://payment?amount=${valorEmCentavos}&editable_amount=false#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
-            window.location.href = intentUrl;
+            window.location.href = `intent://payment?amount=${valorEmCentavos}&editable_amount=false#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
         }
 
         async function toggleScanner() {
             const readerDiv = document.getElementById('reader');
-            const btn = document.getElementById('btnScanner');
-            if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
-
+            if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
             if (readerDiv.style.display === 'none' || readerDiv.style.display === '') {
                 readerDiv.style.display = 'block';
-                btn.innerText = "FECHAR CÂMERA (X)";
-                btn.classList.replace('bg-slate-800', 'bg-red-600');
-                try {
-                    await html5QrCode.start(
-                        { facingMode: "environment" }, 
-                        { fps: 15, qrbox: { width: 250, height: 150 } },
-                        (decodedText) => {
-                            if (itensLidos.has(decodedText)) {
-                                addLog(`ITEM REPETIDO: ${decodedText} ignorado.`);
-                                return; 
-                            }
-                            itensLidos.add(decodedText);
-                            let precoItem = Math.floor(Math.random() * 50) + 10;
-                            somaScanner += precoItem;
-                            addLog(`BIP SUCESSO: ${decodedText} | + R$ ${precoItem},00`);
-                            document.getElementById('valorInput').value = somaScanner.toFixed(2);
-                            document.getElementById('descInput').value += `Item [${decodedText}] - R$ ${precoItem},00\n`;
-                            calcFiscal();
-                        }
-                    );
-                } catch (err) { addLog("Erro ao abrir câmera: " + err); }
+                await html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
+                    if (!itensLidos.has(text)) {
+                        itensLidos.add(text);
+                        let preco = Math.floor(Math.random() * 50) + 10;
+                        somaScanner += preco;
+                        document.getElementById('valorInput').value = somaScanner.toFixed(2);
+                        document.getElementById('descInput').value += `ITEM: ${text} - R$ ${preco},00\n`;
+                        calcFiscal();
+                    }
+                });
             } else {
-                try {
-                    await html5QrCode.stop();
-                    readerDiv.style.display = 'none';
-                    btn.innerText = "Bipar Produto (Câmera)";
-                    btn.classList.replace('bg-red-600', 'bg-slate-800');
-                    addLog("Câmera encerrada. Dados preservados.");
-                } catch (err) { readerDiv.style.display = 'none'; }
+                await html5QrCode.stop();
+                readerDiv.style.display = 'none';
             }
-        }
-
-        function validarNomeSeguro(el) {
-            if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
-                alert("ALERTA DE SEGURANÇA V12: Insira o nome de registro COMPLETO.");
-                el.classList.add('border-red-500');
-                el.focus();
-            } else { el.classList.remove('border-red-500'); }
         }
 
         function motorBusca(val) {
-            const doc = val.replace(/\D/g, '');
-            const nomeInput = document.getElementById('nomeInput');
-            if (doc.length === 11 || doc.length === 14) {
-                setTimeout(() => {
-                    nomeInput.readOnly = false;
-                    nomeInput.value = ""; 
-                    nomeInput.placeholder = "DIGITE O NOME DE REGISTRO COMPLETO...";
-                    nomeInput.classList.remove('bg-slate-50');
-                    nomeInput.classList.add('bg-white', 'border-orange-400');
-                    addLog("Identidade Liberada para preenchimento.");
-                    nomeInput.focus();
-                }, 400);
+            if (val.length >= 11) {
+                const nomeInput = document.getElementById('nomeInput');
+                nomeInput.readOnly = false;
+                nomeInput.classList.remove('bg-slate-50');
+                nomeInput.focus();
             }
-        }
-
-        function calcFiscal() {
-            const v = parseFloat(document.getElementById('valorInput').value) || 0;
-            const cbs = v * 0.009;
-            const ibs = v * 0.001;
-            document.getElementById('cbsVal').innerText = `R$ ${cbs.toFixed(2)}`;
-            document.getElementById('ibsVal').innerText = `R$ ${ibs.toFixed(2)}`;
-            document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
-        }
-
-        function addLog(msg) {
-            const log = document.getElementById('logContent');
-            log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
-            log.scrollTop = log.scrollHeight;
         }
 
         function emitir(tipo) {
@@ -375,91 +177,77 @@
             const desc = document.getElementById('descInput').value;
             const email = document.getElementById('emailInput').value;
             const tel = document.getElementById('telInput').value;
-            const vTotal = parseFloat(valor) || 0;
             const dataHora = new Date().toLocaleString('pt-BR');
 
-            const cbs = vTotal * 0.009;
-            const ibs = vTotal * 0.001;
-
-            if(!nome || !valor) return alert("Erro: Preencha Nome e Valor.");
-
-            const printArea = document.getElementById('print-area');
-            
-            if(tipo === 'TERMICO') {
-                printArea.innerHTML = `
-                    <div class="thermal-print-container">
-                        <div class="ml-style-header">SENTINELA V12</div>
-                        <p style="text-align:center; font-weight:bold; margin-bottom:10px;">COMPROVANTE DE AUTORIDADE</p>
-                        <p>-------------------------------</p>
-                        <p><b>SERIAL P2:</b> ${SERIAL_P2}</p>
-                        <p><b>DATA:</b> ${dataHora}</p>
-                        <p><b>CLI:</b> ${nome.toUpperCase()}</p>
-                        <p>-------------------------------</p>
-                        <p><b>ITENS:</b><br>${desc.replace(/\n/g, '<br>')}</p>
-                        <p>-------------------------------</p>
-                        <h1 style="text-align:right; font-size:22px;">TOTAL: R$ ${vTotal.toFixed(2)}</h1>
-                        <p style="font-size:8px; text-align:center; margin-top:20px;">KEY: ${ACCESS_KEY}</p>
+            // RECONSTRUÇÃO DO LAYOUT DETALHADO (CONFORME O QUE VOCÊ GOSTOU)
+            document.getElementById('print-area').innerHTML = `
+                <div style="font-family: 'JetBrains Mono', monospace; padding: 30px; color: #000; background: #fff; max-width: 800px; margin: auto;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 5px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
+                        <div>
+                            <h1 style="font-size: 42px; margin: 0; font-weight: 900; letter-spacing: -2px;">SENTINELA V12</h1>
+                            <p style="margin: 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">Sistema de Gestão e Autoridade v12.0.1</p>
+                        </div>
+                        <div style="text-align: right; border: 3px solid #000; padding: 10px 20px;">
+                            <p style="margin: 0; font-size: 11px; font-weight: bold;">DOC. AUXILIAR DE VENDA (DANFE)</p>
+                            <p style="margin: 0; font-size: 20px; font-weight: 900;">Nº ${Math.floor(Math.random() * 900000 + 100000)}</p>
+                        </div>
                     </div>
-                `;
-            } else {
-                printArea.innerHTML = `
-                    <div style="font-family: 'JetBrains Mono', monospace; padding: 40px; color: #000; background: #fff;">
-                        <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #000; padding-bottom: 10px;">
-                            <div>
-                                <h1 style="font-size: 38px; margin: 0; font-weight: 900; letter-spacing: -2px;">SENTINELA V12</h1>
-                                <p style="margin: 0; font-size: 12px; font-weight: bold;">SISTEMA DE GESTÃO E AUTORIDADE V12.0.1</p>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="border: 2px solid #000; padding: 5px 15px;">
-                                    <p style="margin: 0; font-size: 10px;">DOC. AUXILIAR DE VENDA (DANFE)</p>
-                                    <p style="margin: 0; font-weight: bold;">Nº ${Math.floor(Math.random() * 999999)}</p>
-                                </div>
-                            </div>
+
+                    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div style="border: 2px solid #000; padding: 15px;">
+                            <p style="margin: 0 0 10px 0; font-size: 11px; border-bottom: 1px solid #000; font-weight: 900; text-transform: uppercase;">Identificação do Cliente</p>
+                            <p style="margin: 3px 0; font-size: 14px;"><b>NOME:</b> ${nome.toUpperCase()}</p>
+                            <p style="margin: 3px 0; font-size: 14px;"><b>CPF/CNPJ:</b> ${doc}</p>
+                            <p style="margin: 3px 0; font-size: 14px;"><b>CONTATO:</b> ${tel}</p>
+                            <p style="margin: 3px 0; font-size: 14px;"><b>E-MAIL:</b> ${email}</p>
                         </div>
-                        <div style="margin-top: 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
-                            <div style="border: 1px solid #000; padding: 10px;">
-                                <p style="margin: 0; font-size: 10px; border-bottom: 1px solid #ddd; margin-bottom: 5px;">IDENTIFICAÇÃO DO CLIENTE</p>
-                                <p style="margin: 0;"><b>NOME:</b> ${nome.toUpperCase()}</p>
-                                <p style="margin: 0;"><b>CPF/CNPJ:</b> ${doc}</p>
-                                <p style="margin: 0;"><b>CONTATO:</b> ${tel} | ${email}</p>
-                            </div>
-                            <div style="border: 1px solid #000; padding: 10px; text-align: center;">
-                                <p style="margin: 0; font-size: 10px; border-bottom: 1px solid #ddd; margin-bottom: 5px;">EMISSÃO</p>
-                                <p style="margin: 0; font-size: 18px; font-weight: bold;">${dataHora.split(',')[0]}</p>
-                                <p style="margin: 0; font-size: 12px;">HORA: ${dataHora.split(',')[1]}</p>
-                            </div>
+                        <div style="border: 2px solid #000; padding: 15px; text-align: center;">
+                            <p style="margin: 0 0 10px 0; font-size: 11px; border-bottom: 1px solid #000; font-weight: 900; text-transform: uppercase;">Emissão</p>
+                            <p style="margin: 5px 0; font-size: 22px; font-weight: 900;">${dataHora.split(' ')[0]}</p>
+                            <p style="margin: 0; font-size: 14px;">HORA: ${dataHora.split(' ')[1]}</p>
+                            <p style="margin-top: 10px; font-size: 10px; opacity: 0.7;">P2 SERIAL: ${SERIAL_P2}</p>
                         </div>
-                        <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #000; color: #fff;">
-                                    <th align="left" style="padding: 5px; font-size: 12px;">CÓD</th>
-                                    <th align="left" style="padding: 5px; font-size: 12px;">DESCRIÇÃO DOS PRODUTOS</th>
-                                    <th align="center" style="padding: 5px; font-size: 12px;">QTD</th>
-                                    <th align="right" style="padding: 5px; font-size: 12px;">TOTAL</th>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                        <thead>
+                            <tr style="background: #000; color: #fff;">
+                                <th align="left" style="padding: 10px; font-size: 12px; text-transform: uppercase;">Cód</th>
+                                <th align="left" style="padding: 10px; font-size: 12px; text-transform: uppercase;">Descrição dos Produtos / Especificação</th>
+                                <th align="center" style="padding: 10px; font-size: 12px; text-transform: uppercase;">Qtd</th>
+                                <th align="right" style="padding: 10px; font-size: 12px; text-transform: uppercase;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${desc.split('\n').filter(l => l.trim() !== "").map((line, idx) => `
+                                <tr style="border-bottom: 2px solid #000;">
+                                    <td style="font-size: 13px; padding: 12px;">00${idx + 1}</td>
+                                    <td style="font-size: 13px; padding: 12px; font-weight: bold;">${line}</td>
+                                    <td align="center" style="font-size: 13px; padding: 12px;">1</td>
+                                    <td align="right" style="font-size: 13px; padding: 12px;">---</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                ${desc.split('\n').filter(l => l.trim() !== "").map((line, idx) => `
-                                    <tr style="border-bottom: 1px solid #000;">
-                                        <td style="font-size: 12px; padding: 8px;">00${idx + 1}</td>
-                                        <td style="font-size: 12px; padding: 8px;">${line}</td>
-                                        <td align="center" style="font-size: 12px; padding: 8px;">1</td>
-                                        <td align="right" style="font-size: 12px; padding: 8px;">--</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
-                            <div style="width: 350px;">
-                                <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 32px; padding-top: 10px;">
-                                    <span>TOTAL:</span>
-                                    <span>R$ ${vTotal.toFixed(2)}</span>
-                                </div>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <div style="display: flex; justify-content: flex-end;">
+                        <div style="width: 400px; border: 4px solid #000; padding: 15px; text-align: right;">
+                            <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px;">
+                                <span>SUBTOTAL:</span>
+                                <span>R$ ${valor}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 36px; border-top: 2px solid #000; padding-top: 10px;">
+                                <span>TOTAL:</span>
+                                <span>R$ ${valor}</span>
                             </div>
                         </div>
                     </div>
-                `;
-            }
+
+                    <div style="margin-top: 50px; text-align: center; border-top: 1px dashed #000; padding-top: 20px;">
+                        <p style="font-size: 10px; font-weight: bold; letter-spacing: 2px;">AUTENTICAÇÃO DO HARDWARE SENTINELA IHVH - CHAVE: ${SERIAL_P2}X12</p>
+                    </div>
+                </div>
+            `;
             window.print();
         }
     </script>
