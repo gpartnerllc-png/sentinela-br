@@ -183,26 +183,28 @@
     </style>
 </head>
 <body>
-<div id="auth-gate" class="no-print min-h-screen flex items-center justify-center bg-[#050505]">
-    <div class="relative bg-slate-900/80 backdrop-blur-xl p-12 rounded-[40px] shadow-[0_50px_100px_rgba(0,0,0,0.8)] w-full max-w-[550px] text-center border border-slate-700/50 overflow-hidden">
+<div id="auth-gate" class="min-h-screen flex items-center justify-center bg-[#0a0f1a] p-4">
+    <div class="bg-slate-900/90 backdrop-blur-md p-8 md:p-12 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] w-full max-w-[450px] border border-slate-700/50 text-center">
         
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50"></div>
-
-        <div class="v12-logo-3d inline-block mb-8 transform hover:scale-110 transition-transform duration-500">V12</div>
+        <div class="v12-logo-3d inline-block mb-10 text-orange-500 font-black text-4xl tracking-tighter">V12</div>
         
-        <h2 class="text-4xl font-black text-white uppercase italic mb-2 tracking-tighter">Acesse</h2>
-        <p class="text-orange-500 text-[10px] font-black mb-8 tracking-[0.4em] uppercase opacity-80">Yod He Vav He</p>
+        <h2 class="text-3xl font-bold text-white uppercase italic mb-2">Acesse</h2>
+        <p class="text-orange-500 text-[10px] font-bold mb-8 tracking-[0.4em] uppercase">Yod He Vav He</p>
         
         <div class="space-y-4">
             <input type="email" id="v12_email" placeholder="E-mail de Autoridade" 
-                   class="w-full bg-black/40 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600 transition-all placeholder:text-slate-600 font-medium">
+                   class="w-full bg-slate-800/50 border border-slate-700 p-4 rounded-2xl text-white outline-none focus:border-orange-500 transition-all">
             
-            <input type="password" id="v12_pass" placeholder="Assinatura Criptográfica" 
-                   class="w-full bg-black/40 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600 transition-all placeholder:text-slate-600 font-medium">
+            <input type="password" id="v12_pass" placeholder="Senha Criptográfica" 
+                   class="w-full bg-slate-800/50 border border-slate-700 p-4 rounded-2xl text-white outline-none focus:border-orange-500 transition-all">
             
             <button onclick="checkV12Auth()" 
-                    class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-xl shadow-[0_10px_20px_rgba(234,88,12,0.3)] uppercase tracking-widest text-sm transition-all active:scale-95">
+                    class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest">
                 Iniciar Sincronização
+            </button>
+        </div>
+    </div>
+</div>
             </button>
             
             <p class="text-[11px] text-slate-500 mt-6 cursor-pointer hover:text-orange-500 font-black uppercase tracking-widest transition-all" 
