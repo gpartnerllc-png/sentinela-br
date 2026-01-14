@@ -577,6 +577,28 @@ function iniciarMonitoramentoIA() {
         ">> AUTORIDADE CRISTIAN RECONHECIDA PELO SISTEMA."
     ];
 
+    <script>
+    // Exemplo de lógica para sua AWS Lambda (Node.js)
+const axios = require('axios');
+
+exports.handler = async (event) => {
+    const body = JSON.parse(event.body);
+    const msgCliente = body.message; // O que o cliente digitou no Whats
+
+    // 1. Chamar o Gemini para entender o pedido
+    const respostaGemini = await consultarGemini(msgCliente);
+
+    // 2. Se o cliente quer comprar, gerar PIX Parcelado na Pagaleve
+    if (respostaGemini.intent === 'COMPRAR') {
+        const checkout = await criarCheckoutPagaleve({
+            amount: respostaGemini.preco,
+            sku: respostaGemini.produtoId
+        });
+        
+        // 3. Responder ao WhatsApp com o link de pagamento
+        await enviarWhats(body.from, `Certo! Aqui está seu link para pagar parcelado no PIX: ${checkout.url}`);
+    }
+};
     setInterval(() => {
         const nextLog = logs[Math.floor(Math.random() * logs.length)];
         const p = document.createElement('p');
