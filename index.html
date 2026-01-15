@@ -249,7 +249,7 @@
 
         <div class="hidden md:block text-right">
             <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Acesso de Autoridade</p>
-            <p class="text-xs font-bold text-slate-800">${SP2}</p>
+            <p class="text-xs font-bold text-slate-800">$P2</p>
         </div>
     </header>
 </div>
@@ -1185,13 +1185,20 @@ function liberarUsuario(email) {
     let receitaAcumulada = 45280.50; 
     let lucroAcumulado = 12450.00;
 
-    function emitir(tipo) {
-        // 1. CAPTURA DOS INPUTS (Segurança e Limpeza)
-        const nome = document.getElementById('nomeInput')?.value.trim() || "CLIENTE CONSUMIDOR";
-        const valorRaw = document.getElementById('valorInput')?.value || "0";
-        const vTotal = parseFloat(valorRaw) || 0;
-        const desc = document.getElementById('descInput')?.value || "SERVIÇOS DE TECNOLOGIA V12";
-        const doc = "000.000.000-00"; // Pode ser alterado para um campo de input
+           <script>
+        
+        function emitir(tipo) {
+            const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
+            const slot = document.getElementById('slotDestino').value;
+            const nome = document.getElementById('nomeInput').value;
+            const valor = parseFloat(document.getElementById('valorInput').value) || 0;
+            const desc = document.getElementById('descInput').value;
+            if(!nome || valor <= 0) return alert("Erro: Preencha Nome e Valor.");
+            
+            const printArea = document.getElementById('print-area');
+            const dataHora = new Date().toLocaleString('pt-BR'); 
+
+    <script>
 
         // 2. VALIDAÇÃO INICIAL
         if (vTotal <= 0) return alert("❌ ERRO: Insira um valor válido.");
