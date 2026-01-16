@@ -742,33 +742,7 @@ let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
         }
     </script>
 
-    <script>
-        function emitir(tipo) {
-    const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
-    const slot = document.getElementById('slotDestino').value;
-
-    if (vTotal <= 0) return alert("ERRO: Valor de autoridade não definido.");
-
-    // Garante que a estrutura detalhada existe
-    if (!v12_finance.detalhado) v12_finance.detalhado = {};
-
-    // DIRECCIONAMENTO
-    if (slot.startsWith('receita')) {
-        v12_finance.receita += vTotal;
-    } else {
-        v12_finance.despesa += vTotal;
-        // Alimenta o slot específico (ex: obras)
-        v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal;
-    }
-
-    // Persistência
-    salvarTudoV12();
-    if (typeof updateDRE === "function") updateDRE();
-
-    // Com o slot definido, a nota fiscal agora sai detalhada
-    gerarNotaV12(tipo, vTotal, slot);
-}
-    </script>
+  
 
     <script>
        // 6. REMOVER USUÁRIO COM LOG DE AUDITORIA
