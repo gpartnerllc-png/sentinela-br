@@ -346,7 +346,7 @@
         <div class="col-span-3 grid grid-cols-1 gap-16 p-16 bg-slate-90 rounded-2xl border border-slate-80 shadow-[22px_22px_36px_#FFFFFF,-22px_-22px_36px_#D4AF37]">
     
     <div class="flex flex-col gap-2">
-        <label class="text-[22px] font-black text-orange-150/60 uppercase tracking-[3.2em] ml-2">F$)</label>
+        <label class="text-[22px] font-black text-orange-150/60 uppercase tracking-[3.2em] ml-2">F$</label>
         <div class="relative group">
             <input type="number" id="valorInput" oninput="calcFiscal()" 
                    class="w-full bg-slate-90 p-5 rounded-2xl text-3xl font-bold text-orange-80 
@@ -543,26 +543,6 @@
     <div id="print-area" class="hidden"></div>
 
     
-    <script>
-// ==========================================
-// NÚCLEO DE DADOS V12 (UNIFICADO)
-// ==========================================
-let v12_finance, v12_users;
-const SERIAL_P2 = "PB1F252F75254";
-const ACCESS_KEY = "20260112PB1F252F75254";
-
-try {
-    // Tenta carregar os dados com segurança
-    v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0 };
-    v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
-        { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
-    ];
-    console.log("Database V12 carregada com sucesso.");
-} catch (error) {
-    console.error("Erro na Database V12: Resetando para o padrão.");
-    v12_finance = { receita: 0, despesa: 0, invest: 0 };
-    v12_users = [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
-}
 
         <script>
     // PROTOCOLO DE INTELIGÊNCIA V12
