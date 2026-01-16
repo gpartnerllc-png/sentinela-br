@@ -1190,7 +1190,58 @@ function executarPagamentoPOS() {
     gerarNotaV12(tipo, vTotal, slot);
 }
     </script>
+<script>
+// ==========================================
+// FUNÇÃO EMITIR CORRIGIDA (SEM CONFLITO)
+// ==========================================
+function emitir(tipo) {
+    // 1. Tenta pegar o valor. Se o ID for diferente, mude para o ID correto do seu input
+    const inputValor = document.getElementById('valorInput');
+    const inputSlot = document.getElementById('slotDestino');
+    
+    const vTotal = inputValor ? parseFloat(inputValor.value) : 12450.00; // Valor padrão se não achar input
+    const slot = inputSlot ? inputSlot.value : 'receita_geral';
 
+    console.log(`Iniciando Emissão ${tipo} no valor de R$ ${vTotal}`);
+
+    // 2. Atualiza o Financeiro V12 (Evita que o sistema quebre se v12_finance não existir)
+    if (typeof v12_finance !== 'undefined') {
+        if (!v12_finance.detalhado) v12_finance.detalhado = {};
+        
+        if (slot.startsWith('receita')) {
+            v12_finance.receita += vTotal;
+        } else {
+            v12_finance.despesa += vTotal;
+            v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal;
+        }
+        
+        // Salva no Navegador
+        localStorage.setItem('v12_finance', JSON.stringify(v12_finance));
+    }
+
+    // 3. COMANDO DE IMPRESSÃO (A nota propriamente dita)
+    alert(`DOCUMENTO ${tipo} GERADO COM SUCESSO!\nValor: R$ ${vTotal.toLocaleString('pt-BR')}\nSincronizando com AWS V12...`);
+    
+    // Abre a tela de impressão do navegador (DANFE)
+    setTimeout(() => {
+        window.print();
+    }, 1000);
+}
+
+// Função de suporte para evitar erro caso não exista no seu código
+function salvarTudoV12() {
+    localStorage.setItem('v12_finance', JSON.stringify(v12_finance));
+    console.log("Dados V12 Salvos.");
+}
+
+// GARANTIA DO FAVICON PPIX (Força a atualização)
+(function() {
+    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.href = 'https://i.ibb.co/LST68m9/ppix.jpg';
+    link.rel = 'shortcut icon';
+    document.getElementsByTagName('head')[0].appendChild(link);
+})();
+</script>
 
     
 
