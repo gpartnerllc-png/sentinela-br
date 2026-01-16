@@ -1183,6 +1183,35 @@ function liberarUsuario(email) {
     let lucroAcumulado = 12450.00;
 
            <script>
+<script>
+// Função para Emitir Notas (DANFE A4 e Térmica)
+function emitir(tipo) {
+    console.log("Robô V12: Iniciando emissão de nota " + tipo);
+    
+    // Simula o processamento da nota
+    const status = document.querySelector('p:last-child');
+    if(status) status.innerText = "GERANDO " + tipo + " AGUARDE...";
+
+    setTimeout(() => {
+        // Comando potente para abrir a janela de impressão
+        window.print(); 
+        
+        if(status) status.innerText = tipo + " EMITIDO COM SUCESSO!";
+    }, 1500);
+}
+
+// Função para Pagamento via Antena Hardware
+function executarPagamentoPOS() {
+    console.log("Robô V12: Ativando Antena Hardware...");
+    alert("Sincronizando com Antena Hardware... Aproxime o cartão.");
+    
+    // Aqui você pode colocar o redirecionamento para o link oficial que você criou
+    // Exemplo: window.location.href = "https://loja.infinitepay.io/partner12";
+}
+</script>
+
+
+               
         
         function emitir(tipo) {
             const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
