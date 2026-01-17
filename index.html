@@ -898,6 +898,15 @@ function liberarUsuario(email) {
 };
     </script>
 
+     <script>
+        
+        function updateDRE() {
+            document.getElementById('dre_receita').innerText = `R$ ${v12_finance.receita.toFixed(2)}`;
+            document.getElementById('dre_despesa').innerText = `R$ ${v12_finance.despesa.toFixed(2)}`;
+            document.getElementById('dre_invest').innerText = `R$ ${v12_finance.invest.toFixed(2)}`;
+        }
+    </script>
+
     <script>
         
         function executarPagamentoPOS() {
@@ -1031,16 +1040,7 @@ console.log("Sistema Sentinela V12: Pronto para Operação.");
         document.getElementById('lucro-display').style.color = lucroLiquido >= 0 ? "#10b981" : "#ef4444";
     }
         
-    document.getElementById("prtDoc").textContent = formatarDocumento(doc);
-    document.getElementById("prtData").textContent = new Date().toLocaleString("pt-BR");
-    document.getElementById("prtProt").textContent = "SENT-" + Date.now().toString(36).toUpperCase();
-
-    document.getElementById("prtResumoFiscal").innerHTML = `
-        <p><strong>Receita Federal:</strong> ${diag.receita_federal || "REGULAR"}</p>
-        <p><strong>Simples Nacional / Créditos:</strong> ${diag.simples_nacional || "R$ 0,00"}</p>
-        <p><strong>Dívida Ativa PGFN:</strong> ${diag.pgfn_divida || "LIMPO"}</p>
-        ${isOffline ? '<p class="text-orange-600 font-bold mt-2">→ Modo Contingência (Offline)</p>' : ''}
-    `;
+ 
         document.getElementById('prtDoc').innerText = input;
                 document.getElementById('prtData').innerText = new Date().toLocaleString();
                 document.getElementById('prtProt').innerText = 'SENT-' + Math.random().toString(36).toUpperCase().substring(2,10);
@@ -1056,11 +1056,7 @@ console.log("Sistema Sentinela V12: Pronto para Operação.");
 
     <script>
                 function updateDRE() {
-    // 1. Cálculos de base
-    const receitaTotal = v12_finance.receita;
-    const totalImpostos = receitaTotal * 0.01; // CBS (0.9%) + IBS (0.1%)
-    const lucroLiquido = receitaTotal - totalImpostos;
-                    
+ 
     // 3. PROCESSAMENTO FINANCEIRO E TRIBUTÁRIO
     const vTotal = parseFloat(valorInput) || 0;
     const fed = vTotal * 0.1345; // Exemplo de carga federal (13.45%)
@@ -1299,13 +1295,7 @@ function executarPagamentoPOS() {
 </script>
     <script>
 
-          <script>
-        
-        function updateDRE() {
-            document.getElementById('dre_receita').innerText = `R$ ${v12_finance.receita.toFixed(2)}`;
-            document.getElementById('dre_despesa').innerText = `R$ ${v12_finance.despesa.toFixed(2)}`;
-            document.getElementById('dre_invest').innerText = `R$ ${v12_finance.invest.toFixed(2)}`;
-        }               
+          <script>          
         
         function emitir(tipo) {
             const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
@@ -1313,9 +1303,8 @@ function executarPagamentoPOS() {
             const nome = document.getElementById('nomeInput').value;
             const valor = parseFloat(document.getElementById('valorInput').value) || 0;
             const desc = document.getElementById('descInput').value;
-            if(!nome || valor <= 0) return alert("Erro: Preencha Nome e Valor.");
             
-            const printArea = document.getElementById('print-area');
+            if(!nome || valor <= 0) return alert("Erro: Preencha Nome e Valor.");
             const dataHora = new Date().toLocaleString('pt-BR'); 
 
         // 2. VALIDAÇÃO INICIAL
@@ -1485,12 +1474,6 @@ async function finalizarEmissaoV12() {
 }
 
 </script>
-                
-<script>
              
 </body>
 </html>
-    
-    
-
-    </script>
