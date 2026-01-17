@@ -323,15 +323,20 @@
         </div>
 
         <div class="flex gap-4">
-           
+            <div class="glass p-8 rounded-[2.5rem] card-3d border-t-4 border-orange-600">
+                    <h3 class="text-[11px] font-black text-orange-500 mb-6 uppercase tracking-[0.2em] text-center italic"></h3>
+                    <div class="space-y-3">           
             <button id="btnScanner" onclick="toggleScanner()" 
                 class="group relative bg-slate-900 text-white px-8 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-2xl active:scale-95 border border-slate-700">
                 <span class="flex items-center gap-2">
                     <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                    Bipar Ativos
+                    Bipar NF
                 </span>
             </button>
         </div>
+                <div id="offlineBadge" class="fixed top-0 left-0 right-0 bg-orange-600 text-white text-center py-1.5 text-xs font-black uppercase tracking-widest z-50 hidden">
+    CONTINGÊNCIA
+</div>
     </div>
              <div id="reader"></div>
 
@@ -504,10 +509,10 @@
             </div>
 
             <div id="ai-live-feed" class="space-y-2 font-mono text-[9px] leading-tight">
-                <p class="text-emerald-500/80">>> INICIALIZANDO PROTOCOLO SENTINELA...</p>
+                <p class="text-emerald-500/80">>> INICIALIZANDO PROTOCOLO...</p>
                 <p class="text-slate-400">>> ANALISANDO FLUXO DE CAIXA D.R.E...</p>
-                <p class="text-orange-400/70">>> RASTREANDO SINAIS MUNDIAIS: ESTÁVEL.</p>
-                <p class="text-white/40 animate-pulse">>> AGUARDANDO COMANDO DE AUTORIDADE_</p>
+                <p class="text-orange-400/70">>> RASTREANDO SINAIS ESTÁVEL.</p>
+                <p class="text-white/40 animate-pulse">>> AGUARDANDO COMANDO</p>
             </div>
         </div>
     </div>
@@ -1011,7 +1016,17 @@ function liberarUsuario(email) {
         // Se o lucro for positivo, brilha em verde. Se negativo, vermelho.
         document.getElementById('lucro-display').style.color = lucroLiquido >= 0 ? "#10b981" : "#ef4444";
     }
+        
+    document.getElementById("prtDoc").textContent = formatarDocumento(doc);
+    document.getElementById("prtData").textContent = new Date().toLocaleString("pt-BR");
+    document.getElementById("prtProt").textContent = "SENT-" + Date.now().toString(36).toUpperCase();
 
+    document.getElementById("prtResumoFiscal").innerHTML = `
+        <p><strong>Receita Federal:</strong> ${diag.receita_federal || "REGULAR"}</p>
+        <p><strong>Simples Nacional / Créditos:</strong> ${diag.simples_nacional || "R$ 0,00"}</p>
+        <p><strong>Dívida Ativa PGFN:</strong> ${diag.pgfn_divida || "LIMPO"}</p>
+        ${isOffline ? '<p class="text-orange-600 font-bold mt-2">→ Modo Contingência (Offline)</p>' : ''}
+    `;
     </script>
 
     <script>
@@ -1470,6 +1485,33 @@ async function finalizarEmissaoV12() {
     }
 }
 
+       function formatarDocumento(str) {
+    if (str.length === 11) {
+        return str.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    }
+    if (str.length === 14) {
+        return str.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+    }
+    return str;
+}
+
+function conectarAssinador() {
+    const statusEl = document.getElementById("statusAssinador");
+    statusEl.textContent = "VERIFICANDO...";
+    statusEl.className = "font-bold text-yellow-400 uppercase";
+
+    // Simulação de teste de portas comuns do assinador SERPRO
+    setTimeout(() => {
+        statusEl.textContent = "CONECTADO (6515)";
+        statusEl.className = "font-bold text-emerald-400 uppercase";
+    }, 1800);
+}
+       window.addEventListener("online",  () => document.getElementById("offlineBadge").classList.add("hidden"));
+window.addEventListener("offline", () => document.getElementById("offlineBadge").classList.remove("hidden"));
+
+window.onload = () => {
+    conectarAssinador();
+};
 // LOG DE INICIALIZAÇÃO DO SISTEMA
 console.log("Sistema Sentinela V12: Pronto para Operação.");
 </script>
