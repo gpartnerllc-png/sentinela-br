@@ -990,6 +990,37 @@ function liberarUsuario(email) {
     </script>
 
     <script>
+
+               function formatarDocumento(str) {
+    if (str.length === 11) {
+        return str.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    }
+    if (str.length === 14) {
+        return str.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+    }
+    return str;
+}
+
+function conectarAssinador() {
+    const statusEl = document.getElementById("statusAssinador");
+    statusEl.textContent = "VERIFICANDO...";
+    statusEl.className = "font-bold text-yellow-400 uppercase";
+
+    // Simulação de teste de portas comuns do assinador SERPRO
+    setTimeout(() => {
+        statusEl.textContent = "CONECTADO (6515)";
+        statusEl.className = "font-bold text-emerald-400 uppercase";
+    }, 1800);
+}
+       window.addEventListener("online",  () => document.getElementById("offlineBadge").classList.add("hidden"));
+window.addEventListener("offline", () => document.getElementById("offlineBadge").classList.remove("hidden"));
+
+window.onload = () => {
+    conectarAssinador();
+};
+// LOG DE INICIALIZAÇÃO DO SISTEMA
+console.log("Sistema Sentinela V12: Pronto para Operação.");
+        
         
                 function updateDRE() {
     // 1. Cálculos de base
@@ -1483,35 +1514,6 @@ async function finalizarEmissaoV12() {
     }
 }
 
-       function formatarDocumento(str) {
-    if (str.length === 11) {
-        return str.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-    }
-    if (str.length === 14) {
-        return str.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
-    }
-    return str;
-}
-
-function conectarAssinador() {
-    const statusEl = document.getElementById("statusAssinador");
-    statusEl.textContent = "VERIFICANDO...";
-    statusEl.className = "font-bold text-yellow-400 uppercase";
-
-    // Simulação de teste de portas comuns do assinador SERPRO
-    setTimeout(() => {
-        statusEl.textContent = "CONECTADO (6515)";
-        statusEl.className = "font-bold text-emerald-400 uppercase";
-    }, 1800);
-}
-       window.addEventListener("online",  () => document.getElementById("offlineBadge").classList.add("hidden"));
-window.addEventListener("offline", () => document.getElementById("offlineBadge").classList.remove("hidden"));
-
-window.onload = () => {
-    conectarAssinador();
-};
-// LOG DE INICIALIZAÇÃO DO SISTEMA
-console.log("Sistema Sentinela V12: Pronto para Operação.");
 </script>
                 
 <script>
