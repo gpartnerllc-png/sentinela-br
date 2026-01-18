@@ -1056,40 +1056,7 @@ console.log("Sistema Sentinela V12: Pronto para Operação.");
 
     </script>
 
-    <script>
-                function updateDRE() {
- 
-    // 3. PROCESSAMENTO FINANCEIRO E TRIBUTÁRIO
-    const vTotal = parseFloat(valorInput) || 0;
-    const fed = vTotal * 0.1345; // Exemplo de carga federal (13.45%)
-    const est = vTotal * 0.07;   // Exemplo de carga estadual (7%)
-    const totalImpostos = fed + est;
-    const authCode = Math.floor(100000 + Math.random() * 900000); // Código de documento único
-    const dataHora = new Date().toLocaleString('pt-BR');
-
-    
-    if (!nome || !valorInput) {
-        alert("Erro: Preencha o Nome e o Valor Operacional.");
-        return;
-    }
-
-    // PROCESSAMENTO FINANCEIRO V12
-    const vTotal = parseFloat(valorInput) || 0;
-    const fed = vTotal * 0.1345; 
-    const est = vTotal * 0.07;   
-    const totalImpostosVenda = fed + est;
-    const authCode = Math.floor(100000 + Math.random() * 900000);
-    const dataHora = new Date().toLocaleString('pt-BR');
-
-    // ATUALIZAÇÃO DO CAIXA (SISTEMA DE AUTORIDADE)
-    v12_finance.receita += vTotal;
-    const receitaAcumulada = v12_finance.receita;
-    const lucroAcumulado = receitaAcumulada * 0.99; // Considerando taxa operacional V12
-
-    // ATUALIZA INTERFACE VISUAL
-    updateDRE();
-        
- </script>
+  
                 
     <script>
 
