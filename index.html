@@ -713,36 +713,6 @@ let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
         }
     </script>
 
-  <script>
-// Variáveis globais para a nota acessar
-let vTotalGlobal = 0;
-let fedGlobal = 0;
-let estGlobal = 0;
-
-function calcFiscal() {
-    // Busca o valor digitado
-    const campoValor = document.getElementById('valorInput');
-    if (!campoValor) return;
-
-    const v = parseFloat(campoValor.value) || 0;
-    
-    // Cálculos de Autoridade V12
-    vTotalGlobal = v;
-    fedGlobal = v * 0.009; // CBS (Federal)
-    estGlobal = v * 0.001; // IBS (Estadual)
-
-    // Atualiza a tela (Detalhe Tributário)
-    document.getElementById('cbsVal').innerText = `R$ ${fedGlobal.toFixed(2)}`;
-    document.getElementById('ibsVal').innerText = `R$ ${estGlobal.toFixed(2)}`;
-    document.getElementById('liqVal').innerText = `R$ ${vTotalGlobal.toFixed(2)}`;
-    
-    // Atualiza o destaque visual do valor total
-    const destaque = document.querySelector('.valor-total-destaque');
-    if (destaque) destaque.innerText = `R$ ${vTotalGlobal.toFixed(2)}`;
-}
-</script>
-
-  
 
     <script>
        // 6. REMOVER USUÁRIO COM LOG DE AUDITORIA
@@ -1122,21 +1092,6 @@ console.log("Sistema Sentinela V12: Pronto para Operação.");
 
     <script>
 
-        
-    // 3. COMANDO DE DISPARO (O que faltava)
-    salvarTudoV12();
-    if (typeof updateDRE === "function") updateDRE();
-    
-    // Pequeno delay para garantir que o HTML foi desenhado antes de imprimir
-    setTimeout(() => {
-        window.print();
-    }, 500);
-}
-
-    </script>
-    
-    <script>
-
     // 2. CÁLCULOS NECESSÁRIOS (O que estava faltando)
     const vTotal = parseFloat(valorRaw) || 0;
     if (vTotal <= 0) {
@@ -1170,25 +1125,6 @@ console.log("Sistema Sentinela V12: Pronto para Operação.");
     let lucroAcumulado = 12450.00;
 
            <script>
-<script>
-// Função para Emitir Notas (DANFE A4 e Térmica)
-function emitir(tipo) {
-    console.log("Robô V12: Iniciando emissão de nota " + tipo);
-    
-    // Simula o processamento da nota
-    const status = document.querySelector('p:last-child');
-    if(status) status.innerText = "GERANDO " + tipo + " AGUARDE...";
-
-    setTimeout(() => {
-        // Comando potente para abrir a janela de impressão
-        window.print(); 
-        
-        if(status) status.innerText = tipo + " EMITIDO COM SUCESSO!";
-    }, 1500);
-}
-
-</script>    
-
 
     
     <script>
@@ -1316,7 +1252,7 @@ function emitir(tipo) {
     // Abre a tela de impressão do navegador (DANFE)
     setTimeout(() => {
         window.print();
-    }, 500);
+    }, 800);
 }
 
 // Função de suporte para evitar erro caso não exista no seu código
