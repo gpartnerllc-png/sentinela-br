@@ -512,7 +512,9 @@
                 <p class="text-emerald-500/80">>> INICIALIZANDO PROTOCOLO...</p>
                 <p class="text-slate-400">>> ANALISANDO FLUXO DE CAIXA D.R.E...</p>
                 <p class="text-orange-400/70">>> RASTREANDO SINAIS ESTÁVEL.</p>
-                <p class="text-white/40 animate-pulse">>> AGUARDANDO COMANDO</p>
+                <p id="status" class="text-white/40 animate-pulse font-bold" style="color: orange;">
+    >> AGUARDANDO COMANDO
+</p>
             </div>
         </div>
     </div>
@@ -538,6 +540,7 @@
     </div>
 
     <div id="print-area" class="hidden"></div>
+    <div id="printArea" style="display: none;"></div>
 
     
 
@@ -724,15 +727,34 @@ let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
         }
     </script>
 
-    <script>
-        // --- 4. FISCAL ---
-        function calcFiscal() {
-            const v = parseFloat(document.getElementById('valorInput').value) || 0;
-            document.getElementById('cbsVal').innerText = `R$ ${(v * 0.009).toFixed(2)}`;
-            document.getElementById('ibsVal').innerText = `R$ ${(v * 0.001).toFixed(2)}`;
-            document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
-        }
-    </script>
+  <script>
+// Variáveis globais para a nota acessar
+let vTotalGlobal = 0;
+let fedGlobal = 0;
+let estGlobal = 0;
+
+function calcFiscal() {
+    // Busca o valor digitado
+    const campoValor = document.getElementById('valorInput');
+    if (!campoValor) return;
+
+    const v = parseFloat(campoValor.value) || 0;
+    
+    // Cálculos de Autoridade V12
+    vTotalGlobal = v;
+    fedGlobal = v * 0.009; // CBS (Federal)
+    estGlobal = v * 0.001; // IBS (Estadual)
+
+    // Atualiza a tela (Detalhe Tributário)
+    document.getElementById('cbsVal').innerText = `R$ ${fedGlobal.toFixed(2)}`;
+    document.getElementById('ibsVal').innerText = `R$ ${estGlobal.toFixed(2)}`;
+    document.getElementById('liqVal').innerText = `R$ ${vTotalGlobal.toFixed(2)}`;
+    
+    // Atualiza o destaque visual do valor total
+    const destaque = document.querySelector('.valor-total-destaque');
+    if (destaque) destaque.innerText = `R$ ${vTotalGlobal.toFixed(2)}`;
+}
+</script>
 
   
 
@@ -774,35 +796,6 @@ function salvarEAtualizarV12() {
 }
     </script>
 
-    <script>
-// 8. CÁLCULO FISCAL AVANÇADO (Refletindo na DANFE e Painel)
-function calcFiscal() {
-    const valorRaw = document.getElementById('valorInput').value;
-    const valor = parseFloat(valorRaw) || 0;
-    
-    // Regras tributárias Sentinela V12
-    const cbs = valor * 0.009; // Contribuição sobre Bens e Serviços
-    const ibs = valor * 0.001; // Imposto sobre Bens e Serviços
-    const impostoTotal = cbs + ibs;
-
-    // Atualização dinâmica dos elementos da interface
-    const elementos = {
-        'cbsVal': cbs,
-        'ibsVal': ibs,
-        'liqVal': valor
-    };
-
-    for (let [id, val] of Object.entries(elementos)) {
-        const el = document.getElementById(id);
-        if (el) {
-            el.innerText = `R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-            // Efeito visual de atualização
-            el.style.color = val > 0 ? "var(--active-orange)" : "inherit";
-        }
-    }
-}
-
-    </script>
 
     <script>
 // 9. LIBERAÇÃO RÁPIDA DE OPERADOR
@@ -895,52 +888,60 @@ function liberarUsuario(email) {
 };
     </script>
 
-       <script>
-        
-        function updateDRE() {
-            document.getElementById('dre_receita').innerText = `R$ ${v12_finance.receita.toFixed(2)}`;
-            document.getElementById('dre_despesa').innerText = `R$ ${v12_finance.despesa.toFixed(2)}`;
-            document.getElementById('dre_invest').innerText = `R$ ${v12_finance.invest.toFixed(2)}`;
+    <script>
+// Variáveis Globais de Autoridade V12
+let vTotalGlobal = 0;
+let cbsGlobal = 0;
+let ibsGlobal = 0;
+
+function calcFiscal() {
+    // 1. Captura o valor real do campo 'valorInput'
+    const input = document.getElementById('valorInput');
+    const valor = input ? parseFloat(input.value) || 0 : 0;
+
+    // 2. Regras Tributárias Sentinela V12
+    vTotalGlobal = valor;
+    cbsGlobal = valor * 0.009; // CBS (Federal 0.9%)
+    ibsGlobal = valor * 0.001; // IBS (Estadual 0.1%)
+
+    // 3. Atualização Dinâmica da Interface
+    const elementos = {
+        'cbsVal': cbsGlobal,
+        'ibsVal': ibsGlobal,
+        'liqVal': vTotalGlobal
+    };
+
+    for (let [id, val] of Object.entries(elementos)) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerText = `R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            el.style.color = val > 0 ? "var(--active-orange)" : "inherit";
         }
-    </script>
-
-  
-      <script>
-                function updateDRE() {
- 
-    // 3. PROCESSAMENTO FINANCEIRO E TRIBUTÁRIO
-    const vTotal = parseFloat(valorInput) || 0;
-    const fed = vTotal * 0.1345; // Exemplo de carga federal (13.45%)
-    const est = vTotal * 0.07;   // Exemplo de carga estadual (7%)
-    const totalImpostos = fed + est;
-    const authCode = Math.floor(100000 + Math.random() * 900000); // Código de documento único
-    const dataHora = new Date().toLocaleString('pt-BR');
-
-    
-    if (!nome || !valorInput) {
-        alert("Erro: Preencha o Nome e o Valor Operacional.");
-        return;
     }
-              
-    // PROCESSAMENTO FINANCEIRO V12
-    const vTotal = parseFloat(valorInput) || 0;
-    const fed = vTotal * 0.1345; 
-    const est = vTotal * 0.07;   
-    const totalImpostosVenda = fed + est;
-    const authCode = Math.floor(100000 + Math.random() * 900000);
-    const dataHora = new Date().toLocaleString('pt-BR');
 
-    // ATUALIZAÇÃO DO CAIXA (SISTEMA DE AUTORIDADE)
-    v12_finance.receita += vTotal;
-    const receitaAcumulada = v12_finance.receita;
-    const lucroAcumulado = receitaAcumulada * 0.99; // Considerando taxa operacional V12
+    // Sincroniza o valor de destaque visual
+    const destaque = document.querySelector('.valor-total-destaque');
+    if (destaque) destaque.innerText = `R$ ${vTotalGlobal.toFixed(2)}`;
+}
 
-    // ATUALIZA INTERFACE VISUAL
-    updateDRE();
+function updateDRE() {
+    // Sincroniza o Financeiro V12 com os dados de base
+    const receita = typeof v12_finance !== 'undefined' ? v12_finance.receita : vTotalGlobal;
+    
+    const elementsDRE = {
+        'dre_receita': receita,
+        'dre_despesa': receita * 0.07, // Exemplo de despesa operacional
+        'dre_invest': receita * 0.05
+    };
 
-      <script>
+    for (let [id, val] of Object.entries(elementsDRE)) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = `R$ ${val.toFixed(2)}`;
+    }
+}
+</script>
 
-                  
+        <script>            
 
 // 4. LÓGICA DE GERAÇÃO POR TIPO
 function gerarImpressao(dados) {
@@ -949,17 +950,42 @@ function gerarImpressao(dados) {
 
     <script>
         
-        function executarPagamentoPOS() {
-            const valor = document.getElementById('valorInput').value;
-            if(!valor || valor == 0) return alert("Insira um valor.");
-            v12_finance.receita += parseFloat(valor);
-            updateDRE();
-            addLog(`Invocando Hardware... R$ ${valor}`);
-            generateAIInsight("Transação em curso via Antena P2. Registrando autoridade fiscal.");
-            const intentUrl = `intent://pay?amount=${Math.round(valor*100)}&currency=BRL#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
-            window.location.href = intentUrl;
-        }
+ function executarPagamentoPOS() {
+    const valorInput = document.getElementById('valorInput');
+    const valor = valorInput ? valorInput.value : 0;
 
+    // 1. Validação de Segurança
+    if(!valor || valor == 0) {
+        alert("Insira um valor válido para transação.");
+        return;
+    }
+
+    // 2. Sincronização de Dados V12 (Antes do Intent)
+    if (typeof v12_finance !== 'undefined') {
+        v12_finance.receita += parseFloat(valor);
+        updateDRE(); // Atualiza o painel financeiro imediatamente
+    }
+
+    // 3. Registros de Autoridade (Logs)
+    if (typeof addLog === "function") addLog(`Invocando Hardware... R$ ${valor}`);
+    if (typeof generateAIInsight === "function") {
+        generateAIInsight("Transação em curso via Antena P2. Registrando autoridade fiscal.");
+    }
+
+    // 4. Invocação do Hardware (Protocolo InfinitePay)
+    const amountInCents = Math.round(parseFloat(valor) * 100);
+    const intentUrl = `intent://pay?amount=${amountInCents}&currency=BRL#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
+
+    console.log("Robô V12: Ativando Antena Hardware...");
+    
+    // 5. Redirecionamento Final
+    // O alerta deve vir ANTES ou ser substituído por um aviso na tela para não travar o Intent
+    setTimeout(() => {
+        window.location.href = intentUrl;
+    }, 500);
+}
+
+    
     </script>
 
     <script>
@@ -1002,17 +1028,7 @@ function gerarImpressao(dados) {
         }
     </script>
 
-    <script>
-        
-        function calcFiscal() {
-            const v = parseFloat(document.getElementById('valorInput').value) || 0;
-            document.getElementById('cbsVal').innerText = `R$ ${(v * 0.009).toFixed(2)}`;
-            document.getElementById('ibsVal').innerText = `R$ ${(v * 0.001).toFixed(2)}`;
-            document.getElementById('liqVal').innerText = `R$ ${v.toFixed(2)}`;
-        }
-    </script>
-
-    <script>
+     <script>
         
         function addLog(msg) {
             const log = document.getElementById('logContent');
@@ -1056,13 +1072,7 @@ window.onload = () => {
 console.log("Sistema Sentinela V12: Pronto para Operação.");
         
         
-                function updateDRE() {
-    // 1. Cálculos de base
-    const receitaTotal = v12_finance.receita;
-    const totalImpostos = receitaTotal * 0.01; // CBS (0.9%) + IBS (0.1%)
-    const lucroLiquido = receitaTotal - totalImpostos;
-    </script>
-
+      
     <script>
     // 2. Atualização dos Elementos Visuais (Cards de Destaque)
     // Procure ou crie elementos com esses IDs no seu HTML
@@ -1181,15 +1191,22 @@ function emitir(tipo) {
     }, 1500);
 }
 
-// Função para Pagamento via Antena Hardware
-function executarPagamentoPOS() {
-    console.log("Robô V12: Ativando Antena Hardware...");
-    alert("Sincronizando com Antena Hardware... Aproxime o cartão.");
-    
-    // Aqui você pode colocar o redirecionamento para o link oficial que você criou
-    // Exemplo: window.location.href = "https://loja.infinitepay.io/partner12";
-}
 </script>    
+
+
+    
+    <script>
+// Captura os dados diretamente da tela para o DANFE
+const vTotal = parseFloat(document.querySelector('.valor-total-destaque')?.innerText.replace('R$', '').replace(',', '.') || 23.00);
+const nome = document.getElementById('nome-cliente')?.value || "CLIENTE V12";
+const doc = document.getElementById('cpf')?.value || "000.000.000-00";
+const desc = "PRESTAÇÃO DE SERVIÇO DIGITAL - NÚCLEO V12";
+const dataHora = new Date().toLocaleString('pt-BR');
+const Code = Math.floor(100000 + Math.random() * 900000); // Gera o número do documento
+
+
+
+    
 
 <script>
 
