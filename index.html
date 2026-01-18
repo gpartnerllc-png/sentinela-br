@@ -343,7 +343,7 @@
         <div class="col-span-3 grid grid-cols-1 gap-16 p-16 bg-slate-90 rounded-2xl border border-slate-80 shadow-[22px_22px_36px_#FFFFFF,-22px_-22px_36px_#D4AF37]">
     
     <div class="flex flex-col gap-2">
-        <label class="text-[22px] font-black text-orange-150/60 uppercase tracking-[3.2em] ml-2">F$</label>
+        <label class="text-[11px] font-black text-slate-500 uppercase tracking-[0.6em] ml-1 group-hover:text-orange-500 transition-colors">Valor</label>
         <div class="relative group">
             <input type="number" id="valorInput" oninput="calcFiscal()" 
                    class="w-full bg-slate-90 p-5 rounded-2xl text-3xl font-bold text-orange-80 
@@ -910,132 +910,12 @@ function liberarUsuario(email) {
     </script>
 
       <script>
-                function updateDRE() {
- 
-    // 3. PROCESSAMENTO FINANCEIRO E TRIBUTÁRIO
-    const vTotal = parseFloat(valorInput) || 0;
-    const fed = vTotal * 0.1345; // Exemplo de carga federal (13.45%)
-    const est = vTotal * 0.07;   // Exemplo de carga estadual (7%)
-    const totalImpostos = fed + est;
-    const authCode = Math.floor(100000 + Math.random() * 900000); // Código de documento único
-    const dataHora = new Date().toLocaleString('pt-BR');
-
-    
-    if (!nome || !valorInput) {
-        alert("Erro: Preencha o Nome e o Valor Operacional.");
-        return;
-    }
-
-    // PROCESSAMENTO FINANCEIRO V12
-    const vTotal = parseFloat(valorInput) || 0;
-    const fed = vTotal * 0.1345; 
-    const est = vTotal * 0.07;   
-    const totalImpostosVenda = fed + est;
-    const authCode = Math.floor(100000 + Math.random() * 900000);
-    const dataHora = new Date().toLocaleString('pt-BR');
-
-    // ATUALIZAÇÃO DO CAIXA (SISTEMA DE AUTORIDADE)
-    v12_finance.receita += vTotal;
-    const receitaAcumulada = v12_finance.receita;
-    const lucroAcumulado = receitaAcumulada * 0.99; // Considerando taxa operacional V12
-
-    // ATUALIZA INTERFACE VISUAL
-    updateDRE();
         
 
 // 4. LÓGICA DE GERAÇÃO POR TIPO
 function gerarImpressao(dados) {
     const { tipo, nome, doc, dataHora, vTotal, desc, receitaAcumulada, lucroAcumulado, fed, est, ACCESS_KEY, SP2, Code } = dados;
     const printArea = document.getElementById('printArea');
-
-    if (tipo === 'TERMICO') {
-        printArea.innerHTML = `
-            <div class="thermal-print-container" style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace;">
-                <div style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">Gestão Acertiva</div>
-                <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO</p>
-                <p style="text-align:center;">------------------------------------------</p>
-                <p><b>DATA:</b> ${dataHora}</p>
-                <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
-                <p><b>DOC:</b> ${doc}</p>
-                <p style="text-align:center;">------------------------------------------</p>
-                <table style="width: 100%; font-size: 10px;">
-                    <tr style="border-bottom: 1px solid #000;">
-                        <td align="left"><b>ITEM</b></td>
-                        <td align="center"><b>QTD</b></td>
-                        <td align="right"><b>TOTAL</b></td>
-                    </tr>
-                    <tr>
-                        <td align="left">${desc.substring(0, 15)}...</td>
-                        <td align="center">1</td>
-                        <td align="right">R$ ${vTotal.toFixed(2)}</td>
-                    </tr>
-                </table>
-                <p style="text-align:center;">------------------------------------------</p>
-                <div style="text-align: right;">
-                    <p style="margin:0;">Subtotal: R$ ${vTotal.toFixed(2)}</p>
-                    <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
-                </div>
-                <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background: #f9f9f9; font-size: 10px;">
-                    <p style="margin:0; font-weight:bold; text-align:center;">RESUMO FINANCEIRO DO TERMINAL</p>
-                    <p style="margin:0;">RECEITA ACUMULADA: R$ ${receitaAcumulada.toFixed(2)}</p>
-                    <p style="margin:0;">LUCRO LÍQUIDO DIA: R$ ${lucroAcumulado.toFixed(2)}</p>
-                </div>
-                <p style="font-size: 9px; margin-top: 5px;">Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)</p>
-                <p style="text-align:center; margin-top: 5px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
-            </div>`;
-    } else {
-        // MODELO SENTINELA V12 - A4 PROFISSIONAL
-        printArea.innerHTML = `
-            <div id="print-a4" style="font-family: 'JetBrains Mono', monospace; padding: 30px; border: 1px solid #ddd; background: #fff; color: #000; max-width: 800px; margin: auto; text-align: left;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 4px solid #000; padding-bottom: 15px;">
-                    <div>
-                        <h1 style="font-size: 32px; margin: 0; font-weight: 900;">SENTINELA V12</h1>
-                        <p style="margin: 0;">SISTEMAS DE AUTORIDADE</p>
-                        <p style="margin: 0; font-size: 11px;">SERIAL POS: ${SP2}</p>
-                    </div>
-                    <div style="text-align: right; border: 2px solid #000; padding: 8px;">
-                        <p style="margin: 0; font-size: 9px;">NÚMERO DO DOCUMENTO</p>
-                        <h2 style="margin: 0;">#${Code}</h2>
-                    </div>
-                </div>
-                <div style="margin-top: 20px; background: #f4f4f4; padding: 15px; border-radius: 5px; display: grid; grid-template-columns: 1fr 1fr;">
-                    <div>
-                        <p style="margin: 0; font-size: 9px; color: #666;">CLIENTE</p>
-                        <p style="margin: 0; font-weight: bold; font-size: 14px;">${nome.toUpperCase()}</p>
-                        <p style="margin: 0;">DOC: ${doc}</p>
-                    </div>
-                    <div style="text-align: right;">
-                        <p style="margin: 0; font-size: 9px; color: #666;">EMISSÃO</p>
-                        <p style="margin: 0;">${dataHora}</p>
-                    </div>
-                </div>
-                <div style="margin-top: 30px;">
-                    <p><b>DESCRIÇÃO DO SERVIÇO:</b> ${desc}</p>
-                </div>
-                <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
-                    <div style="width: 55%; border: 1px solid #000; padding: 12px; background: #f9f9f9;">
-                        <h3 style="margin: 0 0 8px 0; font-size: 11px; border-bottom: 1px solid #000;">CONSOLIDAÇÃO DRE TERMINAL</h3>
-                        <p style="margin: 2px 0; font-size: 10px;">RECEITA BRUTA DIA: R$ ${receitaAcumulada.toFixed(2)}</p>
-                        <p style="margin: 5px 0 0 0; font-size: 11px; font-weight: bold;">LUCRO LÍQUIDO: R$ ${lucroAcumulado.toFixed(2)}</p>
-                    </div>
-                    <div style="width: 250px; background: #000; color: #fff; padding: 15px; text-align: right;">
-                        <h2 style="margin: 0; font-size: 20px;">TOTAL R$ ${vTotal.toFixed(2)}</h2>
-                    </div>
-                </div>
-            </div>`;
-    }
-
-    // Feedback e comando de impressão
-    setTimeout(() => {
-        window.print();
-    }, 500);
-}
-
-
-
-
-
-    
 
     <script>
         
@@ -1280,6 +1160,40 @@ function executarPagamentoPOS() {
     // Exemplo: window.location.href = "https://loja.infinitepay.io/partner12";
 }
 </script>
+
+
+    <script>
+                function updateDRE() {
+ 
+    // 3. PROCESSAMENTO FINANCEIRO E TRIBUTÁRIO
+    const vTotal = parseFloat(valorInput) || 0;
+    const fed = vTotal * 0.1345; // Exemplo de carga federal (13.45%)
+    const est = vTotal * 0.07;   // Exemplo de carga estadual (7%)
+    const totalImpostos = fed + est;
+    const authCode = Math.floor(100000 + Math.random() * 900000); // Código de documento único
+    const dataHora = new Date().toLocaleString('pt-BR');
+
+    
+    if (!nome || !valorInput) {
+        alert("Erro: Preencha o Nome e o Valor Operacional.");
+        return;
+    }
+
+    // PROCESSAMENTO FINANCEIRO V12
+    const vTotal = parseFloat(valorInput) || 0;
+    const fed = vTotal * 0.1345; 
+    const est = vTotal * 0.07;   
+    const totalImpostosVenda = fed + est;
+    const authCode = Math.floor(100000 + Math.random() * 900000);
+    const dataHora = new Date().toLocaleString('pt-BR');
+
+    // ATUALIZAÇÃO DO CAIXA (SISTEMA DE AUTORIDADE)
+    v12_finance.receita += vTotal;
+    const receitaAcumulada = v12_finance.receita;
+    const lucroAcumulado = receitaAcumulada * 0.99; // Considerando taxa operacional V12
+
+    // ATUALIZA INTERFACE VISUAL
+    updateDRE();
     
  
 <script>
@@ -1313,6 +1227,84 @@ function emitir(tipo) {
 
     // 3. COMANDO DE IMPRESSÃO (A nota propriamente dita)
     alert(`DOCUMENTO ${tipo} GERADO COM SUCESSO!\nValor: R$ ${vTotal.toLocaleString('pt-BR')}\nSincronizando com AWS V12...`);
+
+    
+    if (tipo === 'TERMICO') {
+        printArea.innerHTML = `
+            <div class="thermal-print-container" style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace;">
+                <div style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">Gestão Acertiva</div>
+                <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <p><b>DATA:</b> ${dataHora}</p>
+                <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
+                <p><b>DOC:</b> ${doc}</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <table style="width: 100%; font-size: 10px;">
+                    <tr style="border-bottom: 1px solid #000;">
+                        <td align="left"><b>ITEM</b></td>
+                        <td align="center"><b>QTD</b></td>
+                        <td align="right"><b>TOTAL</b></td>
+                    </tr>
+                    <tr>
+                        <td align="left">${desc.substring(0, 15)}...</td>
+                        <td align="center">1</td>
+                        <td align="right">R$ ${vTotal.toFixed(2)}</td>
+                    </tr>
+                </table>
+                <p style="text-align:center;">------------------------------------------</p>
+                <div style="text-align: right;">
+                    <p style="margin:0;">Subtotal: R$ ${vTotal.toFixed(2)}</p>
+                    <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
+                </div>
+                <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background: #f9f9f9; font-size: 10px;">
+                    <p style="margin:0; font-weight:bold; text-align:center;">RESUMO FINANCEIRO DO TERMINAL</p>
+                    <p style="margin:0;">RECEITA ACUMULADA: R$ ${receitaAcumulada.toFixed(2)}</p>
+                    <p style="margin:0;">LUCRO LÍQUIDO DIA: R$ ${lucroAcumulado.toFixed(2)}</p>
+                </div>
+                <p style="font-size: 9px; margin-top: 5px;">Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)</p>
+                <p style="text-align:center; margin-top: 5px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
+            </div>`;
+    } else {
+        // MODELO SENTINELA V12 - A4 PROFISSIONAL
+        printArea.innerHTML = `
+            <div id="print-a4" style="font-family: 'JetBrains Mono', monospace; padding: 30px; border: 1px solid #ddd; background: #fff; color: #000; max-width: 800px; margin: auto; text-align: left;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 4px solid #000; padding-bottom: 15px;">
+                    <div>
+                        <h1 style="font-size: 32px; margin: 0; font-weight: 900;">SENTINELA V12</h1>
+                        <p style="margin: 0;">SISTEMAS DE AUTORIDADE</p>
+                        <p style="margin: 0; font-size: 11px;">SERIAL POS: ${SP2}</p>
+                    </div>
+                    <div style="text-align: right; border: 2px solid #000; padding: 8px;">
+                        <p style="margin: 0; font-size: 9px;">NÚMERO DO DOCUMENTO</p>
+                        <h2 style="margin: 0;">#${Code}</h2>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; background: #f4f4f4; padding: 15px; border-radius: 5px; display: grid; grid-template-columns: 1fr 1fr;">
+                    <div>
+                        <p style="margin: 0; font-size: 9px; color: #666;">CLIENTE</p>
+                        <p style="margin: 0; font-weight: bold; font-size: 14px;">${nome.toUpperCase()}</p>
+                        <p style="margin: 0;">DOC: ${doc}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 9px; color: #666;">EMISSÃO</p>
+                        <p style="margin: 0;">${dataHora}</p>
+                    </div>
+                </div>
+                <div style="margin-top: 30px;">
+                    <p><b>DESCRIÇÃO DO SERVIÇO:</b> ${desc}</p>
+                </div>
+                <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div style="width: 55%; border: 1px solid #000; padding: 12px; background: #f9f9f9;">
+                        <h3 style="margin: 0 0 8px 0; font-size: 11px; border-bottom: 1px solid #000;">CONSOLIDAÇÃO DRE TERMINAL</h3>
+                        <p style="margin: 2px 0; font-size: 10px;">RECEITA BRUTA DIA: R$ ${receitaAcumulada.toFixed(2)}</p>
+                        <p style="margin: 5px 0 0 0; font-size: 11px; font-weight: bold;">LUCRO LÍQUIDO: R$ ${lucroAcumulado.toFixed(2)}</p>
+                    </div>
+                    <div style="width: 250px; background: #000; color: #fff; padding: 15px; text-align: right;">
+                        <h2 style="margin: 0; font-size: 20px;">TOTAL R$ ${vTotal.toFixed(2)}</h2>
+                    </div>
+                </div>
+            </div>`;
+    }
     
     // Abre a tela de impressão do navegador (DANFE)
     setTimeout(() => {
