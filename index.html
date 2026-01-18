@@ -1192,9 +1192,7 @@ function executarPagamentoPOS() {
 </script>    
 
 <script>
-// ==========================================
-// FUNÇÃO EMITIR CORRIGIDA (SEM CONFLITO)
-// ==========================================
+
 function emitir(tipo) {
     // 1. Tenta pegar o valor. Se o ID for diferente, mude para o ID correto do seu input
     const inputValor = document.getElementById('valorInput');
@@ -1314,21 +1312,12 @@ function salvarTudoV12() {
     console.log("Dados V12 Salvos.");
 }
 
-// GARANTIA DO FAVICON PPIX (Força a atualização)
-(function() {
-    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-    link.href = 'https://i.ibb.co/LST68m9/ppix.jpg';
-    link.rel = 'shortcut icon';
-    document.getElementsByTagName('head')[0].appendChild(link);
-})();
 </script>
 
     
 
      <script>
-// ==========================================
-// NÚCLEO DE DADOS V12 (UNIFICADO)
-// ==========================================
+
 let v12_finance, v12_users;
 const SERIAL_P2 = "PB1F252F75254";
 const ACCESS_KEY = "20260112PB1F252F75254";
@@ -1345,54 +1334,7 @@ try {
     v12_users = [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
 }
 
-// Função para os botões Emitir DANFE e Imp. Térmica
-function emitir(tipo) {
-    console.log("Robô V12: Iniciando emissão " + tipo);
-    alert("Gerando " + tipo + "... Aguarde a sincronização com o sistema.");
-    
-    // Comando para abrir impressão do DANFE
-    setTimeout(() => {
-        window.print();
-    }, 500);
-}
-
-// Função para a Antena Hardware
-function executarPagamentoPOS() {
-    console.log("Robô V12: Ativando Hardware " + SERIAL_P2);
-    alert("Conectando à Antena Hardware via Serial " + SERIAL_P2 + "... Aproxime para pagar.");
-}
-
-
-</script>
-
-          <script>          
-        
-        function emitir(tipo) {
-            const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
-            const slot = document.getElementById('slotDestino').value;
-            const nome = document.getElementById('nomeInput').value;
-            const valor = parseFloat(document.getElementById('valorInput').value) || 0;
-            const desc = document.getElementById('descInput').value;
-            
-            if(!nome || valor <= 0) return alert("Erro: Preencha Nome e Valor.");
-            const dataHora = new Date().toLocaleString('pt-BR'); 
-
-        // 2. VALIDAÇÃO INICIAL
-        if (vTotal <= 0) return alert("❌ ERRO: Insira um valor válido.");
-
-        // 3. CÁLCULOS DE AUTORIDADE (Impostos e Serial)
-        const dataHora = new Date().toLocaleString('pt-BR');
-        const Code = Math.floor(Math.random() * 900000) + 100000;
-        const SP2 = "FIN-POS-" + Math.floor(Math.random() * 9999);
-        const ACCESS_KEY = "V12-AUTH-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-        
-        const fed = vTotal * 0.1345; // Simulação de tributos Federais
-        const est = vTotal * 0.0700; // Simulação de tributos Estaduais
-        
-        const printArea = document.getElementById('print-area');
-        if (!printArea) return alert("Erro: Elemento 'print-area' não encontrado.");
-
-           
+     
     
 
     <script>
