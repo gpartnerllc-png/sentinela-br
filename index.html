@@ -394,27 +394,7 @@
     </div>
 </div>
 
-    <button onclick="emitir('A4')" 
-        class="group relative mt-6 w-full overflow-hidden bg-slate-950 p-5 rounded-xl font-black text-white uppercase tracking-[0.3em] text-xs
-               border border-orange-500/30 shadow-[0_0_20px_rgba(234,88,12,0.1)]
-               hover:border-orange-500 hover:shadow-[0_0_30px_rgba(234,88,12,0.3)]
-               active:scale-95 transition-all duration-500">
-    
-    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-    
-    <div class="absolute inset-0 w-full h-[1px] bg-orange-500/50 -translate-y-full group-hover:animate-scan"></div>
-
-    <span class="relative z-10 flex items-center justify-center gap-3">
-        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-        </svg>
-        Emitir Nota
-    </span>
-
-    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full duration-1000 transition-transform"></div>
-</button>
-
-      
+     
                         
         <div> 
          <div class="grid grid-cols-6 gap-8">
@@ -473,11 +453,17 @@
                         </div>
                     </div>
 
-                    <div class="mt-10 space-y-4">
-                        <button onclick="emitir('A4')" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl uppercase text-sm">Emitir DANFE (A4)</button>
-                        <button onclick="executarPagamentoPOS()" class="w-full bg-emerald-600 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Pagar via Antena Hardware</button>
-                        <button onclick="emitir('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Imp. Térmica / PDV Móvel</button>
-                    </div>
+                    
+<div class="mt-10 space-y-4">
+    <button type="button" onclick="emitir('A4')" class="btn-orange w-full text-white font-black py-5 rounded-2xl shadow-xl uppercase text-sm">Emitir DANFE (A4)</button>
+    
+    <button type="button" onclick="executarPagamentoPOS()" class="w-full bg-emerald-600 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Pagar via Antena Hardware</button>
+    
+    <button type="button" onclick="emitir('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-2xl shadow-lg uppercase text-[10px]">Imp. Térmica / PDV Móvel</button>
+</div>
+
+
+                    
                 </div>
                 
               <div class="panel-3d p-6 bg-slate-950 border border-slate-800/50 rounded-2xl relative overflow-hidden group">
