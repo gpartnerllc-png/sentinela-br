@@ -843,46 +843,35 @@ function liberarUsuario(email) {
     }
 };
     </script>
-
     <script>
-// Variáveis Globais de Autoridade V12
-let vTotalGlobal = 0;
-let cbsGlobal = 0;
-let ibsGlobal = 0;
-
+// 8. CÁLCULO FISCAL AVANÇADO (Refletindo na DANFE e Painel)
 function calcFiscal() {
-    // 1. Captura o valor real do campo 'valorInput'
-    const input = document.getElementById('valorInput');
-    const valor = input ? parseFloat(input.value) || 0 : 0;
+    const valorRaw = document.getElementById('valorInput').value;
+    const valor = parseFloat(valorRaw) || 0;
+    
+    // Regras tributárias Sentinela V12
+    const cbs = valor * 0.009; // Contribuição sobre Bens e Serviços
+    const ibs = valor * 0.001; // Imposto sobre Bens e Serviços
+    const impostoTotal = cbs + ibs;
 
-    // 2. Regras Tributárias Sentinela V12
-    vTotalGlobal = valor;
-    cbsGlobal = valor * 0.009; // CBS (Federal 0.9%)
-    ibsGlobal = valor * 0.001; // IBS (Estadual 0.1%)
-
-    // 3. Atualização Dinâmica da Interface
+    // Atualização dinâmica dos elementos da interface
     const elementos = {
-        'cbsVal': cbsGlobal,
-        'ibsVal': ibsGlobal,
-        'liqVal': vTotalGlobal
+        'cbsVal': cbs,
+        'ibsVal': ibs,
+        'liqVal': valor
     };
 
     for (let [id, val] of Object.entries(elementos)) {
         const el = document.getElementById(id);
         if (el) {
             el.innerText = `R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            // Efeito visual de atualização
             el.style.color = val > 0 ? "var(--active-orange)" : "inherit";
         }
     }
-
-    // Sincroniza o valor de destaque visual
-    const destaque = document.querySelector('.valor-total-destaque');
-    if (destaque) destaque.innerText = `R$ ${vTotalGlobal.toFixed(2)}`;
 }
 
-
- <script>
-        
+    </script>
         function updateDRE() {
             document.getElementById('dre_receita').innerText = `R$ ${v12_finance.receita.toFixed(2)}`;
             document.getElementById('dre_despesa').innerText = `R$ ${v12_finance.despesa.toFixed(2)}`;
