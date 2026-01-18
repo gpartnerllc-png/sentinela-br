@@ -1326,6 +1326,8 @@ function executarPagamentoPOS() {
         const printArea = document.getElementById('print-area');
         if (!printArea) return alert("Erro: Elemento 'print-area' não encontrado.");
 
+              </script>
+            
         // 4. LÓGICA DE GERAÇÃO POR TIPO
      if (tipo === 'TERMICO') {
         printArea.innerHTML = `
@@ -1364,7 +1366,8 @@ function executarPagamentoPOS() {
             </div>`;
          
  } else {
-        </script>
+    
+        <script>
         } else {
             // MODELO SENTINELA V12 - A4 PROFISSIONAL
             printArea.innerHTML = `
