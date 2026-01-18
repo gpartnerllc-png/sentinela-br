@@ -1325,42 +1325,44 @@ function executarPagamentoPOS() {
         if (!printArea) return alert("Erro: Elemento 'print-area' não encontrado.");
 
         // 4. LÓGICA DE GERAÇÃO POR TIPO
-        if (tipo === 'TERMICO') {
-            // MODELO CUPOM FISCAL DE TERMINAL
-            printArea.innerHTML = `
-                <div style="width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace; font-size: 11px; border: 1px solid #eee; margin: auto;">
-                    <div style="border: 2px solid #000; font-size: 18px; text-align: center; font-weight: 900; margin-bottom: 5px;">Gestão Assertiva</div>
-                    <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO V12</p>
-                    <p style="text-align:center;">------------------------------------------</p>
-                    <p><b>DATA:</b> ${dataHora}</p>
-                    <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
-                    <p><b>DOC:</b> ${doc}</p>
-                    <p style="text-align:center;">------------------------------------------</p>
-                    <table style="width: 100%; font-size: 10px;">
-                        <tr style="border-bottom: 1px solid #000;">
-                            <td align="left"><b>ITEM</b></td>
-                            <td align="center"><b>QTD</b></td>
-                            <td align="right"><b>TOTAL</b></td>
-                        </tr>
-                        <tr>
-                            <td align="left">${desc.substring(0, 15)}...</td>
-                            <td align="center">1</td>
-                            <td align="right">R$ ${vTotal.toFixed(2)}</td>
-                        </tr>
-                    </table>
-                    <p style="text-align:center;">------------------------------------------</p>
-                    <div style="text-align: right;">
-                        <p style="margin:0;">Subtotal: R$ ${vTotal.toFixed(2)}</p>
-                        <h2 style="margin: 0; font-size: 16px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
-                    </div>
-                    <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background: #f9f9f9;">
-                        <p style="margin:0; font-weight:bold; text-align:center;">RESUMO FINANCEIRO TERMINAL</p>
-                        <p style="margin:0;">RECEITA ACUM.: R$ ${receitaAcumulada.toFixed(2)}</p>
-                        <p style="margin:0;">LUCRO LÍQ. DIA: R$ ${lucroAcumulado.toFixed(2)}</p>
-                    </div>
-                    <p style="font-size: 8px; margin-top: 5px;">Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)</p>
-                    <p style="text-align:center; margin-top: 5px; font-size: 9px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
-                </div>`;
+     if (tipo === 'TERMICO') {
+        printArea.innerHTML = `
+            <div class="thermal-print-container" style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace;">
+                <div style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">Gestão Acertiva</div>
+                <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <p><b>DATA:</b> ${dataHora}</p>
+                <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
+                <p><b>DOC:</b> ${doc}</p>
+                <p style="text-align:center;">------------------------------------------</p>
+                <table style="width: 100%; font-size: 10px;">
+                    <tr style="border-bottom: 1px solid #000;">
+                        <td align="left"><b>ITEM</b></td>
+                        <td align="center"><b>QTD</b></td>
+                        <td align="right"><b>TOTAL</b></td>
+                    </tr>
+                    <tr>
+                        <td align="left">${desc.substring(0, 15)}...</td>
+                        <td align="center">1</td>
+                        <td align="right">R$ ${vTotal.toFixed(2)}</td>
+                    </tr>
+                </table>
+                <p style="text-align:center;">------------------------------------------</p>
+                <div style="text-align: right;">
+                    <p style="margin:0;">Subtotal: R$ ${vTotal.toFixed(2)}</p>
+                    <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
+                </div>
+                <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background: #f9f9f9; font-size: 10px;">
+                    <p style="margin:0; font-weight:bold; text-align:center;">RESUMO FINANCEIRO DO TERMINAL</p>
+                    <p style="margin:0;">RECEITA ACUMULADA: R$ ${receitaAcumulada.toFixed(2)}</p>
+                    <p style="margin:0;">LUCRO LÍQUIDO DIA: R$ ${lucroAcumulado.toFixed(2)}</p>
+                </div>
+                <p style="font-size: 9px; margin-top: 5px;">Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)</p>
+                <p style="text-align:center; margin-top: 5px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
+            </div>`;
+         
+ } else {
+        </script>
         } else {
             // MODELO SENTINELA V12 - A4 PROFISSIONAL
             printArea.innerHTML = `
