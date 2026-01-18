@@ -924,6 +924,16 @@ function calcFiscal() {
     if (destaque) destaque.innerText = `R$ ${vTotalGlobal.toFixed(2)}`;
 }
 
+
+ <script>
+        
+        function updateDRE() {
+            document.getElementById('dre_receita').innerText = `R$ ${v12_finance.receita.toFixed(2)}`;
+            document.getElementById('dre_despesa').innerText = `R$ ${v12_finance.despesa.toFixed(2)}`;
+            document.getElementById('dre_invest').innerText = `R$ ${v12_finance.invest.toFixed(2)}`;
+        }
+  
+        
 function updateDRE() {
     // Sincroniza o Financeiro V12 com os dados de base
     const receita = typeof v12_finance !== 'undefined' ? v12_finance.receita : vTotalGlobal;
