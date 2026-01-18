@@ -614,11 +614,6 @@ window.onload = function() {
         updateDRE();
     }
 
-    // 4. Se existir um logo/tela de carregamento, esconde aqui
-    const loader = document.getElementById('loading-screen') || document.getElementById('logo');
-    if (loader) {
-        loader.style.display = 'none';
-    }
 };
             </script>
 
@@ -1310,7 +1305,7 @@ function emitir(tipo) {
     // Abre a tela de impressão do navegador (DANFE)
     setTimeout(() => {
         window.print();
-    }, 1000);
+    }, 500);
 }
 
 // Função de suporte para evitar erro caso não exista no seu código
@@ -1350,10 +1345,6 @@ try {
     v12_users = [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
 }
 
-// ==========================================
-// FUNÇÕES DE AÇÃO (RESOLVENDO CONFLITO)
-// ==========================================
-
 // Função para os botões Emitir DANFE e Imp. Térmica
 function emitir(tipo) {
     console.log("Robô V12: Iniciando emissão " + tipo);
@@ -1369,21 +1360,10 @@ function emitir(tipo) {
 function executarPagamentoPOS() {
     console.log("Robô V12: Ativando Hardware " + SERIAL_P2);
     alert("Conectando à Antena Hardware via Serial " + SERIAL_P2 + "... Aproxime para pagar.");
-    
-    // Redirecionamento para o seu domínio/link de pagamento
-    // window.location.href = "SEU_LINK_AQUI";
 }
 
-// Mantém o Favicon vivo no carregamento
-(function() {
-    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-    link.type = 'image/x-icon';
-    link.rel = 'shortcut icon';
-    link.href = 'https://i.ibb.co/LST68m9/ppix.jpg';
-    document.getElementsByTagName('head')[0].appendChild(link);
-})();
+
 </script>
-    <script>
 
           <script>          
         
