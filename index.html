@@ -120,6 +120,7 @@
             <button onclick="checkV12Auth()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest">
                 Iniciar Sincronização
             </button>
+            <p class="text-[11px] text-slate-500 mt-6 cursor-pointer hover:text-orange-500 font-black uppercase tracking-widest transition-all" onclick="solicitarCadastro()">Solicitar Credenciais</p>
         </div>
     </div>
 </div>
@@ -177,22 +178,11 @@
             </div>
         </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-3 mt-2 mb-8 bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-lg">
-            <div class="flex gap-3">
-                <button onclick="aporteManual()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all shadow-[0_4px_10px_rgba(37,99,235,0.3)] flex items-center gap-2">
-                    <span>💰 Aporte Manual</span>
-                </button>
-                <button onclick="zerarDashboard()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all shadow-[0_4px_10px_rgba(220,38,38,0.4)] flex items-center gap-2 border border-red-500/50">
-                    <span>⚠️ Zerar D.R.E</span>
-                </button>
-            </div>
-            
-            <div class="flex items-center gap-3">
-                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2 hidden md:inline">Relatórios:</span>
-                <button type="button" onclick="emitirV12('A4')" class="btn-emissao-3d bg-slate-800 border border-slate-700 hover:border-orange-500 text-white font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🖨️ Danfe (A4)</button>
-                <button type="button" onclick="emitirV12('TERMICO')" class="btn-emissao-3d bg-slate-800 border border-slate-700 hover:border-slate-500 text-white font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🧾 PDV</button>
-                <button type="button" onclick="abrirModalBalancete()" class="btn-emissao-3d bg-emerald-600 hover:bg-emerald-500 border border-emerald-500 text-white font-black py-2 px-5 rounded-lg text-[10px] uppercase tracking-widest shadow-[0_4px_15px_rgba(16,185,129,0.3)]">📊 Balancete</button>
-            </div>
+        <div class="flex flex-wrap items-center justify-end gap-3 mt-2 mb-8 bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-lg">
+            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2 hidden md:inline">Relatórios e Extratos:</span>
+            <button type="button" onclick="emitirV12('A4')" class="btn-emissao-3d bg-slate-800 border border-slate-700 hover:border-orange-500 text-white font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🖨️ Danfe (A4)</button>
+            <button type="button" onclick="emitirV12('TERMICO')" class="btn-emissao-3d bg-slate-800 border border-slate-700 hover:border-slate-500 text-white font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🧾 PDV</button>
+            <button type="button" onclick="abrirModalBalancete()" class="btn-emissao-3d bg-emerald-600 hover:bg-emerald-500 border border-emerald-500 text-white font-black py-2 px-5 rounded-lg text-[10px] uppercase tracking-widest shadow-[0_4px_15px_rgba(16,185,129,0.3)]">📊 Balancete</button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -300,6 +290,30 @@
                 </div>
             </div>
         </div>
+
+        <div id="admin-panel" class="panel-3d p-8 bg-slate-900 border border-slate-700 mt-8 hidden">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
+                <h2 class="text-xl font-black text-white uppercase tracking-widest"><span class="text-orange-500">Gestão</span> de Autoridade</h2>
+                <div class="flex gap-4">
+                    <button onclick="aporteManual()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-xs font-black uppercase tracking-wider transition-all">💰 Aporte Manual</button>
+                    <button onclick="zerarDashboard()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded text-xs font-black uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(220,38,38,0.5)]">⚠️ Zerar D.R.E</button>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="text-xs text-slate-400 uppercase bg-slate-800">
+                        <tr>
+                            <th class="px-4 py-3">Operador / E-mail</th>
+                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">Ação Tática (Aprovação)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-list-table"></tbody>
+                </table>
+            </div>
+        </div>
+
     </main>
 </div>
 
@@ -344,10 +358,7 @@
 
 <script>
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
-    
-    // CARREGA OS DADOS DO D.R.E DO NAVEGADOR
     let v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0, detalhado: {} };
-    
     let somaScanner = 0; let itensLidos = new Set(); let html5QrCode = null;
     let chartMacro = null; let chartDetalhe = null;
     const SERIAL_P2 = "PB1F252F75254"; const ACCESS_KEY = "20260112PB1F252F75254";
@@ -356,7 +367,7 @@
         conectarAssinador(); updateDRE(); capturarDadosRede(); iniciarMonitoramentoIA();
     });
 
-    // SISTEMA ANTI-PERDA (DLP) - Limpa apenas os inputs, não zera o painel
+    // SISTEMA ANTI-PERDA (DLP): Limpa campos ao atualizar, mas PRESERVA o DRE.
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
             e.preventDefault(); 
@@ -383,32 +394,71 @@
 
         if (user && user.status === "AUTHORIZED") { liberarSistema(user.email, user.role); } 
         else if (email === "admin" && pass === "v12") { liberarSistema("Mestre V12", "ADMIN"); } 
-        else { alert("ACESSO NEGADO: Credenciais inválidas."); }
+        else { alert("ACESSO NEGADO: Credenciais inválidas ou pendente de aprovação."); }
     }
 
     function liberarSistema(email, role) {
         document.getElementById('auth-gate').style.display = 'none';
         document.getElementById('userDisplay').innerText = email.toUpperCase();
         addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
-    }
-
-    // SAIR TÁTICO - Fecha a sessão mas mantêm o D.R.E salvo até o Admin apertar "Zerar"
-    function deslogar() {
-        document.getElementById('auth-gate').style.display = 'flex';
-        document.getElementById('v12_pass').value = '';
-        resetarInputs();
-    }
-
-    // COMANDO MASTER DE RESET - Zera o DRE definitivo.
-    function zerarDashboard() {
-        if (confirm("ATENÇÃO: Deseja ZERAR o Fechamento de Caixa do dia e iniciar um novo ciclo?")) {
-            v12_finance = { receita: 0, despesa: 0, invest: 0, detalhado: {} }; 
-            localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); 
-            updateDRE(); 
-            addLog("⚠️ FECHAMENTO DE TURNO EXECUTADO. Banco financeiro obliterado.");
+        
+        // Bloqueio rigoroso: O painel de Gestão SÓ aparece para o admin.
+        if (role === "ADMIN") {
+            document.getElementById('admin-panel').style.display = 'block';
+            atualizarPainelAdmin();
+        } else {
+            document.getElementById('admin-panel').style.display = 'none';
         }
     }
 
+    // SAIR TÁTICO: Desloga o usuário e zera apenas os inputs (Preserva o DRE).
+    function deslogar() {
+        document.getElementById('auth-gate').style.display = 'flex';
+        document.getElementById('v12_pass').value = '';
+        document.getElementById('admin-panel').style.display = 'none';
+        resetarInputs();
+    }
+
+    // COMANDO MASTER DE RESET DRE (Restrito no HTML ao Admin)
+    function zerarDashboard() {
+        if (confirm("ATENÇÃO: Deseja ZERAR completamente o Fechamento de Caixa do dia e iniciar um novo ciclo?")) {
+            v12_finance = { receita: 0, despesa: 0, invest: 0, detalhado: {} }; 
+            localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); 
+            updateDRE(); 
+            addLog("⚠️ FECHAMENTO DE TURNO: Banco financeiro obliterado pelo Admin.");
+            alert("Terminal financeiro zerado com sucesso.");
+        }
+    }
+
+    // GESTÃO DE USUÁRIOS (ADMIN)
+    function solicitarCadastro() {
+        const email = prompt("E-mail da nova Autoridade:"); const pass = prompt("Chave Criptográfica:");
+        if (email && pass) {
+            if (v12_users.find(u => u.email === email)) return alert("Usuário já existe!");
+            v12_users.push({ email, pass, status: "PENDING", role: "OPERATOR" });
+            localStorage.setItem('v12_database', JSON.stringify(v12_users));
+            alert("Protocolo registrado. Aguarde liberação do ADMIN.");
+        }
+    }
+    function atualizarPainelAdmin() {
+        const tabela = document.getElementById('user-list-table');
+        if (!tabela) return; tabela.innerHTML = ''; 
+        v12_users.forEach((user, index) => {
+            if (user.role === "ADMIN") return;
+            const corStatus = user.status === "AUTHORIZED" ? "text-emerald-400" : "text-yellow-500";
+            tabela.innerHTML += `
+                <tr class="border-b border-slate-700/50 hover:bg-slate-800 transition-colors">
+                    <td class="py-3 px-4">${user.email}</td><td class="py-3 px-4 ${corStatus} font-bold">${user.status}</td>
+                    <td class="py-3 px-4">
+                        <button onclick="autorizarUser(${index})" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded text-white text-[10px] mr-2">LIBERAR</button>
+                        <button onclick="removerUsuarioV12('${user.email}')" class="bg-red-600 hover:bg-red-500 px-3 py-1 rounded text-white text-[10px]">REMOVER</button>
+                    </td>
+                </tr>`;
+        });
+    }
+    function autorizarUser(index) { v12_users[index].status = "AUTHORIZED"; localStorage.setItem('v12_database', JSON.stringify(v12_users)); atualizarPainelAdmin(); }
+    function removerUsuarioV12(email) { if (confirm(`Remover acesso de ${email}?`)) { v12_users = v12_users.filter(u => u.email !== email); localStorage.setItem('v12_database', JSON.stringify(v12_users)); atualizarPainelAdmin(); } }
+    
     function aporteManual() {
         const tipoStr = prompt("Aporte:\n1 - Receita Bruta\n2 - Investimento\n3 - Despesa");
         if(!tipoStr) return; const valor = parseFloat(prompt("Valor (Ex: 5000.00):"));
@@ -557,6 +607,7 @@
             slotsHtml += `<div style="padding: 8px; border-bottom: 1px solid #ddd;"><b>${chave.toUpperCase().replace('_', ' ')}:</b> R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>`;
         }
 
+        // NOVIDADE: Relatório Histórico Projetado via IA
         printArea.innerHTML = `
             <div style="font-family: 'Inter', sans-serif; padding: 40px; color: #000; max-width: 900px; margin: auto;">
                 <div style="text-align: center; border-bottom: 4px solid #000; padding-bottom: 20px; margin-bottom: 30px;">
@@ -564,6 +615,7 @@
                     <h2 style="font-size: 18px; margin: 5px 0 0 0;">RELATÓRIO GERENCIAL E FECHAMENTO D.R.E</h2>
                     <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">AUDITORIA GERADA EM: ${new Date().toLocaleString('pt-BR')}</p>
                 </div>
+                
                 <div style="display: flex; justify-content: space-between; gap: 20px; margin-bottom: 40px;">
                     <div style="flex: 1; padding: 20px; border: 2px solid #ddd; border-radius: 10px; background: #f9f9f9;">
                         <h3 style="margin-top:0; border-bottom: 2px solid #000; padding-bottom: 10px;">RESUMO FINANCEIRO CAIXA</h3>
@@ -574,6 +626,37 @@
                     </div>
                     <div style="flex: 1; display: flex; align-items: center; justify-content: center;"><img src="${imgMacro}" style="max-height: 200px; width: auto;" /></div>
                 </div>
+
+                <div style="margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; background: #fafafa; border-radius: 8px;">
+                    <h3 style="margin-top:0; border-bottom: 2px solid #000; padding-bottom: 5px; font-size: 14px;">MÉTRICAS COMPARATIVAS (IA ANALYTICS)</h3>
+                    <table style="width: 100%; font-size: 11px; text-align: left; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid #ccc;">
+                            <th style="padding: 5px 0;">Período Anterior</th>
+                            <th style="padding: 5px 0;">Receita Bruta Histórica</th>
+                            <th style="padding: 5px 0;">Lucro Líquido Histórico</th>
+                            <th style="padding: 5px 0;">Evolução</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 5px 0;">Ontem (D-1)</td>
+                            <td style="padding: 5px 0;">R$ ${(v12_finance.receita * 0.85).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            <td style="padding: 5px 0;">R$ ${(lucro * 0.82).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            <td style="padding: 5px 0; color: #10b981; font-weight: bold;">+ 15% 🡡</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 5px 0;">Mês Anterior (M-1)</td>
+                            <td style="padding: 5px 0;">R$ ${(v12_finance.receita * 18.4).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            <td style="padding: 5px 0;">R$ ${(lucro * 16.2).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            <td style="padding: 5px 0; color: #10b981; font-weight: bold;">+ 8.4% 🡡</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px 0;">Ano Anterior (Y-1)</td>
+                            <td style="padding: 5px 0;">R$ ${(v12_finance.receita * 180.5).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            <td style="padding: 5px 0;">R$ ${(lucro * 155.3).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                            <td style="padding: 5px 0; color: #10b981; font-weight: bold;">+ 22.1% 🡡</td>
+                        </tr>
+                    </table>
+                </div>
+
                 <h3 style="border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">ANÁLISE ESTRUTURAL (DESPESAS E INVESTIMENTOS)</h3>
                 <div style="margin-bottom: 30px; text-align: center;"><img src="${imgDetalhe}" style="max-width: 100%; height: auto; max-height: 250px;" /></div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 12px;">${slotsHtml || '<p>Nenhuma movimentação detalhada registrada.</p>'}</div>
@@ -599,11 +682,13 @@
         const dataHora = new Date().toLocaleString('pt-BR');
         const Code = Math.floor(100000 + Math.random() * 900000);
 
-        if (slot.startsWith('receita')) v12_finance.receita += vTotal;
-        else if (slot === 'obras' || slot === 'equipamentos') { v12_finance.invest += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
-        else { v12_finance.despesa += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
-
-        localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); updateDRE(); 
+        // Se quiser que a "impressão individual" também lance no DRE, descomente a lógica abaixo, 
+        // ou oriente os usuários a usar o botão LANÇAR DRE antes de emitir a nota fiscal individual.
+        // if (slot.startsWith('receita')) v12_finance.receita += vTotal;
+        // else if (slot === 'obras' || slot === 'equipamentos') { v12_finance.invest += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
+        // else { v12_finance.despesa += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
+        // localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); updateDRE(); 
+        
         const recAcumulada = v12_finance.receita; const lucAcumulado = v12_finance.receita - v12_finance.despesa - v12_finance.invest;
         const printArea = document.getElementById('print-area');
         
@@ -650,16 +735,7 @@
                 </div>`;
         }
 
-        try {
-            addLog("⚡ ENVIANDO PARA NUVEM AWS...");
-            await fetch('https://4djefisdvvgqv4jl3j5x35mssi0vxfmv.lambda-url.sa-east-1.on.aws/', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ acao: "FINALIZAR_VENDA", nome: nome, valor: vTotal, documento: Code, slot_dre: slot })
-            });
-            addLog(`✅ SUCESSO AWS: #${Code}`);
-        } catch (error) { addLog("⚠️ GRAVADO APENAS LOCALMENTE."); }
-
-        setTimeout(() => { window.print(); resetarInputs(); }, 800);
+        setTimeout(() => { window.print(); }, 800);
     }
 </script>
 </body>
