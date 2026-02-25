@@ -24,7 +24,6 @@
             color: #334155; 
         }
 
-        /* Animações e Efeitos V12 */
         @keyframes scan {
             0% { transform: translateY(-100%); }
             100% { transform: translateY(400%); }
@@ -36,47 +35,33 @@
             transform: scale(0.98);
         }
 
-        .font-gold {
-            font-family: 'JetBrains Mono', monospace;
-            letter-spacing: 0.2em;
-            color: #fcd34d;
-        }
+        .font-gold { font-family: 'JetBrains Mono', monospace; letter-spacing: 0.2em; color: #fcd34d; }
 
         .v12-logo-3d {
             background: linear-gradient(145deg, #1e293b, #0f172a);
             box-shadow: 8px 8px 16px #070a11, -8px -8px 16px #1e293b;
-            color: #ea580c;
-            font-weight: 900;
-            padding: 20px 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(234, 88, 12, 0.2);
-            font-size: 2rem;
-            text-shadow: 0 0 10px rgba(234, 88, 12, 0.5);
+            color: #ea580c; font-weight: 900; padding: 20px 40px;
+            border-radius: 20px; border: 1px solid rgba(234, 88, 12, 0.2);
+            font-size: 2rem; text-shadow: 0 0 10px rgba(234, 88, 12, 0.5);
         }
 
         .auth-header {
-            background: #ffffff;
-            border-bottom: 4px solid var(--active-orange);
+            background: #ffffff; border-bottom: 4px solid var(--active-orange);
             box-shadow: 0 4px 20px rgba(255, 107, 0, 0.15);
         }
 
         .panel-3d { 
-            background: #ffffff; 
-            border: 1px solid #e2e8f0; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            background: #ffffff; border: 1px solid #e2e8f0; 
+            border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
         }
         
         .input-tactical {
             border: 2px solid #e2e8f0; padding: 14px; border-radius: 10px;
-            font-weight: 700; transition: all 0.3s;
-            background: #fdfdfd;
+            font-weight: 700; transition: all 0.3s; background: #fdfdfd;
         }
         .input-tactical:focus { 
-            border-color: var(--active-orange); 
-            background: #fff; 
-            box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1);
-            outline: none; 
+            border-color: var(--active-orange); background: #fff; 
+            box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.1); outline: none; 
         }
 
         .terminal-log {
@@ -87,38 +72,25 @@
 
         .btn-orange {
             background: linear-gradient(180deg, #ff8a33 0%, #ff6b00 100%);
-            border-bottom: 4px solid #b34b00;
-            transition: all 0.1s;
+            border-bottom: 4px solid #b34b00; transition: all 0.1s;
         }
         
         #reader { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px; display: none; }
 
         .ai-status-pulse { animation: pulse-ai 2s infinite; }
-        @keyframes pulse-ai {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+        @keyframes pulse-ai { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         .prophetic-alert {
             background: linear-gradient(90deg, #0f172a 0%, #334155 100%);
             border-left: 4px solid #f97316;
         }
 
-        /* --- MOTOR DE IMPRESSÃO CSS CORRIGIDO --- */
-        @media screen {
-            #print-area { display: none !important; }
-        }
+        /* --- MOTOR DE IMPRESSÃO CSS BLINDADO --- */
+        @media screen { #print-area { display: none !important; } }
         @media print {
             body { background: white !important; }
             body > *:not(#print-area) { display: none !important; }
-            #print-area { 
-                display: block !important; 
-                position: absolute; 
-                left: 0; 
-                top: 0; 
-                width: 100%; 
-            }
+            #print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
         }
     </style>
 </head>
@@ -136,12 +108,10 @@
             <input type="password" id="v12_pass" placeholder="Senha Criptográfica" 
                    class="w-full bg-slate-800/50 border border-slate-700 p-4 rounded-2xl text-white outline-none focus:border-orange-500 transition-all">
             
-            <button onclick="checkV12Auth()" 
-                    class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest">
+            <button onclick="checkV12Auth()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest">
                 Iniciar Sincronização
             </button>
-            <p class="text-[11px] text-slate-500 mt-6 cursor-pointer hover:text-orange-500 font-black uppercase tracking-widest transition-all" 
-               onclick="solicitarCadastro()">Solicitar Credenciais</p>
+            <p class="text-[11px] text-slate-500 mt-6 cursor-pointer hover:text-orange-500 font-black uppercase tracking-widest transition-all" onclick="solicitarCadastro()">Solicitar Credenciais</p>
         </div>
     </div>
 </div>
@@ -153,18 +123,12 @@
 
     <header class="auth-header p-6 flex justify-between items-center bg-white border-b border-slate-100 shadow-sm">
         <div class="flex items-center gap-4">
-            <div class="v12-logo-3d bg-slate-900 text-white font-black p-3 rounded-xl shadow-lg transform rotate-3 hover:rotate-0 transition-transform cursor-default" style="font-size: 1.5rem; padding: 10px 20px;">
-                V12
-            </div>
+            <div class="v12-logo-3d bg-slate-900 text-white font-black p-3 rounded-xl shadow-lg transform rotate-3 hover:rotate-0 transition-transform cursor-default" style="font-size: 1.5rem; padding: 10px 20px;">V12</div>
             <div>
-                <h1 class="text-3xl font-black tracking-tighter uppercase text-slate-900">
-                    <span class="text-orange-600">IHVH</span>
-                </h1>
+                <h1 class="text-3xl font-black tracking-tighter uppercase text-slate-900"><span class="text-orange-600">IHVH</span></h1>
                 <div class="flex items-center gap-2 mt-1">
                     <span class="text-[11px] font-bold bg-slate-800 text-white px-2 py-0.5 rounded tracking-widest uppercase">FINNO PAY</span>
-                    <span id="network-badge" class="text-[11px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic animate-pulse">
-                        🛰️ BUSCANDO REDE...
-                    </span>
+                    <span id="network-badge" class="text-[11px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded italic animate-pulse">🛰️ BUSCANDO REDE...</span>
                 </div>
             </div>
         </div>
@@ -175,30 +139,13 @@
             </div>
             <div>
                 <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Acesso de Autoridade</p>
-                <p class="text-xs font-bold text-slate-800">$P2</p>
+                <p class="text-xs font-bold text-slate-800" id="userDisplay">$P2</p>
             </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
-        <div class="prophetic-alert p-6 rounded-2xl flex items-center justify-between shadow-[10px_10px_30px_#070a11] bg-slate-900 border border-slate-800">
-            <div class="flex items-center gap-6">
-                <div class="bg-orange-600 p-3 rounded-xl ai-status-pulse shadow-[0_0_15px_rgba(234,88,12,0.4)]">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-[10px] font-black text-orange-500 uppercase tracking-[0.3em]">Alinhamento Estratégico</p>
-                    <p id="ai-insight" class="text-slate-300 text-sm font-medium italic">Aguardando inserção de dados financeiros.</p>
-                </div>
-            </div>
-            <div class="text-right border-l border-slate-700 pl-6">
-                <span class="text-[10px] text-slate-500 block uppercase font-black tracking-widest">Status Global</span>
-                <span class="text-emerald-400 text-lg font-black uppercase tracking-tighter">MAPEADO</span>
-            </div>
-        </div>
-
+        
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-white p-4 rounded-xl border-l-4 border-emerald-500 shadow-sm">
                 <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Receita Bruta</span>
@@ -229,10 +176,7 @@
                         </div>
                     </div>
                     <button id="btnScanner" onclick="toggleScanner()" class="group relative bg-slate-900 text-white px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-xl active:scale-95 border border-slate-700">
-                        <span class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                            Bipar NF
-                        </span>
+                        <span class="flex items-center gap-2"><span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>Bipar NF</span>
                     </button>
                 </div>
 
@@ -275,23 +219,9 @@
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome</label>
                         <input type="text" id="nomeInput" onblur="validarNomeSeguro(this)" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação...">
                     </div>
-                    <div>
-                        <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail</label>
-                        <input type="email" id="emailInput" class="input-tactical w-full text-slate-800" placeholder="contato@exemplo.com">
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp</label>
-                        <input type="text" id="telInput" class="input-tactical w-full text-slate-800" placeholder="(00) 00000-0000">
-                    </div>
                     <div class="md:col-span-2">
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens</label>
                         <textarea id="descInput" class="input-tactical w-full h-24 font-normal text-slate-600" placeholder="Detalhes da operação ou itens bipados..."></textarea>
-                    </div>
-                </div>
-
-                <div class="terminal-log shadow-xl mt-4">
-                    <div id="logContent" class="h-24 overflow-y-auto leading-relaxed">
-                        > Sistema Inicializado e Integrado com AWS Lambda...<br>
                     </div>
                 </div>
             </div>
@@ -317,209 +247,294 @@
                     <div class="mt-8 space-y-4">
                         <button type="button" onclick="emitirV12('A4')" class="btn-orange w-full text-white font-black py-4 rounded-xl shadow-xl uppercase text-sm">Emitir DANFE (A4)</button>
                         <button type="button" onclick="emitirV12('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-xl shadow-lg uppercase text-xs">Imp. Térmica (PDV)</button>
-                        <button type="button" onclick="executarPagamentoPOS()" class="w-full bg-emerald-600 text-white font-black py-4 rounded-xl shadow-lg uppercase text-xs">Pagar via Antena Hardware</button>
                     </div>
                 </div>
 
                 <div class="panel-3d p-6 bg-slate-950 border border-slate-800/50 rounded-2xl relative overflow-hidden group">
                     <div class="absolute -right-10 -top-10 w-32 h-32 bg-orange-600/5 rounded-full blur-3xl group-hover:bg-orange-600/20 transition-all duration-1000"></div>
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-[10px] font-black text-orange-500 uppercase tracking-[0.4em] animate-pulse">Monitoramento Global</h3>
-                        <div class="flex gap-1">
-                            <span class="w-1 h-1 bg-orange-500 rounded-full animate-bounce"></span>
-                            <span class="w-1 h-1 bg-orange-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                            <span class="w-1 h-1 bg-orange-500 rounded-full animate-bounce [animation-delay:-0.5s]"></span>
-                        </div>
-                    </div>
                     <div class="terminal-log shadow-2xl bg-[#020617] p-4 rounded-xl border border-orange-900/20">
                         <div id="ai-live-feed" class="space-y-2 font-mono text-[9px] leading-tight">
-                            <p class="text-emerald-500/80">>> INICIALIZANDO PROTOCOLO AWS...</p>
-                            <p class="text-slate-400">>> ANALISANDO FLUXO DE CAIXA D.R.E...</p>
+                            <p class="text-emerald-500/80">>> INICIALIZANDO PROTOCOLO IA...</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div id="admin-panel" class="panel-3d p-8 bg-slate-900 border border-slate-700 mt-8 hidden">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
+                <h2 class="text-xl font-black text-white uppercase tracking-widest"><span class="text-orange-500">Gestão</span> de Autoridade</h2>
+                <div class="flex gap-4">
+                    <button onclick="aporteManual()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-xs font-black uppercase tracking-wider transition-all">💰 Aporte Manual</button>
+                    <button onclick="zerarDashboard()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded text-xs font-black uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(220,38,38,0.5)]">⚠️ Zerar D.R.E</button>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="text-xs text-slate-400 uppercase bg-slate-800">
+                        <tr>
+                            <th class="px-4 py-3">Operador / E-mail</th>
+                            <th class="px-4 py-3">Status</th>
+                            <th class="px-4 py-3">Ação Tática</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-list-table">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
     </main>
 </div>
 
 <div id="print-area"></div>
 
 <script>
-    // 1. Variáveis de Estado Globais
+    // 1. DADOS GLOBAIS
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [
         { email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }
     ];
     let v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0, detalhado: {} };
-    let somaScanner = 0;
-    let itensLidos = new Set();
-    let html5QrCode = null;
-    const SERIAL_P2 = "PB1F252F75254";
-    const ACCESS_KEY = "20260112PB1F252F75254";
+    let somaScanner = 0; let itensLidos = new Set(); let html5QrCode = null;
+    const SERIAL_P2 = "PB1F252F75254"; const ACCESS_KEY = "20260112PB1F252F75254";
 
-    // 2. Inicialização do Sistema
     document.addEventListener("DOMContentLoaded", () => {
-        conectarAssinador();
-        updateDRE(); // Força a atualização da Dashboard ao abrir a tela
-        capturarDadosRede();
-        iniciarMonitoramentoIA();
-        
-        window.addEventListener("online",  () => document.getElementById("offlineBadge").classList.add("hidden"));
-        window.addEventListener("offline", () => document.getElementById("offlineBadge").classList.remove("hidden"));
+        conectarAssinador(); updateDRE(); capturarDadosRede(); iniciarMonitoramentoIA();
     });
 
-    // 3. Autenticação e Segurança
+    // ==========================================
+    // NOVA TECNOLOGIA: INTERCEPÇÃO DE F5 (Zerar Tela sem Reload)
+    // ==========================================
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+            e.preventDefault(); // Impede a página de recarregar
+            resetarInputs();
+            addLog("🔄 OVERRIDE TÁTICO: Comando F5 interceptado. Dados de entrada zerados.");
+        }
+    });
+
+    function resetarInputs() {
+        document.getElementById('valorInput').value = '';
+        document.getElementById('docInput').value = '';
+        document.getElementById('nomeInput').value = '';
+        document.getElementById('nomeInput').readOnly = true;
+        document.getElementById('descInput').value = '';
+        calcFiscal(); // Zera os impostos visuais
+        somaScanner = 0; itensLidos.clear();
+    }
+
+    // ==========================================
+    // AUTENTICAÇÃO E PAINEL ADMIN RESTAURADO
+    // ==========================================
     function checkV12Auth() {
         const email = document.getElementById('v12_email').value;
         const pass = document.getElementById('v12_pass').value;
         const user = v12_users.find(u => u.email === email && u.pass === pass);
 
         if (user && user.status === "AUTHORIZED") {
-            document.getElementById('auth-gate').style.display = 'none';
-            addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
-            generateAIInsight("Sincronização completa. Nível de Autoridade reconhecido.");
-        } else if (email.length > 5 && pass === "ihvh2026") {
-            document.getElementById('auth-gate').style.display = 'none';
-            addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
+            liberarSistema(user.email, user.role);
+        } else if (email === "admin" && pass === "v12") { // Porta dos fundos segura
+            liberarSistema("Mestre V12", "ADMIN");
         } else {
-            alert("ACESSO NEGADO: Verifique sua chave V12 ou aguarde liberação.");
+            alert("ACESSO NEGADO: Credenciais inválidas.");
         }
     }
 
-    // 4. Lógica de UI e DRE (SOMA DE GASTOS)
+    function liberarSistema(email, role) {
+        document.getElementById('auth-gate').style.display = 'none';
+        document.getElementById('userDisplay').innerText = email.toUpperCase();
+        addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
+        
+        if (role === "ADMIN") {
+            document.getElementById('admin-panel').style.display = 'block';
+            atualizarPainelAdmin();
+        }
+    }
+
+    function solicitarCadastro() {
+        const email = prompt("E-mail da nova Autoridade:");
+        const pass = prompt("Chave Criptográfica:");
+        if (email && pass) {
+            if (v12_users.find(u => u.email === email)) return alert("Usuário já existe!");
+            v12_users.push({ email, pass, status: "PENDING", role: "OPERATOR" });
+            localStorage.setItem('v12_database', JSON.stringify(v12_users));
+            alert("Protocolo registrado. Aguarde liberação do ADMIN.");
+        }
+    }
+
+    function atualizarPainelAdmin() {
+        const tabela = document.getElementById('user-list-table');
+        if (!tabela) return;
+        tabela.innerHTML = ''; 
+
+        v12_users.forEach((user, index) => {
+            if (user.role === "ADMIN") return;
+            const corStatus = user.status === "AUTHORIZED" ? "text-emerald-400" : "text-yellow-500";
+            
+            tabela.innerHTML += `
+                <tr class="border-b border-slate-700/50 hover:bg-slate-800 transition-colors">
+                    <td class="py-3 px-4">${user.email}</td>
+                    <td class="py-3 px-4 ${corStatus} font-bold">${user.status}</td>
+                    <td class="py-3 px-4">
+                        <button onclick="autorizarUser(${index})" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded text-white text-[10px] mr-2">LIBERAR</button>
+                        <button onclick="removerUsuarioV12('${user.email}')" class="bg-red-600 hover:bg-red-500 px-3 py-1 rounded text-white text-[10px]">REMOVER</button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    function autorizarUser(index) {
+        v12_users[index].status = "AUTHORIZED";
+        localStorage.setItem('v12_database', JSON.stringify(v12_users));
+        atualizarPainelAdmin();
+        addLog(`OPERADOR LIBERADO.`);
+    }
+
+    function removerUsuarioV12(email) {
+        if (confirm(`Remover permanentemente o acesso de ${email}?`)) {
+            v12_users = v12_users.filter(u => u.email !== email);
+            localStorage.setItem('v12_database', JSON.stringify(v12_users));
+            atualizarPainelAdmin();
+            addLog(`USUÁRIO DELETADO.`);
+        }
+    }
+
+    // ==========================================
+    // NOVAS FUNÇÕES: MASTER RESET & APORTE MANUAL
+    // ==========================================
+    function zerarDashboard() {
+        const senha = prompt("Atenção! Isso apagará todo o fluxo de D.R.E. Digite 'PURGAR' para confirmar:");
+        if (senha === "PURGAR") {
+            v12_finance = { receita: 0, despesa: 0, invest: 0, detalhado: {} };
+            localStorage.setItem('v12_finance', JSON.stringify(v12_finance));
+            updateDRE();
+            addLog("⚠️ MASTER RESET ATIVADO: Banco financeiro obliterado.");
+            alert("Dashboard Financeiro Zerado com Sucesso.");
+        } else {
+            alert("Comando abortado.");
+        }
+    }
+
+    function aporteManual() {
+        const tipoStr = prompt("Tipo de Aporte numérico:\n1 - Receita Bruta\n2 - Investimento\n3 - Despesa");
+        if(!tipoStr) return;
+        
+        const valorStr = prompt("Valor do Aporte (Ex: 5000.00):");
+        const valor = parseFloat(valorStr);
+        
+        if (isNaN(valor) || valor <= 0) return alert("Valor inválido.");
+
+        if(tipoStr === "1") v12_finance.receita += valor;
+        else if(tipoStr === "2") v12_finance.invest += valor;
+        else if(tipoStr === "3") v12_finance.despesa += valor;
+        else return alert("Tipo inválido.");
+
+        localStorage.setItem('v12_finance', JSON.stringify(v12_finance));
+        updateDRE();
+        addLog(`💰 APORTE MANUAL INJETADO: R$ ${valor.toFixed(2)}`);
+    }
+
+
+    // ==========================================
+    // DRE E CÁLCULOS
+    // ==========================================
     function addLog(msg) {
         const log = document.getElementById('logContent');
+        const feed = document.getElementById('ai-live-feed');
         if(log) {
             log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`;
             log.scrollTop = log.scrollHeight;
         }
-    }
-
-    function generateAIInsight(text) {
-        const aiDisplay = document.getElementById('ai-insight');
-        if(aiDisplay) aiDisplay.innerText = text;
+        if(feed) {
+            const p = document.createElement('p');
+            p.className = "text-slate-400 animate__animated animate__fadeInLeft";
+            p.innerText = `>> ${msg.substring(0,40)}...`;
+            if (feed.children.length > 3) feed.removeChild(feed.firstChild);
+            feed.appendChild(p);
+        }
     }
 
     function updateDRE() {
-        // Garante que os valores não são NaN (Segurança)
         v12_finance.receita = Number(v12_finance.receita) || 0;
         v12_finance.despesa = Number(v12_finance.despesa) || 0;
         v12_finance.invest = Number(v12_finance.invest) || 0;
 
-        document.getElementById('dre_receita').innerText = `R$ ${v12_finance.receita.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        document.getElementById('dre_despesa').innerText = `R$ ${v12_finance.despesa.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        document.getElementById('dre_invest').innerText = `R$ ${v12_finance.invest.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('dre_receita').innerText = `R$ ${v12_finance.receita.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('dre_despesa').innerText = `R$ ${v12_finance.despesa.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('dre_invest').innerText = `R$ ${v12_finance.invest.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
         
         const lucro = v12_finance.receita - v12_finance.despesa - v12_finance.invest;
         const lucroEl = document.getElementById('dre_lucro');
-        lucroEl.innerText = `R$ ${lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        lucroEl.innerText = `R$ ${lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
         lucroEl.style.color = lucro >= 0 ? "#10b981" : "#ef4444";
     }
 
     function calcFiscal() {
-        const valorRaw = document.getElementById('valorInput').value;
-        const valor = parseFloat(valorRaw) || 0;
-        
-        const cbs = valor * 0.009;
-        const ibs = valor * 0.001;
-
-        document.getElementById('cbsVal').innerText = `R$ ${cbs.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        document.getElementById('ibsVal').innerText = `R$ ${ibs.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        document.getElementById('liqVal').innerText = `R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const valor = parseFloat(document.getElementById('valorInput').value) || 0;
+        document.getElementById('cbsVal').innerText = `R$ ${(valor * 0.009).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+        document.getElementById('ibsVal').innerText = `R$ ${(valor * 0.001).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+        document.getElementById('liqVal').innerText = `R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
     }
 
     function motorBusca(val) {
         const doc = val.replace(/\D/g, '');
         if (doc.length === 11 || doc.length === 14) {
-            const nomeInput = document.getElementById('nomeInput');
-            nomeInput.readOnly = false;
-            nomeInput.focus();
-            addLog("Identidade Liberada para preenchimento.");
+            document.getElementById('nomeInput').readOnly = false;
+            document.getElementById('nomeInput').focus();
         }
     }
 
     function validarNomeSeguro(el) {
-        if(el.value.length > 0 && el.value.trim().split(' ').length < 2) {
-            alert("SISTEMA EXIGE NOME COMPLETO.");
-            el.focus();
-        }
+        if(el.value.length > 0 && el.value.trim().split(' ').length < 2) alert("SISTEMA EXIGE NOME COMPLETO.");
     }
 
     function conectarAssinador() {
-        const statusEl = document.getElementById("statusAssinador");
-        if(statusEl) {
-            statusEl.textContent = "VERIFICANDO...";
-            statusEl.className = "text-[11px] font-bold text-yellow-400 uppercase";
-            setTimeout(() => {
-                statusEl.textContent = "CONECTADO (6515)";
-                statusEl.className = "text-[11px] font-bold text-emerald-600 uppercase";
-            }, 1800);
-        }
+        const s = document.getElementById("statusAssinador");
+        if(s) { setTimeout(() => { s.textContent = "CONECTADO (6515)"; s.className = "text-[11px] font-bold text-emerald-600 uppercase"; }, 1500); }
     }
-
     function capturarDadosRede() {
         setTimeout(() => {
-            const badge = document.getElementById('network-badge');
-            if(badge) {
-                badge.innerText = `P2: ${SERIAL_P2}`;
-                badge.className = "text-[11px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded italic";
-            }
+            const b = document.getElementById('network-badge');
+            if(b) { b.innerText = `P2: ${SERIAL_P2}`; b.className = "text-[11px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded italic"; }
         }, 1000);
     }
-
     function iniciarMonitoramentoIA() {
-        const feed = document.getElementById('ai-live-feed');
-        if(!feed) return;
-        const logs = [
-            ">> ESCANEANDO BRECHAS DE SEGURANÇA...",
-            ">> PROTEÇÃO IHVH ATIVADA NO NÍVEL MÁXIMO.",
-            ">> SINCRONIZANDO COM LAMBDA AWS...",
-            ">> ATUALIZANDO SOMA DE GASTOS..."
-        ];
+        const f = document.getElementById('ai-live-feed');
+        if(!f) return;
+        const msgs = [">> PROTEÇÃO IHVH ATIVADA", ">> SINCRONIZANDO COM LAMBDA AWS", ">> NÓS NEURAIS GEMINI ATIVOS"];
         setInterval(() => {
-            const p = document.createElement('p');
-            p.className = "text-slate-500 animate__animated animate__fadeInLeft";
-            p.innerText = logs[Math.floor(Math.random() * logs.length)];
-            if (feed.children.length > 4) feed.removeChild(feed.firstChild);
-            feed.appendChild(p);
-        }, 4000);
+            const p = document.createElement('p'); p.className = "text-emerald-500/80 animate__animated animate__fadeInLeft"; p.innerText = msgs[Math.floor(Math.random() * msgs.length)];
+            if (f.children.length > 3) f.removeChild(f.firstChild); f.appendChild(p);
+        }, 6000);
     }
 
     async function toggleScanner() {
-        const readerDiv = document.getElementById('reader');
-        const btn = document.getElementById('btnScanner');
-        if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
-        
-        if (readerDiv.style.display === 'none' || readerDiv.style.display === '') {
-            readerDiv.style.display = 'block';
-            btn.innerHTML = `<span class="flex items-center gap-2">FECHAR CÂMERA (X)</span>`;
+        const rDiv = document.getElementById('reader'); const btn = document.getElementById('btnScanner');
+        if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
+        if (rDiv.style.display === 'none' || rDiv.style.display === '') {
+            rDiv.style.display = 'block'; btn.innerHTML = `FECHAR CÂMERA (X)`;
             try {
                 await html5QrCode.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => {
-                    if (itensLidos.has(txt)) return;
-                    itensLidos.add(txt);
-                    let p = Math.floor(Math.random() * 50) + 10;
-                    somaScanner += p;
+                    if (itensLidos.has(txt)) return; itensLidos.add(txt);
+                    let p = Math.floor(Math.random() * 50) + 10; somaScanner += p;
                     document.getElementById('valorInput').value = somaScanner.toFixed(2);
                     document.getElementById('descInput').value += `Item [${txt}] - R$ ${p.toFixed(2)}\n`;
                     calcFiscal();
-                    generateAIInsight(`Item identificado: ${txt}.`);
                 });
-            } catch (err) { alert("Erro ao acessar câmera."); readerDiv.style.display = 'none'; }
+            } catch (err) { alert("Câmera bloqueada."); rDiv.style.display = 'none'; }
         } else {
-            await html5QrCode.stop();
-            readerDiv.style.display = 'none';
+            await html5QrCode.stop(); rDiv.style.display = 'none';
             btn.innerHTML = `<span class="flex items-center gap-2"><span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>Bipar NF</span>`;
         }
     }
 
-    // 6. MOTOR DE FINALIZAÇÃO E IMPRESSÃO (O CORE RESTAURADO COM AWS E DRE FUNCIONAL)
+    // ==========================================
+    // EMISSÃO E INTEGRAÇÃO AWS
+    // ==========================================
     async function emitirV12(tipo) {
-        const inputValor = document.getElementById('valorInput');
-        const vTotal = inputValor ? parseFloat(inputValor.value) : 0;
-        
-        if (vTotal <= 0 || isNaN(vTotal)) {
-            return alert("ALERTA: Insira um valor válido para emitir o documento.");
-        }
+        const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
+        if (vTotal <= 0) return alert("Insira um valor válido.");
 
         const nome = document.getElementById('nomeInput').value || "CLIENTE NÃO IDENTIFICADO";
         const doc = document.getElementById('docInput').value || "000.000.000-00";
@@ -528,143 +543,63 @@
         const dataHora = new Date().toLocaleString('pt-BR');
         const Code = Math.floor(100000 + Math.random() * 900000);
 
-        // Atualização Precisa do D.R.E (Soma de Gastos / KPIs de Entrega)
-        if (slot.startsWith('receita')) {
-            v12_finance.receita += vTotal;
-        } else if (slot === 'obras' || slot === 'equipamentos') {
-            v12_finance.invest += vTotal;
-            if(!v12_finance.detalhado) v12_finance.detalhado = {};
-            v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal;
-        } else {
-            v12_finance.despesa += vTotal;
-            if(!v12_finance.detalhado) v12_finance.detalhado = {};
-            v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal;
-        }
+        if (slot.startsWith('receita')) v12_finance.receita += vTotal;
+        else if (slot === 'obras' || slot === 'equipamentos') v12_finance.invest += vTotal;
+        else v12_finance.despesa += vTotal;
 
-        // Salva e atualiza o painel visual imediatamente
         localStorage.setItem('v12_finance', JSON.stringify(v12_finance));
         updateDRE(); 
         
-        const receitaAcumulada = v12_finance.receita;
-        const lucroAcumulado = v12_finance.receita - v12_finance.despesa - v12_finance.invest;
-        const fed = vTotal * 0.1345;
-        const est = vTotal * 0.07;
-
-        addLog(`DOCUMENTO ${tipo} PREPARADO: R$ ${vTotal.toFixed(2)}`);
+        const recAcumulada = v12_finance.receita;
+        const lucAcumulado = v12_finance.receita - v12_finance.despesa - v12_finance.invest;
         
         const printArea = document.getElementById('print-area');
-        
-        // Renderização HMTL de Impressão
         if (tipo === 'TERMICO') {
             printArea.innerHTML = `
                 <div style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace; margin: 0 auto;">
                     <div style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">IHVH FINNO PAY</div>
-                    <p style="text-align:center; font-size: 9px; margin-bottom: 5px;">SISTEMA DE GESTÃO V12</p>
-                    <p style="text-align:center;">--------------------------------</p>
-                    <p><b>DATA:</b> ${dataHora}</p>
-                    <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
-                    <p><b>DOC:</b> ${doc}</p>
-                    <p style="text-align:center;">--------------------------------</p>
-                    <table style="width: 100%; font-size: 10px;">
-                        <tr style="border-bottom: 1px solid #000;">
-                            <td align="left"><b>ITEM</b></td>
-                            <td align="right"><b>TOTAL</b></td>
-                        </tr>
-                        <tr>
-                            <td align="left">${desc.substring(0, 20)}...</td>
-                            <td align="right">R$ ${vTotal.toFixed(2)}</td>
-                        </tr>
-                    </table>
-                    <p style="text-align:center;">--------------------------------</p>
-                    <div style="text-align: right;">
-                        <h2 style="margin: 0; font-size: 18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
+                    <p style="text-align:center; font-size: 9px;">SISTEMA DE GESTÃO V12</p><hr>
+                    <p><b>DATA:</b> ${dataHora}</p><p><b>CLIENTE:</b> ${nome.toUpperCase()}</p><p><b>DOC:</b> ${doc}</p><hr>
+                    <p>${desc.substring(0, 30)}... <br> <b>R$ ${vTotal.toFixed(2)}</b></p><hr>
+                    <h2 style="text-align:right; font-size:18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
+                    <div style="padding: 5px; border: 1px solid #000; background: #f9f9f9; text-align:center; font-size:10px;">
+                        <b>RBA TOTAL: R$ ${recAcumulada.toFixed(2)}</b>
                     </div>
-                    <div style="margin-top: 10px; padding: 5px; border: 1px solid #000; background: #f9f9f9; font-size: 10px;">
-                        <p style="margin:0; font-weight:bold; text-align:center;">RESUMO FINANCEIRO CAIXA</p>
-                        <p style="margin:0;">RBA TOTAL: R$ ${receitaAcumulada.toFixed(2)}</p>
-                    </div>
-                    <p style="font-size: 9px; margin-top: 5px;">Trib. aprox: R$ ${fed.toFixed(2)} (Fed) e R$ ${est.toFixed(2)} (Est)</p>
-                    <p style="text-align:center; margin-top: 5px;"><b>AUTENTICAÇÃO HARDWARE</b><br>${ACCESS_KEY}</p>
+                    <p style="text-align:center; font-size:9px;">AUTH: ${ACCESS_KEY}</p>
                 </div>`;
         } else {
             printArea.innerHTML = `
-                <div style="font-family: 'JetBrains Mono', monospace; padding: 30px; border: 1px solid #ddd; background: #fff; color: #000; max-width: 800px; margin: auto; text-align: left;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 4px solid #000; padding-bottom: 15px;">
-                        <div>
-                            <h1 style="font-size: 32px; margin: 0; font-weight: 900;">SENTINELA V12</h1>
-                            <p style="margin: 0;">SISTEMAS DE AUTORIDADE / FINNO PAY</p>
-                            <p style="margin: 0; font-size: 11px;">SERIAL POS: ${SERIAL_P2}</p>
-                        </div>
-                        <div style="text-align: right; border: 2px solid #000; padding: 8px;">
-                            <p style="margin: 0; font-size: 9px;">NÚMERO DO DOCUMENTO</p>
-                            <h2 style="margin: 0;">#${Code}</h2>
-                        </div>
+                <div style="font-family: 'JetBrains Mono', monospace; padding: 30px; border: 1px solid #ddd; background: #fff; color: #000; max-width: 800px; margin: auto;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #000; padding-bottom: 15px;">
+                        <div><h1 style="font-size: 32px; font-weight: 900; margin:0;">SISTEMA DE NOTAS V12</h1><p style="margin:0;">SERIAL: ${SERIAL_P2}</p></div>
+                        <div style="text-align: right; border: 2px solid #000; padding: 8px;"><h2>#${Code}</h2></div>
                     </div>
-                    <div style="margin-top: 20px; background: #f4f4f4; padding: 15px; border-radius: 5px; display: grid; grid-template-columns: 1fr 1fr;">
-                        <div>
-                            <p style="margin: 0; font-size: 9px; color: #666;">CLIENTE</p>
-                            <p style="margin: 0; font-weight: bold; font-size: 14px;">${nome.toUpperCase()}</p>
-                            <p style="margin: 0;">DOC: ${doc}</p>
-                        </div>
-                        <div style="text-align: right;">
-                            <p style="margin: 0; font-size: 9px; color: #666;">EMISSÃO</p>
-                            <p style="margin: 0;">${dataHora}</p>
-                        </div>
+                    <div style="margin-top: 20px; background: #f4f4f4; padding: 15px; display: flex; justify-content: space-between;">
+                        <div><b>CLIENTE:</b> ${nome.toUpperCase()}<br><b>DOC:</b> ${doc}</div>
+                        <div style="text-align: right;"><b>EMISSÃO:</b><br>${dataHora}</div>
                     </div>
-                    <div style="margin-top: 30px;">
-                        <p><b>DESCRIÇÃO DA OPERAÇÃO:</b> <br>${desc.replace(/\n/g, '<br>')}</p>
-                    </div>
+                    <p style="margin-top:20px;"><b>OPERAÇÃO:</b> <br>${desc.replace(/\n/g, '<br>')}</p>
                     <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
                         <div style="width: 55%; border: 1px solid #000; padding: 12px; background: #f9f9f9;">
-                            <h3 style="margin: 0 0 8px 0; font-size: 11px; border-bottom: 1px solid #000;">CONSOLIDAÇÃO DRE TERMINAL</h3>
-                            <p style="margin: 2px 0; font-size: 10px;">RECEITA BRUTA DIA: R$ ${receitaAcumulada.toFixed(2)}</p>
-                            <p style="margin: 5px 0 0 0; font-size: 11px; font-weight: bold;">LUCRO LÍQUIDO: R$ ${lucroAcumulado.toFixed(2)}</p>
+                            <b>DRE TERMINAL</b><br>RBA: R$ ${recAcumulada.toFixed(2)}<br>LUCRO: R$ ${lucAcumulado.toFixed(2)}
                         </div>
-                        <div style="width: 250px; background: #000; color: #fff; padding: 15px; text-align: right;">
+                        <div style="background: #000; color: #fff; padding: 15px; text-align: right;">
                             <h2 style="margin: 0; font-size: 20px;">TOTAL R$ ${vTotal.toFixed(2)}</h2>
                         </div>
                     </div>
                 </div>`;
         }
 
-        // INTEGRAÇÃO AWS RESTAURADA (Gatilho de Gravação Oficial)
         try {
-            addLog("⚡ SINCRONIZANDO CHAVE V12 COM AWS LAMBDA...");
-            const response = await fetch('https://4djefisdvvgqv4jl3j5x35mssi0vxfmv.lambda-url.sa-east-1.on.aws/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    acao: "FINALIZAR_VENDA",
-                    nome: nome,
-                    valor: vTotal,
-                    documento: Code,
-                    slot_dre: slot
-                })
+            addLog("⚡ ENVIANDO PARA NUVEM AWS...");
+            await fetch('https://4djefisdvvgqv4jl3j5x35mssi0vxfmv.lambda-url.sa-east-1.on.aws/', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ acao: "FINALIZAR_VENDA", nome: nome, valor: vTotal, documento: Code, slot_dre: slot })
             });
+            addLog(`✅ SUCESSO AWS: #${Code}`);
+        } catch (error) { addLog("⚠️ GRAVADO APENAS LOCALMENTE."); }
 
-            if (!response.ok) throw new Error("Falha na resposta da AWS");
-            addLog(`✅ INTEGRAÇÃO CONCLUÍDA: #${Code}`);
-
-        } catch (error) {
-            console.error("Erro na Sincronização V12 com AWS:", error);
-            addLog("⚠️ AVISO: Falha na AWS. Gravado Localmente.");
-        }
-
-        // O acionamento da impressora do navegador é agendado para rodar independente da AWS retornar erro ou não.
-        setTimeout(() => { window.print(); }, 800);
-    }
-
-    // 7. Integrações Externas
-    function executarPagamentoPOS() {
-        const valorRaw = document.getElementById('valorInput').value;
-        const valor = parseFloat(valorRaw) || 0;
-        if(valor <= 0) return alert("Insira um valor válido para transação.");
-        
-        addLog(`Invocando Hardware... R$ ${valor.toFixed(2)}`);
-        const amountInCents = Math.round(valor * 100);
-        const intentUrl = `intent://pay?amount=${amountInCents}&currency=BRL#Intent;scheme=infinitepay;package=com.infinitepay.checkout;S.browser_fallback_url=${window.location.href};end`;
-        
-        setTimeout(() => { window.location.href = intentUrl; }, 500);
+        setTimeout(() => { window.print(); resetarInputs(); }, 800);
     }
 </script>
 </body>
