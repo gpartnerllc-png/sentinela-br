@@ -142,7 +142,7 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
+    <main class="max-w-7xl mx-auto p-4 md:p-8 space-y-4">
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-white p-4 rounded-xl border-l-4 border-emerald-500 shadow-sm">
@@ -161,6 +161,13 @@
                 <span class="text-[9px] font-black text-orange-400 uppercase tracking-widest">Lucro Líquido</span>
                 <h4 id="dre_lucro" class="text-xl font-black text-white">R$ 0,00</h4>
             </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-3 mt-2 mb-8">
+            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2">Extratos de Operação:</span>
+            <button type="button" onclick="emitirV12('A4')" class="bg-white border border-slate-200 hover:border-orange-500 hover:text-orange-600 text-slate-500 font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest transition-all shadow-sm">🖨️ Danfe (A4)</button>
+            <button type="button" onclick="emitirV12('TERMICO')" class="bg-white border border-slate-200 hover:border-slate-800 hover:text-slate-800 text-slate-500 font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest transition-all shadow-sm">🧾 PDV (Térmica)</button>
+            <button type="button" onclick="abrirModalBalancete()" class="bg-blue-50 border border-blue-200 hover:bg-blue-600 hover:text-white text-blue-600 font-bold py-2 px-5 rounded-lg text-[10px] uppercase tracking-widest transition-all shadow-sm">📊 Fechamento Completo</button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -242,10 +249,11 @@
                         </div>
                     </div>
 
-                    <div class="mt-8 space-y-3">
-                        <button type="button" onclick="emitirV12('A4')" class="btn-orange w-full text-white font-black py-4 rounded-xl shadow-xl uppercase text-sm">Emitir DANFE (A4)</button>
-                        <button type="button" onclick="emitirV12('TERMICO')" class="w-full bg-slate-800 text-white font-black py-4 rounded-xl shadow-lg uppercase text-xs">Imp. Térmica (PDV)</button>
-                        <button type="button" onclick="abrirModalBalancete()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-xl shadow-lg uppercase text-xs transition-all border-b-4 border-blue-800 active:border-b-0 active:mt-1">📊 Gerar Fechamento D.R.E</button>
+                    <div class="mt-8">
+                        <button type="button" onclick="lancarNoDRE()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-5 rounded-xl shadow-[0_10px_20px_rgba(234,88,12,0.3)] uppercase tracking-widest text-sm transition-all border-b-4 border-orange-800 active:border-b-0 active:mt-1 flex items-center justify-center gap-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            LANÇAR NO D.R.E
+                        </button>
                     </div>
                 </div>
 
@@ -386,7 +394,7 @@
         resetarInputs();
     }
 
-    // (Outras funções de admin mantidas idênticas... cadastro, aporte, zerar)
+    // (Funções de admin mantidas idênticas... cadastro, aporte, zerar)
     function solicitarCadastro() {
         const email = prompt("E-mail da nova Autoridade:"); const pass = prompt("Chave Criptográfica:");
         if (email && pass) {
@@ -483,6 +491,39 @@
     }
 
     // ==========================================
+    // NOVA FUNÇÃO: LANÇAR NO D.R.E (SEM IMPRIMIR)
+    // ==========================================
+    async function lancarNoDRE() {
+        const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
+        if (vTotal <= 0) return alert("Insira um valor válido para lançar.");
+
+        const nome = document.getElementById('nomeInput').value || "CLIENTE NÃO IDENTIFICADO";
+        const doc = document.getElementById('docInput').value || "000.000.000-00";
+        const desc = document.getElementById('descInput').value || "PRESTAÇÃO DE SERVIÇO DIGITAL";
+        const slot = document.getElementById('slotDestino').value;
+        const Code = Math.floor(100000 + Math.random() * 900000);
+
+        // Atualiza Financeiro Real
+        if (slot.startsWith('receita')) v12_finance.receita += vTotal;
+        else if (slot === 'obras' || slot === 'equipamentos') { v12_finance.invest += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
+        else { v12_finance.despesa += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
+
+        localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); 
+        updateDRE(); 
+
+        try {
+            addLog(`⚡ ENVIANDO LANÇAMENTO #${Code} PARA NUVEM AWS...`);
+            await fetch('https://4djefisdvvgqv4jl3j5x35mssi0vxfmv.lambda-url.sa-east-1.on.aws/', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ acao: "FINALIZAR_VENDA", nome: nome, valor: vTotal, documento: Code, slot_dre: slot })
+            });
+            addLog(`✅ LANÇAMENTO CONFIRMADO: R$ ${vTotal.toFixed(2)}`);
+        } catch (error) { addLog("⚠️ GRAVADO APENAS LOCALMENTE NO D.R.E."); }
+
+        resetarInputs(); // Limpa a tela para o próximo lançamento
+    }
+
+    // ==========================================
     // MÓDULO DE INTELIGÊNCIA ANALÍTICA (GRÁFICOS)
     // ==========================================
     function abrirModalBalancete() {
@@ -500,7 +541,6 @@
         if (chartMacro) chartMacro.destroy();
         if (chartDetalhe) chartDetalhe.destroy();
 
-        // 1. Gráfico de Visão Macro (Rosca)
         const ctxMacro = document.getElementById('chartVisaoMacro').getContext('2d');
         chartMacro = new Chart(ctxMacro, {
             type: 'doughnut',
@@ -515,7 +555,6 @@
             options: { plugins: { legend: { position: 'bottom', labels: { font: { size: 10, family: 'Inter' } } } }, cutout: '70%' }
         });
 
-        // 2. Gráfico de Detalhamento Operacional (Barras)
         const labelsDetalhe = Object.keys(v12_finance.detalhado || {});
         const dataDetalhe = Object.values(v12_finance.detalhado || {});
         
@@ -558,7 +597,6 @@
     }
 
     function imprimirBalanceteGrafico() {
-        // Converte os gráficos em imagem base64 para injetar na impressão (Garante a renderização do Canvas no papel)
         const imgMacro = document.getElementById('chartVisaoMacro').toDataURL("image/png");
         const imgDetalhe = document.getElementById('chartDetalhamento').toDataURL("image/png");
         
@@ -613,11 +651,11 @@
     }
 
     // ==========================================
-    // EMISSÃO PADRÃO (A4 e TÉRMICA - MANTIDAS INTACTAS)
+    // EMISSÃO INDIVIDUAL RÁPIDA (A4 e TÉRMICA)
     // ==========================================
     async function emitirV12(tipo) {
         const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
-        if (vTotal <= 0) return alert("Insira um valor válido.");
+        if (vTotal <= 0) return alert("Insira um valor válido para emitir uma nota individual.");
 
         const nome = document.getElementById('nomeInput').value || "CLIENTE NÃO IDENTIFICADO";
         const doc = document.getElementById('docInput').value || "000.000.000-00";
