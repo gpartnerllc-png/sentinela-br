@@ -87,6 +87,20 @@
         /* Modal Custom Scrollbar */
         .modal-scroll::-webkit-scrollbar { width: 8px; }
         .modal-scroll::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
+
+        /* Botões 3D Emissão */
+        .btn-emissao-3d {
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .btn-emissao-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.08);
+        }
+        .btn-emissao-3d:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -165,9 +179,9 @@
 
         <div class="flex flex-wrap items-center justify-end gap-3 mt-2 mb-8">
             <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2">Extratos de Operação:</span>
-            <button type="button" onclick="emitirV12('A4')" class="bg-white border border-slate-200 hover:border-orange-500 hover:text-orange-600 text-slate-500 font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest transition-all shadow-sm">🖨️ Danfe (A4)</button>
-            <button type="button" onclick="emitirV12('TERMICO')" class="bg-white border border-slate-200 hover:border-slate-800 hover:text-slate-800 text-slate-500 font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest transition-all shadow-sm">🧾 PDV (Térmica)</button>
-            <button type="button" onclick="abrirModalBalancete()" class="bg-blue-50 border border-blue-200 hover:bg-blue-600 hover:text-white text-blue-600 font-bold py-2 px-5 rounded-lg text-[10px] uppercase tracking-widest transition-all shadow-sm">📊 Fechamento Completo</button>
+            <button type="button" onclick="emitirV12('A4')" class="btn-emissao-3d bg-white border border-slate-200 hover:border-orange-500 hover:text-orange-600 text-slate-500 font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🖨️ Danfe (A4)</button>
+            <button type="button" onclick="emitirV12('TERMICO')" class="btn-emissao-3d bg-white border border-slate-200 hover:border-slate-800 hover:text-slate-800 text-slate-500 font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🧾 PDV (Térmica)</button>
+            <button type="button" onclick="abrirModalBalancete()" class="btn-emissao-3d bg-blue-50 border border-blue-200 hover:bg-blue-600 hover:text-white text-blue-600 font-bold py-2 px-5 rounded-lg text-[10px] uppercase tracking-widest">📊 Fechamento Completo</button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -223,6 +237,14 @@
                     <div>
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome</label>
                         <input type="text" id="nomeInput" onblur="validarNomeSeguro(this)" class="input-tactical w-full bg-slate-50 text-slate-600 border-dashed" readonly placeholder="Aguardando validação...">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">E-mail</label>
+                        <input type="email" id="emailInput" class="input-tactical w-full text-slate-800" placeholder="contato@exemplo.com">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp / Telefone</label>
+                        <input type="text" id="telInput" class="input-tactical w-full text-slate-800" placeholder="(00) 00000-0000">
                     </div>
                     <div class="md:col-span-2">
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens</label>
@@ -334,7 +356,6 @@
 <div id="print-area"></div>
 
 <script>
-    // 1. DADOS GLOBAIS E INSTÂNCIAS DE GRÁFICO
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
     let v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0, detalhado: {} };
     let somaScanner = 0; let itensLidos = new Set(); let html5QrCode = null;
@@ -345,9 +366,6 @@
         conectarAssinador(); updateDRE(); capturarDadosRede(); iniciarMonitoramentoIA();
     });
 
-    // ==========================================
-    // OVERRIDE DE F5
-    // ==========================================
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
             e.preventDefault(); resetarInputs();
@@ -360,13 +378,12 @@
         document.getElementById('docInput').value = '';
         document.getElementById('nomeInput').value = '';
         document.getElementById('nomeInput').readOnly = true;
+        document.getElementById('emailInput').value = '';
+        document.getElementById('telInput').value = '';
         document.getElementById('descInput').value = '';
         calcFiscal(); somaScanner = 0; itensLidos.clear();
     }
 
-    // ==========================================
-    // AUTENTICAÇÃO E LOGOUT (SAIR TÁTICO)
-    // ==========================================
     function checkV12Auth() {
         const email = document.getElementById('v12_email').value;
         const pass = document.getElementById('v12_pass').value;
@@ -394,7 +411,6 @@
         resetarInputs();
     }
 
-    // (Funções de admin mantidas idênticas... cadastro, aporte, zerar)
     function solicitarCadastro() {
         const email = prompt("E-mail da nova Autoridade:"); const pass = prompt("Chave Criptográfica:");
         if (email && pass) {
@@ -435,9 +451,6 @@
         localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); updateDRE(); addLog(`💰 APORTE INJETADO: R$ ${valor.toFixed(2)}`);
     }
 
-    // ==========================================
-    // DRE E LOGS
-    // ==========================================
     function addLog(msg) {
         const log = document.getElementById('logContent'); const feed = document.getElementById('ai-live-feed');
         if(log) { log.innerHTML += `> [${new Date().toLocaleTimeString()}] ${msg}<br>`; log.scrollTop = log.scrollHeight; }
@@ -490,9 +503,6 @@
         }
     }
 
-    // ==========================================
-    // NOVA FUNÇÃO: LANÇAR NO D.R.E (SEM IMPRIMIR)
-    // ==========================================
     async function lancarNoDRE() {
         const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
         if (vTotal <= 0) return alert("Insira um valor válido para lançar.");
@@ -503,7 +513,6 @@
         const slot = document.getElementById('slotDestino').value;
         const Code = Math.floor(100000 + Math.random() * 900000);
 
-        // Atualiza Financeiro Real
         if (slot.startsWith('receita')) v12_finance.receita += vTotal;
         else if (slot === 'obras' || slot === 'equipamentos') { v12_finance.invest += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
         else { v12_finance.despesa += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
@@ -520,22 +529,15 @@
             addLog(`✅ LANÇAMENTO CONFIRMADO: R$ ${vTotal.toFixed(2)}`);
         } catch (error) { addLog("⚠️ GRAVADO APENAS LOCALMENTE NO D.R.E."); }
 
-        resetarInputs(); // Limpa a tela para o próximo lançamento
+        resetarInputs();
     }
 
-    // ==========================================
-    // MÓDULO DE INTELIGÊNCIA ANALÍTICA (GRÁFICOS)
-    // ==========================================
     function abrirModalBalancete() {
         document.getElementById('modal-balancete').style.display = 'flex';
         document.getElementById('dataAuditoria').innerText = `GERADO EM: ${new Date().toLocaleString('pt-BR')}`;
-        renderizarGraficos();
-        preencherTabelaDetalhada();
+        renderizarGraficos(); preencherTabelaDetalhada();
     }
-
-    function fecharModalBalancete() {
-        document.getElementById('modal-balancete').style.display = 'none';
-    }
+    function fecharModalBalancete() { document.getElementById('modal-balancete').style.display = 'none'; }
 
     function renderizarGraficos() {
         if (chartMacro) chartMacro.destroy();
@@ -563,43 +565,24 @@
             type: 'bar',
             data: {
                 labels: labelsDetalhe.length > 0 ? labelsDetalhe.map(l => l.toUpperCase().replace('_', ' ')) : ['SEM DADOS'],
-                datasets: [{
-                    label: 'Gasto por Categoria (R$)',
-                    data: labelsDetalhe.length > 0 ? dataDetalhe : [0],
-                    backgroundColor: '#f97316', borderRadius: 4
-                }]
+                datasets: [{ label: 'Gasto por Categoria (R$)', data: labelsDetalhe.length > 0 ? dataDetalhe : [0], backgroundColor: '#f97316', borderRadius: 4 }]
             },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { x: { display: false }, y: { beginAtZero: true, grid: { color: '#f1f5f9' } } }
-            }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { beginAtZero: true, grid: { color: '#f1f5f9' } } } }
         });
     }
 
     function preencherTabelaDetalhada() {
-        const container = document.getElementById('tabela-slots-detalhe');
-        container.innerHTML = '';
+        const container = document.getElementById('tabela-slots-detalhe'); container.innerHTML = '';
         const detalhado = v12_finance.detalhado || {};
-        
-        if(Object.keys(detalhado).length === 0) {
-            container.innerHTML = '<p class="col-span-4 text-slate-500 text-center italic">Nenhuma movimentação alocada em slots.</p>';
-            return;
-        }
-
+        if(Object.keys(detalhado).length === 0) { container.innerHTML = '<p class="col-span-4 text-slate-500 text-center italic">Nenhuma movimentação alocada em slots.</p>'; return; }
         for (const [chave, valor] of Object.entries(detalhado)) {
-            container.innerHTML += `
-                <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
-                    <span class="block text-[8px] text-slate-400 uppercase tracking-widest">${chave.replace('_', ' ')}</span>
-                    <span class="text-emerald-400 font-black">R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
-                </div>`;
+            container.innerHTML += `<div class="bg-slate-800 p-3 rounded-lg border border-slate-700"><span class="block text-[8px] text-slate-400 uppercase tracking-widest">${chave.replace('_', ' ')}</span><span class="text-emerald-400 font-black">R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span></div>`;
         }
     }
 
     function imprimirBalanceteGrafico() {
         const imgMacro = document.getElementById('chartVisaoMacro').toDataURL("image/png");
         const imgDetalhe = document.getElementById('chartDetalhamento').toDataURL("image/png");
-        
         const printArea = document.getElementById('print-area');
         const lucro = v12_finance.receita - v12_finance.despesa - v12_finance.invest;
         
@@ -615,7 +598,6 @@
                     <h2 style="font-size: 18px; margin: 5px 0 0 0;">RELATÓRIO GERENCIAL E FECHAMENTO D.R.E</h2>
                     <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">AUDITORIA GERADA EM: ${new Date().toLocaleString('pt-BR')}</p>
                 </div>
-
                 <div style="display: flex; justify-content: space-between; gap: 20px; margin-bottom: 40px;">
                     <div style="flex: 1; padding: 20px; border: 2px solid #ddd; border-radius: 10px; background: #f9f9f9;">
                         <h3 style="margin-top:0; border-bottom: 2px solid #000; padding-bottom: 10px;">RESUMO FINANCEIRO CAIXA</h3>
@@ -624,35 +606,20 @@
                         <p><b>INVESTIMENTOS:</b> R$ ${v12_finance.invest.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
                         <h2 style="margin-bottom:0; color: ${lucro >= 0 ? '#10b981' : '#ef4444'};">LUCRO LÍQUIDO: R$ ${lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</h2>
                     </div>
-                    
-                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
-                        <img src="${imgMacro}" style="max-height: 200px; width: auto;" />
-                    </div>
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;"><img src="${imgMacro}" style="max-height: 200px; width: auto;" /></div>
                 </div>
-
                 <h3 style="border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">ANÁLISE ESTRUTURAL (DESPESAS E INVESTIMENTOS)</h3>
-                
-                <div style="margin-bottom: 30px; text-align: center;">
-                    <img src="${imgDetalhe}" style="max-width: 100%; height: auto; max-height: 250px;" />
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 12px;">
-                    ${slotsHtml || '<p>Nenhuma movimentação detalhada registrada.</p>'}
-                </div>
-                
+                <div style="margin-bottom: 30px; text-align: center;"><img src="${imgDetalhe}" style="max-width: 100%; height: auto; max-height: 250px;" /></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 12px;">${slotsHtml || '<p>Nenhuma movimentação detalhada registrada.</p>'}</div>
                 <div style="margin-top: 50px; text-align: center; font-size: 10px; color: #777;">
                     <p>--------------------------------------------------------</p>
                     <p>DOCUMENTO GERADO PELO MÓDULO DE INTELIGÊNCIA V12</p>
                     <p>SERIAL POS: ${SERIAL_P2} | CHAVE: ${ACCESS_KEY}</p>
                 </div>
             </div>`;
-        
         setTimeout(() => { window.print(); fecharModalBalancete(); }, 500);
     }
 
-    // ==========================================
-    // EMISSÃO INDIVIDUAL RÁPIDA (A4 e TÉRMICA)
-    // ==========================================
     async function emitirV12(tipo) {
         const vTotal = parseFloat(document.getElementById('valorInput').value) || 0;
         if (vTotal <= 0) return alert("Insira um valor válido para emitir uma nota individual.");
@@ -660,6 +627,9 @@
         const nome = document.getElementById('nomeInput').value || "CLIENTE NÃO IDENTIFICADO";
         const doc = document.getElementById('docInput').value || "000.000.000-00";
         const desc = document.getElementById('descInput').value || "PRESTAÇÃO DE SERVIÇO DIGITAL";
+        // Captura os novos campos
+        const email = document.getElementById('emailInput').value || "NÃO INFORMADO";
+        const telefone = document.getElementById('telInput').value || "NÃO INFORMADO";
         const slot = document.getElementById('slotDestino').value;
         const dataHora = new Date().toLocaleString('pt-BR');
         const Code = Math.floor(100000 + Math.random() * 900000);
@@ -677,7 +647,11 @@
                 <div style="font-size: 12px; line-height: 1.2; width: 80mm; background: #fff; padding: 10px; color: #000; font-family: 'JetBrains Mono', monospace; margin: 0 auto;">
                     <div style="border: 2px solid #000; font-size: 20px; text-align: center; font-weight: 900; margin-bottom: 5px;">IHVH FINNO PAY</div>
                     <p style="text-align:center; font-size: 9px;">SISTEMA DE GESTÃO V12</p><hr>
-                    <p><b>DATA:</b> ${dataHora}</p><p><b>CLIENTE:</b> ${nome.toUpperCase()}</p><p><b>DOC:</b> ${doc}</p><hr>
+                    <p><b>DATA:</b> ${dataHora}</p>
+                    <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
+                    <p><b>DOC:</b> ${doc}</p>
+                    <p><b>CONTATO:</b> ${telefone}</p>
+                    <hr>
                     <p>${desc.substring(0, 30)}... <br> <b>R$ ${vTotal.toFixed(2)}</b></p><hr>
                     <h2 style="text-align:right; font-size:18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
                     <div style="padding: 5px; border: 1px solid #000; background: #f9f9f9; text-align:center; font-size:10px;"><b>RBA TOTAL: R$ ${recAcumulada.toFixed(2)}</b></div>
@@ -687,11 +661,20 @@
             printArea.innerHTML = `
                 <div style="font-family: 'JetBrains Mono', monospace; padding: 30px; border: 1px solid #ddd; background: #fff; color: #000; max-width: 800px; margin: auto;">
                     <div style="display: flex; justify-content: space-between; border-bottom: 4px solid #000; padding-bottom: 15px;">
-                        <div><h1 style="font-size: 32px; font-weight: 900; margin:0;">SISTEMA DE NOTAS V12</h1><p style="margin:0;">SERIAL: ${SERIAL_P2}</p></div>
+                        <div>
+                            <h1 style="font-size: 32px; font-weight: 900; margin:0;">SISTEMA DE NOTAS V12</h1>
+                            <p style="margin:0;">SERIAL: ${SERIAL_P2}</p>
+                            <p style="margin:0; font-size: 12px;">Matriz Operacional IHVH</p>
+                        </div>
                         <div style="text-align: right; border: 2px solid #000; padding: 8px;"><h2>#${Code}</h2></div>
                     </div>
                     <div style="margin-top: 20px; background: #f4f4f4; padding: 15px; display: flex; justify-content: space-between;">
-                        <div><b>CLIENTE:</b> ${nome.toUpperCase()}<br><b>DOC:</b> ${doc}</div>
+                        <div>
+                            <b>CLIENTE:</b> ${nome.toUpperCase()}<br>
+                            <b>DOC:</b> ${doc}<br>
+                            <b>E-MAIL:</b> ${email}<br>
+                            <b>TELEFONE/WHATSAPP:</b> ${telefone}
+                        </div>
                         <div style="text-align: right;"><b>EMISSÃO:</b><br>${dataHora}</div>
                     </div>
                     <p style="margin-top:20px;"><b>OPERAÇÃO:</b> <br>${desc.replace(/\n/g, '<br>')}</p>
