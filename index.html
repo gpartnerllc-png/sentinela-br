@@ -251,6 +251,13 @@
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens</label>
                         <textarea id="descInput" class="input-tactical w-full h-24 font-normal text-slate-600" placeholder="Detalhes da operação ou itens bipados..."></textarea>
                     </div>
+
+                    <div class="md:col-span-2 mt-4 pt-4 border-t border-slate-100">
+                        <button type="button" onclick="lancarNoDRE()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-xl shadow-[0_8px_15px_rgba(234,88,12,0.3)] uppercase tracking-widest text-sm transition-all border-b-4 border-orange-800 active:border-b-0 active:mt-1 flex items-center justify-center gap-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            LANÇAR NO D.R.E
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -271,13 +278,6 @@
                             <span id="liqVal" class="text-3xl font-black text-orange-600">R$ 0,00</span>
                         </div>
                     </div>
-
-                    <div class="mt-8">
-                        <button type="button" onclick="lancarNoDRE()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-5 rounded-xl shadow-[0_10px_20px_rgba(234,88,12,0.3)] uppercase tracking-widest text-sm transition-all border-b-4 border-orange-800 active:border-b-0 active:mt-1 flex items-center justify-center gap-3">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                            LANÇAR NO D.R.E
-                        </button>
-                    </div>
                 </div>
 
                 <div class="panel-3d p-6 bg-slate-950 border border-slate-800/50 rounded-2xl relative overflow-hidden group">
@@ -291,8 +291,8 @@
             </div>
         </div>
 
-        <div id="admin-panel" class="panel-3d p-8 bg-slate-900 border border-slate-700 mt-8 hidden">
-            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
+        <div id="operator-panel" class="panel-3d p-8 bg-slate-900 border border-slate-700 mt-8 hidden">
+            <div id="operator-header" class="flex justify-between items-center mb-6 pb-4">
                 <h2 class="text-xl font-black text-white uppercase tracking-widest"><span class="text-orange-500">Gestão</span> de Autoridade</h2>
                 <div class="flex gap-4">
                     <button onclick="aporteManual()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-xs font-black uppercase tracking-wider transition-all">💰 Aporte Manual</button>
@@ -300,7 +300,8 @@
                 </div>
             </div>
             
-            <div class="overflow-x-auto">
+            <div id="admin-table-container" class="overflow-x-auto hidden">
+                <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Aprovação de Novos Comandos (Nível Admin)</h3>
                 <table class="w-full text-left text-sm text-slate-300">
                     <thead class="text-xs text-slate-400 uppercase bg-slate-800">
                         <tr>
@@ -358,7 +359,10 @@
 
 <script>
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
+    
+    // CARREGA OS DADOS DO D.R.E DO NAVEGADOR
     let v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0, detalhado: {} };
+    
     let somaScanner = 0; let itensLidos = new Set(); let html5QrCode = null;
     let chartMacro = null; let chartDetalhe = null;
     const SERIAL_P2 = "PB1F252F75254"; const ACCESS_KEY = "20260112PB1F252F75254";
@@ -402,35 +406,47 @@
         document.getElementById('userDisplay').innerText = email.toUpperCase();
         addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
         
-        // Bloqueio rigoroso: O painel de Gestão SÓ aparece para o admin.
+        // Exibe o painel de operações para TODOS (para terem o botão de Zerar/Aporte)
+        document.getElementById('operator-panel').style.display = 'block';
+
+        // Bloqueio de autoridade: Tabela de gerenciar cadastro SÓ aparece para Admin
         if (role === "ADMIN") {
-            document.getElementById('admin-panel').style.display = 'block';
+            document.getElementById('admin-table-container').style.display = 'block';
+            document.getElementById('operator-header').classList.add('border-b', 'border-slate-700');
             atualizarPainelAdmin();
         } else {
-            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('admin-table-container').style.display = 'none';
+            document.getElementById('operator-header').classList.remove('border-b', 'border-slate-700');
         }
     }
 
-    // SAIR TÁTICO: Desloga o usuário e zera apenas os inputs (Preserva o DRE).
+    // SAIR TÁTICO - Com alerta de inteligência e prevenção de perda (DLP)
     function deslogar() {
+        const resetar = confirm("Deseja ZERAR o fluxo de caixa antes de sair?\n\n[OK] = Zerar todos os dados do D.R.E do turno.\n[Cancelar] = Apenas sair e MANTER dados salvos no caixa.");
+        
+        if(resetar) {
+            v12_finance = { receita: 0, despesa: 0, invest: 0, detalhado: {} }; 
+            localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); 
+        }
+
         document.getElementById('auth-gate').style.display = 'flex';
         document.getElementById('v12_pass').value = '';
-        document.getElementById('admin-panel').style.display = 'none';
+        document.getElementById('operator-panel').style.display = 'none';
         resetarInputs();
+        updateDRE(); // Atualiza painel caso tenha zerado
     }
 
-    // COMANDO MASTER DE RESET DRE (Restrito no HTML ao Admin)
     function zerarDashboard() {
         if (confirm("ATENÇÃO: Deseja ZERAR completamente o Fechamento de Caixa do dia e iniciar um novo ciclo?")) {
             v12_finance = { receita: 0, despesa: 0, invest: 0, detalhado: {} }; 
             localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); 
             updateDRE(); 
-            addLog("⚠️ FECHAMENTO DE TURNO: Banco financeiro obliterado pelo Admin.");
+            addLog("⚠️ FECHAMENTO DE TURNO: Banco financeiro obliterado manualmente.");
             alert("Terminal financeiro zerado com sucesso.");
         }
     }
 
-    // GESTÃO DE USUÁRIOS (ADMIN)
+    // GESTÃO DE USUÁRIOS
     function solicitarCadastro() {
         const email = prompt("E-mail da nova Autoridade:"); const pass = prompt("Chave Criptográfica:");
         if (email && pass) {
@@ -607,7 +623,6 @@
             slotsHtml += `<div style="padding: 8px; border-bottom: 1px solid #ddd;"><b>${chave.toUpperCase().replace('_', ' ')}:</b> R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>`;
         }
 
-        // NOVIDADE: Relatório Histórico Projetado via IA
         printArea.innerHTML = `
             <div style="font-family: 'Inter', sans-serif; padding: 40px; color: #000; max-width: 900px; margin: auto;">
                 <div style="text-align: center; border-bottom: 4px solid #000; padding-bottom: 20px; margin-bottom: 30px;">
@@ -681,13 +696,6 @@
         const slot = document.getElementById('slotDestino').value;
         const dataHora = new Date().toLocaleString('pt-BR');
         const Code = Math.floor(100000 + Math.random() * 900000);
-
-        // Se quiser que a "impressão individual" também lance no DRE, descomente a lógica abaixo, 
-        // ou oriente os usuários a usar o botão LANÇAR DRE antes de emitir a nota fiscal individual.
-        // if (slot.startsWith('receita')) v12_finance.receita += vTotal;
-        // else if (slot === 'obras' || slot === 'equipamentos') { v12_finance.invest += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
-        // else { v12_finance.despesa += vTotal; v12_finance.detalhado[slot] = (v12_finance.detalhado[slot] || 0) + vTotal; }
-        // localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); updateDRE(); 
         
         const recAcumulada = v12_finance.receita; const lucAcumulado = v12_finance.receita - v12_finance.despesa - v12_finance.invest;
         const printArea = document.getElementById('print-area');
