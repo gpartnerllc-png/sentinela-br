@@ -120,7 +120,6 @@
             <button onclick="checkV12Auth()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-2xl shadow-lg transition-all active:scale-95 uppercase tracking-widest">
                 Iniciar Sincronização
             </button>
-            <p class="text-[11px] text-slate-500 mt-6 cursor-pointer hover:text-orange-500 font-black uppercase tracking-widest transition-all" onclick="solicitarCadastro()">Solicitar Credenciais</p>
         </div>
     </div>
 </div>
@@ -171,17 +170,29 @@
                 <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Investimentos</span>
                 <h4 id="dre_invest" class="text-xl font-black text-blue-600">R$ 0,00</h4>
             </div>
-            <div class="bg-slate-900 p-4 rounded-xl border-l-4 border-orange-500 shadow-lg">
+            <div class="bg-slate-900 p-4 rounded-xl border-l-4 border-orange-500 shadow-lg relative overflow-hidden group">
+                <div class="absolute -right-5 -top-5 w-20 h-20 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-all"></div>
                 <span class="text-[9px] font-black text-orange-400 uppercase tracking-widest">Lucro Líquido</span>
-                <h4 id="dre_lucro" class="text-xl font-black text-white">R$ 0,00</h4>
+                <h4 id="dre_lucro" class="text-xl font-black text-white relative z-10">R$ 0,00</h4>
             </div>
         </div>
 
-        <div class="flex flex-wrap items-center justify-end gap-3 mt-2 mb-8">
-            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2">Extratos de Operação:</span>
-            <button type="button" onclick="emitirV12('A4')" class="btn-emissao-3d bg-white border border-slate-200 hover:border-orange-500 hover:text-orange-600 text-slate-500 font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🖨️ Danfe (A4)</button>
-            <button type="button" onclick="emitirV12('TERMICO')" class="btn-emissao-3d bg-white border border-slate-200 hover:border-slate-800 hover:text-slate-800 text-slate-500 font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🧾 PDV (Térmica)</button>
-            <button type="button" onclick="abrirModalBalancete()" class="btn-emissao-3d bg-blue-50 border border-blue-200 hover:bg-blue-600 hover:text-white text-blue-600 font-bold py-2 px-5 rounded-lg text-[10px] uppercase tracking-widest">📊 Fechamento Completo</button>
+        <div class="flex flex-wrap items-center justify-between gap-3 mt-2 mb-8 bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-lg">
+            <div class="flex gap-3">
+                <button onclick="aporteManual()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all shadow-[0_4px_10px_rgba(37,99,235,0.3)] flex items-center gap-2">
+                    <span>💰 Aporte Manual</span>
+                </button>
+                <button onclick="zerarDashboard()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all shadow-[0_4px_10px_rgba(220,38,38,0.4)] flex items-center gap-2 border border-red-500/50">
+                    <span>⚠️ Zerar D.R.E</span>
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2 hidden md:inline">Relatórios:</span>
+                <button type="button" onclick="emitirV12('A4')" class="btn-emissao-3d bg-slate-800 border border-slate-700 hover:border-orange-500 text-white font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🖨️ Danfe (A4)</button>
+                <button type="button" onclick="emitirV12('TERMICO')" class="btn-emissao-3d bg-slate-800 border border-slate-700 hover:border-slate-500 text-white font-bold py-2 px-4 rounded-lg text-[10px] uppercase tracking-widest">🧾 PDV</button>
+                <button type="button" onclick="abrirModalBalancete()" class="btn-emissao-3d bg-emerald-600 hover:bg-emerald-500 border border-emerald-500 text-white font-black py-2 px-5 rounded-lg text-[10px] uppercase tracking-widest shadow-[0_4px_15px_rgba(16,185,129,0.3)]">📊 Balancete</button>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -289,30 +300,6 @@
                 </div>
             </div>
         </div>
-
-        <div id="admin-panel" class="panel-3d p-8 bg-slate-900 border border-slate-700 mt-8 hidden">
-            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-                <h2 class="text-xl font-black text-white uppercase tracking-widest"><span class="text-orange-500">Gestão</span> de Autoridade</h2>
-                <div class="flex gap-4">
-                    <button onclick="aporteManual()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-xs font-black uppercase tracking-wider transition-all">💰 Aporte Manual</button>
-                    <button onclick="zerarDashboard()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded text-xs font-black uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(220,38,38,0.5)]">⚠️ Zerar D.R.E</button>
-                </div>
-            </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-300">
-                    <thead class="text-xs text-slate-400 uppercase bg-slate-800">
-                        <tr>
-                            <th class="px-4 py-3">Operador / E-mail</th>
-                            <th class="px-4 py-3">Status</th>
-                            <th class="px-4 py-3">Ação Tática</th>
-                        </tr>
-                    </thead>
-                    <tbody id="user-list-table"></tbody>
-                </table>
-            </div>
-        </div>
-
     </main>
 </div>
 
@@ -357,7 +344,10 @@
 
 <script>
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
+    
+    // CARREGA OS DADOS DO D.R.E DO NAVEGADOR
     let v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0, detalhado: {} };
+    
     let somaScanner = 0; let itensLidos = new Set(); let html5QrCode = null;
     let chartMacro = null; let chartDetalhe = null;
     const SERIAL_P2 = "PB1F252F75254"; const ACCESS_KEY = "20260112PB1F252F75254";
@@ -366,10 +356,12 @@
         conectarAssinador(); updateDRE(); capturarDadosRede(); iniciarMonitoramentoIA();
     });
 
+    // SISTEMA ANTI-PERDA (DLP) - Limpa apenas os inputs, não zera o painel
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
-            e.preventDefault(); resetarInputs();
-            addLog("🔄 OVERRIDE TÁTICO: Comando F5 interceptado. Tela limpa.");
+            e.preventDefault(); 
+            resetarInputs();
+            addLog("🔄 OVERRIDE TÁTICO: Campos de entrada limpos. D.R.E Preservado.");
         }
     });
 
@@ -398,51 +390,25 @@
         document.getElementById('auth-gate').style.display = 'none';
         document.getElementById('userDisplay').innerText = email.toUpperCase();
         addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
-        if (role === "ADMIN") {
-            document.getElementById('admin-panel').style.display = 'block';
-            atualizarPainelAdmin();
-        }
     }
 
+    // SAIR TÁTICO - Fecha a sessão mas mantêm o D.R.E salvo até o Admin apertar "Zerar"
     function deslogar() {
         document.getElementById('auth-gate').style.display = 'flex';
         document.getElementById('v12_pass').value = '';
-        document.getElementById('admin-panel').style.display = 'none';
         resetarInputs();
     }
 
-    function solicitarCadastro() {
-        const email = prompt("E-mail da nova Autoridade:"); const pass = prompt("Chave Criptográfica:");
-        if (email && pass) {
-            if (v12_users.find(u => u.email === email)) return alert("Usuário já existe!");
-            v12_users.push({ email, pass, status: "PENDING", role: "OPERATOR" });
-            localStorage.setItem('v12_database', JSON.stringify(v12_users));
-            alert("Protocolo registrado. Aguarde liberação do ADMIN.");
-        }
-    }
-    function atualizarPainelAdmin() {
-        const tabela = document.getElementById('user-list-table');
-        if (!tabela) return; tabela.innerHTML = ''; 
-        v12_users.forEach((user, index) => {
-            if (user.role === "ADMIN") return;
-            const corStatus = user.status === "AUTHORIZED" ? "text-emerald-400" : "text-yellow-500";
-            tabela.innerHTML += `
-                <tr class="border-b border-slate-700/50 hover:bg-slate-800 transition-colors">
-                    <td class="py-3 px-4">${user.email}</td><td class="py-3 px-4 ${corStatus} font-bold">${user.status}</td>
-                    <td class="py-3 px-4">
-                        <button onclick="autorizarUser(${index})" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded text-white text-[10px] mr-2">LIBERAR</button>
-                        <button onclick="removerUsuarioV12('${user.email}')" class="bg-red-600 hover:bg-red-500 px-3 py-1 rounded text-white text-[10px]">REMOVER</button>
-                    </td>
-                </tr>`;
-        });
-    }
-    function autorizarUser(index) { v12_users[index].status = "AUTHORIZED"; localStorage.setItem('v12_database', JSON.stringify(v12_users)); atualizarPainelAdmin(); }
-    function removerUsuarioV12(email) { if (confirm(`Remover acesso de ${email}?`)) { v12_users = v12_users.filter(u => u.email !== email); localStorage.setItem('v12_database', JSON.stringify(v12_users)); atualizarPainelAdmin(); } }
+    // COMANDO MASTER DE RESET - Zera o DRE definitivo.
     function zerarDashboard() {
-        if (prompt("Digite 'PURGAR' para confirmar:") === "PURGAR") {
-            v12_finance = { receita: 0, despesa: 0, invest: 0, detalhado: {} }; localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); updateDRE(); addLog("⚠️ MASTER RESET ATIVADO.");
+        if (confirm("ATENÇÃO: Deseja ZERAR o Fechamento de Caixa do dia e iniciar um novo ciclo?")) {
+            v12_finance = { receita: 0, despesa: 0, invest: 0, detalhado: {} }; 
+            localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); 
+            updateDRE(); 
+            addLog("⚠️ FECHAMENTO DE TURNO EXECUTADO. Banco financeiro obliterado.");
         }
     }
+
     function aporteManual() {
         const tipoStr = prompt("Aporte:\n1 - Receita Bruta\n2 - Investimento\n3 - Despesa");
         if(!tipoStr) return; const valor = parseFloat(prompt("Valor (Ex: 5000.00):"));
@@ -627,7 +593,6 @@
         const nome = document.getElementById('nomeInput').value || "CLIENTE NÃO IDENTIFICADO";
         const doc = document.getElementById('docInput').value || "000.000.000-00";
         const desc = document.getElementById('descInput').value || "PRESTAÇÃO DE SERVIÇO DIGITAL";
-        // Captura os novos campos
         const email = document.getElementById('emailInput').value || "NÃO INFORMADO";
         const telefone = document.getElementById('telInput').value || "NÃO INFORMADO";
         const slot = document.getElementById('slotDestino').value;
