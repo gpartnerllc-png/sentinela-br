@@ -388,6 +388,7 @@
 <script>
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
     
+    // CARREGA OS DADOS DO D.R.E DO NAVEGADOR
     let v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0, detalhado: {} };
     let v12_historico = JSON.parse(localStorage.getItem('v12_historico')) || { dia: { receita: 0, lucro: 0 }, mes: { receita: 0, lucro: 0 }, ano: { receita: 0, lucro: 0 } };
     
@@ -569,10 +570,14 @@
         document.getElementById('liqVal').innerText = `R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
     }
 
+    // ==========================================
+    // MOTOR DE BUSCA NEURAL: MÁSCARA INTELIGENTE + RECEITA FEDERAL (BRASIL API)
+    // ==========================================
     async function motorBusca(input) {
         let v = input.value.replace(/\D/g, '');
         if (v.length > 14) v = v.substring(0, 14);
 
+        // MÁSCARA DINÂMICA (CPF ou CNPJ)
         if (v.length <= 11) { 
             v = v.replace(/(\d{3})(\d)/, "$1.$2");
             v = v.replace(/(\d{3})(\d)/, "$1.$2");
@@ -588,6 +593,7 @@
         const docLimpo = v.replace(/\D/g, '');
         const nomeInput = document.getElementById('nomeInput');
 
+        // BUSCA NA RECEITA FEDERAL (API)
         if (docLimpo.length === 14) {
             nomeInput.readOnly = false;
             nomeInput.value = "BUSCANDO NA BASE FEDERAL...";
@@ -599,6 +605,7 @@
                 
                 const data = await response.json();
                 
+                // Autopreenchimento Inteligente
                 nomeInput.value = data.razao_social || "";
                 document.getElementById('endInput').value = data.logradouro || "";
                 document.getElementById('numInput').value = data.numero || "";
@@ -726,22 +733,20 @@
     }
 
     // ==========================================
-    // CÁLCULO DE EVOLUÇÃO NEURAL E BLINDADO
+    // CÁLCULO DE EVOLUÇÃO BLINDADO CONTRA "FALSOS NEGATIVOS"
     // ==========================================
     function calcularEvolucao(atual, historico) {
-        // Se a caixa atual do turno estiver 100% virgem, mantém em 0.0% para evitar falso-negativo.
+        // Se a caixa atual do turno estiver virgem (0), não exibe erro de queda de 100%. Exibe 0%.
         if (v12_finance.receita === 0 && v12_finance.despesa === 0 && v12_finance.invest === 0) {
             return { texto: "0.0%", cor: "#64748b", seta: "−" };
         }
         
-        // Se a caixa tem dinheiro, mas o passado era 0
         if (historico === 0) {
             if (atual > 0) return { texto: "+100.0%", cor: "#10b981", seta: "🡡" };
             if (atual < 0) return { texto: "-100.0%", cor: "#ef4444", seta: "🡣" };
             return { texto: "0.0%", cor: "#64748b", seta: "−" };
         }
         
-        // Cálculo padrão em tempo real
         const percentual = ((atual - historico) / Math.abs(historico)) * 100;
         const formatado = Math.abs(percentual).toFixed(1) + "%";
         
