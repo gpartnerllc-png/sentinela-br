@@ -76,6 +76,7 @@
             border-left: 4px solid #f97316;
         }
 
+        /* --- MOTOR DE IMPRESSÃO CSS BLINDADO --- */
         @media screen { #print-area { display: none !important; } }
         @media print {
             body { background: white !important; }
@@ -83,9 +84,11 @@
             #print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
         }
         
+        /* Modal Custom Scrollbar */
         .modal-scroll::-webkit-scrollbar { width: 8px; }
         .modal-scroll::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
 
+        /* Botões 3D Emissão */
         .btn-emissao-3d {
             transition: all 0.2s ease;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
@@ -723,15 +726,22 @@
     }
 
     // ==========================================
-    // NOVA FUNÇÃO: CALCULO DE EVOLUÇÃO BLINDADO
+    // CÁLCULO DE EVOLUÇÃO NEURAL E BLINDADO
     // ==========================================
     function calcularEvolucao(atual, historico) {
+        // Se a caixa atual do turno estiver 100% virgem, mantém em 0.0% para evitar falso-negativo.
+        if (v12_finance.receita === 0 && v12_finance.despesa === 0 && v12_finance.invest === 0) {
+            return { texto: "0.0%", cor: "#64748b", seta: "−" };
+        }
+        
+        // Se a caixa tem dinheiro, mas o passado era 0
         if (historico === 0) {
             if (atual > 0) return { texto: "+100.0%", cor: "#10b981", seta: "🡡" };
             if (atual < 0) return { texto: "-100.0%", cor: "#ef4444", seta: "🡣" };
             return { texto: "0.0%", cor: "#64748b", seta: "−" };
         }
         
+        // Cálculo padrão em tempo real
         const percentual = ((atual - historico) / Math.abs(historico)) * 100;
         const formatado = Math.abs(percentual).toFixed(1) + "%";
         
@@ -751,7 +761,6 @@
             slotsHtml += `<div style="padding: 8px; border-bottom: 1px solid #ddd;"><b>${chave.toUpperCase().replace('_', ' ')}:</b> R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>`;
         }
 
-        // CHAMA A FUNÇÃO BLINDADA PARA CALCULAR A EVOLUÇÃO
         const evoD1 = calcularEvolucao(lucro, v12_historico.dia.lucro);
         const evoM1 = calcularEvolucao(lucro, v12_historico.mes.lucro);
         const evoY1 = calcularEvolucao(lucro, v12_historico.ano.lucro);
