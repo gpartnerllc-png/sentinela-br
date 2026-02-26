@@ -233,8 +233,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">ID - (CPF/CNPJ)</label>
-                        <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800" placeholder="000.000.000-00">
-                        <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800" placeholder="00.000.000/0000-00">
+                        <input type="text" id="docInput" oninput="motorBusca(this)" class="input-tactical w-full text-slate-800" placeholder="CPF ou CNPJ" maxlength="18">
                     </div>
                     <div>
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome</label>
@@ -535,7 +534,36 @@
         document.getElementById('liqVal').innerText = `R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
     }
 
-    function motorBusca(val) { const doc = val.replace(/\D/g, ''); if (doc.length === 11 || doc.length === 14) { document.getElementById('nomeInput').readOnly = false; document.getElementById('nomeInput').focus(); } }
+    // ==========================================
+    // NOVA FUNÇÃO: MOTOR DE BUSCA COM MÁSCARA INTELIGENTE CPF/CNPJ
+    // ==========================================
+    function motorBusca(input) {
+        let v = input.value.replace(/\D/g, '');
+        
+        if (v.length > 14) v = v.substring(0, 14);
+
+        if (v.length <= 11) { 
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        } else { 
+            v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+            v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+            v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+            v = v.replace(/(\d{4})(\d)/, "$1-$2");
+        }
+        
+        input.value = v;
+
+        const docLimpo = v.replace(/\D/g, '');
+        if (docLimpo.length === 11 || docLimpo.length === 14) {
+            document.getElementById('nomeInput').readOnly = false;
+            document.getElementById('nomeInput').focus();
+        } else {
+            document.getElementById('nomeInput').readOnly = true; 
+        }
+    }
+
     function validarNomeSeguro(el) { if(el.value.length > 0 && el.value.trim().split(' ').length < 2) alert("SISTEMA EXIGE NOME COMPLETO."); }
     function conectarAssinador() { const s = document.getElementById("statusAssinador"); if(s) { setTimeout(() => { s.textContent = "CONECTADO (6515)"; s.className = "text-[11px] font-bold text-emerald-600 uppercase"; }, 1500); } }
     function capturarDadosRede() { setTimeout(() => { const b = document.getElementById('network-badge'); if(b) { b.innerText = `P2: ${SERIAL_P2}`; b.className = "text-[11px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded italic"; } }, 1000); }
@@ -567,6 +595,7 @@
 
         const nome = document.getElementById('nomeInput').value || "CLIENTE NÃO IDENTIFICADO";
         const doc = document.getElementById('docInput').value || "000.000.000-00";
+        const desc = document.getElementById('descInput').value || "PRESTAÇÃO DE SERVIÇO DIGITAL";
         const slot = document.getElementById('slotDestino').value;
         const Code = Math.floor(100000 + Math.random() * 900000);
 
@@ -651,7 +680,7 @@
         printArea.innerHTML = `
             <div style="font-family: 'Inter', sans-serif; padding: 40px; color: #000; max-width: 900px; margin: auto;">
                 <div style="text-align: center; border-bottom: 4px solid #000; padding-bottom: 20px; margin-bottom: 30px;">
-                    <h1 style="font-size: 32px; font-weight: 900; margin: 0; font-family: 'JetBrains Mono', monospace;">SISTEMA DE NOTAS V12</h1>
+                    <h1 style="font-size: 32px; font-weight: 900; margin: 0; font-family: 'JetBrains Mono', monospace;">SENTINELA V12</h1>
                     <h2 style="font-size: 18px; margin: 5px 0 0 0;">RELATÓRIO GERENCIAL E FECHAMENTO D.R.E</h2>
                     <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">AUDITORIA GERADA EM: ${new Date().toLocaleString('pt-BR')}</p>
                 </div>
