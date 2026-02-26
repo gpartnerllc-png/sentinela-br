@@ -76,7 +76,6 @@
             border-left: 4px solid #f97316;
         }
 
-        /* --- MOTOR DE IMPRESSÃO CSS BLINDADO --- */
         @media screen { #print-area { display: none !important; } }
         @media print {
             body { background: white !important; }
@@ -84,11 +83,9 @@
             #print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
         }
         
-        /* Modal Custom Scrollbar */
         .modal-scroll::-webkit-scrollbar { width: 8px; }
         .modal-scroll::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 10px; }
 
-        /* Botões 3D Emissão */
         .btn-emissao-3d {
             transition: all 0.2s ease;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
@@ -388,9 +385,7 @@
 <script>
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
     
-    // CARREGA OS DADOS DO D.R.E DO NAVEGADOR
     let v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0, detalhado: {} };
-    // BANCO DE DADOS DE HISTÓRICO REAL
     let v12_historico = JSON.parse(localStorage.getItem('v12_historico')) || { dia: { receita: 0, lucro: 0 }, mes: { receita: 0, lucro: 0 }, ano: { receita: 0, lucro: 0 } };
     
     let somaScanner = 0; let itensLidos = new Set(); let html5QrCode = null;
@@ -401,7 +396,6 @@
         conectarAssinador(); updateDRE(); capturarDadosRede(); iniciarMonitoramentoIA();
     });
 
-    // SISTEMA ANTI-PERDA (DLP): Limpa campos ao atualizar, mas PRESERVA o DRE.
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
             e.preventDefault(); 
@@ -457,7 +451,6 @@
         const resetar = confirm("Deseja ZERAR o fluxo de caixa antes de sair?\n\n[OK] = Salvar fechamento no Histórico e Zerar o turno.\n[Cancelar] = Apenas sair e MANTER dados salvos no caixa.");
         
         if(resetar) {
-            // Salva para o IA Analytics antes de zerar
             const lucroAtual = v12_finance.receita - v12_finance.despesa - v12_finance.invest;
             v12_historico.dia.receita = v12_finance.receita;
             v12_historico.dia.lucro = lucroAtual;
@@ -480,7 +473,6 @@
 
     function zerarDashboard() {
         if (confirm("ATENÇÃO: Deseja ZERAR completamente o Fechamento de Caixa do dia e iniciar um novo ciclo?")) {
-            // Salva para o IA Analytics antes de zerar
             const lucroAtual = v12_finance.receita - v12_finance.despesa - v12_finance.invest;
             v12_historico.dia.receita = v12_finance.receita;
             v12_historico.dia.lucro = lucroAtual;
@@ -536,16 +528,12 @@
         localStorage.setItem('v12_finance', JSON.stringify(v12_finance)); updateDRE(); addLog(`💰 APORTE INJETADO: R$ ${valor.toFixed(2)}`);
     }
 
-    // ==========================================
-    // NOVA FUNÇÃO: RECUPERAR SENHA
-    // ==========================================
     function recuperarSenha() {
         const email = prompt("Informe seu E-mail de Autoridade para recuperação:");
         if(email) {
             const user = v12_users.find(u => u.email === email);
             if(user) {
                 alert("Instruções de recuperação de chave foram enviadas para o sistema matriz. Comunique o Administrador.");
-                // Opcionalmente você poderia logar isso no painel admin, mas mantendo a simplicidade requerida
             } else {
                 alert("ERRO: E-mail não consta nos registros de autoridade.");
             }
@@ -734,6 +722,24 @@
         }
     }
 
+    // ==========================================
+    // NOVA FUNÇÃO: CALCULO DE EVOLUÇÃO BLINDADO
+    // ==========================================
+    function calcularEvolucao(atual, historico) {
+        if (historico === 0) {
+            if (atual > 0) return { texto: "+100.0%", cor: "#10b981", seta: "🡡" };
+            if (atual < 0) return { texto: "-100.0%", cor: "#ef4444", seta: "🡣" };
+            return { texto: "0.0%", cor: "#64748b", seta: "−" };
+        }
+        
+        const percentual = ((atual - historico) / Math.abs(historico)) * 100;
+        const formatado = Math.abs(percentual).toFixed(1) + "%";
+        
+        if (percentual > 0) return { texto: "+" + formatado, cor: "#10b981", seta: "🡡" };
+        if (percentual < 0) return { texto: "-" + formatado, cor: "#ef4444", seta: "🡣" };
+        return { texto: "0.0%", cor: "#64748b", seta: "−" };
+    }
+
     function imprimirBalanceteGrafico() {
         const imgMacro = document.getElementById('chartVisaoMacro').toDataURL("image/png");
         const imgDetalhe = document.getElementById('chartDetalhamento').toDataURL("image/png");
@@ -745,13 +751,10 @@
             slotsHtml += `<div style="padding: 8px; border-bottom: 1px solid #ddd;"><b>${chave.toUpperCase().replace('_', ' ')}:</b> R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>`;
         }
 
-        const calcEvo = (atual, passado) => passado === 0 ? (atual > 0 ? "+100.0" : "0.0") : (((atual - passado) / Math.abs(passado)) * 100).toFixed(1) > 0 ? "+" + (((atual - passado) / Math.abs(passado)) * 100).toFixed(1) : (((atual - passado) / Math.abs(passado)) * 100).toFixed(1);
-        const getCor = (atual, passado) => atual >= passado ? "#10b981" : "#ef4444";
-        const getSeta = (atual, passado) => atual >= passado ? "🡡" : "🡣";
-
-        const evoD1 = calcEvo(lucro, v12_historico.dia.lucro);
-        const evoM1 = calcEvo(lucro, v12_historico.mes.lucro);
-        const evoY1 = calcEvo(lucro, v12_historico.ano.lucro);
+        // CHAMA A FUNÇÃO BLINDADA PARA CALCULAR A EVOLUÇÃO
+        const evoD1 = calcularEvolucao(lucro, v12_historico.dia.lucro);
+        const evoM1 = calcularEvolucao(lucro, v12_historico.mes.lucro);
+        const evoY1 = calcularEvolucao(lucro, v12_historico.ano.lucro);
 
         printArea.innerHTML = `
             <div style="font-family: 'Inter', sans-serif; padding: 40px; color: #000; max-width: 900px; margin: auto;">
@@ -785,19 +788,19 @@
                             <td style="padding: 5px 0;">Último Fechamento (D-1)</td>
                             <td style="padding: 5px 0;">R$ ${v12_historico.dia.receita.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             <td style="padding: 5px 0;">R$ ${v12_historico.dia.lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            <td style="padding: 5px 0; color: ${getCor(lucro, v12_historico.dia.lucro)}; font-weight: bold;">${evoD1}% ${getSeta(lucro, v12_historico.dia.lucro)}</td>
+                            <td style="padding: 5px 0; color: ${evoD1.cor}; font-weight: bold;">${evoD1.texto} ${evoD1.seta}</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #eee;">
                             <td style="padding: 5px 0;">Acumulado Mensal (M-1)</td>
                             <td style="padding: 5px 0;">R$ ${v12_historico.mes.receita.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             <td style="padding: 5px 0;">R$ ${v12_historico.mes.lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            <td style="padding: 5px 0; color: ${getCor(lucro, v12_historico.mes.lucro)}; font-weight: bold;">${evoM1}% ${getSeta(lucro, v12_historico.mes.lucro)}</td>
+                            <td style="padding: 5px 0; color: ${evoM1.cor}; font-weight: bold;">${evoM1.texto} ${evoM1.seta}</td>
                         </tr>
                         <tr>
                             <td style="padding: 5px 0;">Acumulado Anual (Y-1)</td>
                             <td style="padding: 5px 0;">R$ ${v12_historico.ano.receita.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                             <td style="padding: 5px 0;">R$ ${v12_historico.ano.lucro.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
-                            <td style="padding: 5px 0; color: ${getCor(lucro, v12_historico.ano.lucro)}; font-weight: bold;">${evoY1}% ${getSeta(lucro, v12_historico.ano.lucro)}</td>
+                            <td style="padding: 5px 0; color: ${evoY1.cor}; font-weight: bold;">${evoY1.texto} ${evoY1.seta}</td>
                         </tr>
                     </table>
                 </div>
