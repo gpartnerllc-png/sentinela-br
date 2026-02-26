@@ -234,6 +234,7 @@
                     <div>
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">ID - (CPF/CNPJ)</label>
                         <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800" placeholder="000.000.000-00">
+                        <input type="text" id="docInput" oninput="motorBusca(this.value)" class="input-tactical w-full text-slate-800" placeholder="00.000.000/0000-00">
                     </div>
                     <div>
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Razão Social / Nome</label>
@@ -247,12 +248,36 @@
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">WhatsApp / Telefone</label>
                         <input type="text" id="telInput" class="input-tactical w-full text-slate-800" placeholder="(00) 00000-0000">
                     </div>
-                    <div class="md:col-span-2">
+                    
+                    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4 border-t border-slate-100 pt-4 mt-2">
+                        <div class="md:col-span-3">
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Endereço (Rua/Av)</label>
+                            <input type="text" id="endInput" class="input-tactical w-full text-slate-800" placeholder="Ex: Av. das Nações Unidas">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Nº</label>
+                            <input type="text" id="numInput" class="input-tactical w-full text-slate-800" placeholder="1000">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Bairro</label>
+                            <input type="text" id="bairroInput" class="input-tactical w-full text-slate-800" placeholder="Centro">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Cidade</label>
+                            <input type="text" id="cidadeInput" class="input-tactical w-full text-slate-800" placeholder="São Paulo">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">País</label>
+                            <input type="text" id="paisInput" class="input-tactical w-full text-slate-800" placeholder="Brasil" value="Brasil">
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 mt-2 border-t border-slate-100 pt-4">
                         <label class="text-[11px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Descrição do Ativo / Itens</label>
                         <textarea id="descInput" class="input-tactical w-full h-24 font-normal text-slate-600" placeholder="Detalhes da operação ou itens bipados..."></textarea>
                     </div>
 
-                    <div class="md:col-span-2 mt-4 pt-4 border-t border-slate-100">
+                    <div class="md:col-span-2 mt-4">
                         <button type="button" onclick="lancarNoDRE()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-black py-4 rounded-xl shadow-[0_8px_15px_rgba(234,88,12,0.3)] uppercase tracking-widest text-sm transition-all border-b-4 border-orange-800 active:border-b-0 active:mt-1 flex items-center justify-center gap-3">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                             LANÇAR NO D.R.E
@@ -360,7 +385,6 @@
 <script>
     let v12_users = JSON.parse(localStorage.getItem('v12_database')) || [{ email: "admin@v12.com", pass: "ihvh2026", status: "AUTHORIZED", role: "ADMIN" }];
     
-    // CARREGA OS DADOS DO D.R.E DO NAVEGADOR
     let v12_finance = JSON.parse(localStorage.getItem('v12_finance')) || { receita: 0, despesa: 0, invest: 0, detalhado: {} };
     
     let somaScanner = 0; let itensLidos = new Set(); let html5QrCode = null;
@@ -371,7 +395,6 @@
         conectarAssinador(); updateDRE(); capturarDadosRede(); iniciarMonitoramentoIA();
     });
 
-    // SISTEMA ANTI-PERDA (DLP): Limpa campos ao atualizar, mas PRESERVA o DRE.
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
             e.preventDefault(); 
@@ -387,6 +410,11 @@
         document.getElementById('nomeInput').readOnly = true;
         document.getElementById('emailInput').value = '';
         document.getElementById('telInput').value = '';
+        document.getElementById('endInput').value = '';
+        document.getElementById('numInput').value = '';
+        document.getElementById('bairroInput').value = '';
+        document.getElementById('cidadeInput').value = '';
+        document.getElementById('paisInput').value = 'Brasil';
         document.getElementById('descInput').value = '';
         calcFiscal(); somaScanner = 0; itensLidos.clear();
     }
@@ -406,10 +434,8 @@
         document.getElementById('userDisplay').innerText = email.toUpperCase();
         addLog(`ACESSO AUTORIZADO: ${email.toUpperCase()}`);
         
-        // Exibe o painel de operações para TODOS (para terem o botão de Zerar/Aporte)
         document.getElementById('operator-panel').style.display = 'block';
 
-        // Bloqueio de autoridade: Tabela de gerenciar cadastro SÓ aparece para Admin
         if (role === "ADMIN") {
             document.getElementById('admin-table-container').style.display = 'block';
             document.getElementById('operator-header').classList.add('border-b', 'border-slate-700');
@@ -420,7 +446,6 @@
         }
     }
 
-    // SAIR TÁTICO - Com alerta de inteligência e prevenção de perda (DLP)
     function deslogar() {
         const resetar = confirm("Deseja ZERAR o fluxo de caixa antes de sair?\n\n[OK] = Zerar todos os dados do D.R.E do turno.\n[Cancelar] = Apenas sair e MANTER dados salvos no caixa.");
         
@@ -433,7 +458,7 @@
         document.getElementById('v12_pass').value = '';
         document.getElementById('operator-panel').style.display = 'none';
         resetarInputs();
-        updateDRE(); // Atualiza painel caso tenha zerado
+        updateDRE(); 
     }
 
     function zerarDashboard() {
@@ -446,7 +471,6 @@
         }
     }
 
-    // GESTÃO DE USUÁRIOS
     function solicitarCadastro() {
         const email = prompt("E-mail da nova Autoridade:"); const pass = prompt("Chave Criptográfica:");
         if (email && pass) {
@@ -456,6 +480,7 @@
             alert("Protocolo registrado. Aguarde liberação do ADMIN.");
         }
     }
+    
     function atualizarPainelAdmin() {
         const tabela = document.getElementById('user-list-table');
         if (!tabela) return; tabela.innerHTML = ''; 
@@ -472,6 +497,7 @@
                 </tr>`;
         });
     }
+    
     function autorizarUser(index) { v12_users[index].status = "AUTHORIZED"; localStorage.setItem('v12_database', JSON.stringify(v12_users)); atualizarPainelAdmin(); }
     function removerUsuarioV12(email) { if (confirm(`Remover acesso de ${email}?`)) { v12_users = v12_users.filter(u => u.email !== email); localStorage.setItem('v12_database', JSON.stringify(v12_users)); atualizarPainelAdmin(); } }
     
@@ -541,7 +567,6 @@
 
         const nome = document.getElementById('nomeInput').value || "CLIENTE NÃO IDENTIFICADO";
         const doc = document.getElementById('docInput').value || "000.000.000-00";
-        const desc = document.getElementById('descInput').value || "PRESTAÇÃO DE SERVIÇO DIGITAL";
         const slot = document.getElementById('slotDestino').value;
         const Code = Math.floor(100000 + Math.random() * 900000);
 
@@ -626,7 +651,7 @@
         printArea.innerHTML = `
             <div style="font-family: 'Inter', sans-serif; padding: 40px; color: #000; max-width: 900px; margin: auto;">
                 <div style="text-align: center; border-bottom: 4px solid #000; padding-bottom: 20px; margin-bottom: 30px;">
-                    <h1 style="font-size: 32px; font-weight: 900; margin: 0; font-family: 'JetBrains Mono', monospace;">SENTINELA V12</h1>
+                    <h1 style="font-size: 32px; font-weight: 900; margin: 0; font-family: 'JetBrains Mono', monospace;">SISTEMA DE NOTAS V12</h1>
                     <h2 style="font-size: 18px; margin: 5px 0 0 0;">RELATÓRIO GERENCIAL E FECHAMENTO D.R.E</h2>
                     <p style="margin: 5px 0 0 0; font-size: 12px; color: #555;">AUDITORIA GERADA EM: ${new Date().toLocaleString('pt-BR')}</p>
                 </div>
@@ -693,6 +718,14 @@
         const desc = document.getElementById('descInput').value || "PRESTAÇÃO DE SERVIÇO DIGITAL";
         const email = document.getElementById('emailInput').value || "NÃO INFORMADO";
         const telefone = document.getElementById('telInput').value || "NÃO INFORMADO";
+        
+        const endereco = document.getElementById('endInput').value || "Endereço não informado";
+        const num = document.getElementById('numInput').value || "S/N";
+        const bairro = document.getElementById('bairroInput').value || "";
+        const cidade = document.getElementById('cidadeInput').value || "";
+        const pais = document.getElementById('paisInput').value || "Brasil";
+        const enderecoCompleto = `${endereco}, Nº ${num} - ${bairro}, ${cidade} / ${pais}`;
+        
         const slot = document.getElementById('slotDestino').value;
         const dataHora = new Date().toLocaleString('pt-BR');
         const Code = Math.floor(100000 + Math.random() * 900000);
@@ -709,6 +742,7 @@
                     <p><b>CLIENTE:</b> ${nome.toUpperCase()}</p>
                     <p><b>DOC:</b> ${doc}</p>
                     <p><b>CONTATO:</b> ${telefone}</p>
+                    <p><b>END:</b> ${enderecoCompleto}</p>
                     <hr>
                     <p>${desc.substring(0, 30)}... <br> <b>R$ ${vTotal.toFixed(2)}</b></p><hr>
                     <h2 style="text-align:right; font-size:18px;">TOTAL: R$ ${vTotal.toFixed(2)}</h2>
@@ -730,8 +764,8 @@
                         <div>
                             <b>CLIENTE:</b> ${nome.toUpperCase()}<br>
                             <b>DOC:</b> ${doc}<br>
-                            <b>E-MAIL:</b> ${email}<br>
-                            <b>TELEFONE/WHATSAPP:</b> ${telefone}
+                            <b>ENDEREÇO:</b> ${enderecoCompleto}<br>
+                            <b>E-MAIL:</b> ${email} | <b>TEL:</b> ${telefone}
                         </div>
                         <div style="text-align: right;"><b>EMISSÃO:</b><br>${dataHora}</div>
                     </div>
